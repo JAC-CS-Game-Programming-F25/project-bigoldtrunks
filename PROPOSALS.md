@@ -15,6 +15,19 @@ The game draws strong inspiration from the survival-adventure spirit of Jumanji 
 4. Defeat mini-bosses to open new regions
 5. Face the final boss and collect the key to finish the game
 
+## Player 
+Managed with state machine system: 
+- `IdleState`
+- `WalkingState`
+- `SwordSwingState`
+- `PerformFireFlameState`
+- `PerformFrozenFlameState`
+- `FallingDownToEartthState`
+
+## 👾 Creatures Design
+- Creates start chasing player once player come near to the (enter their radius)
+    + Chasing Logic: If player come close within certain distance they start to chase, when get close to player, they attack player
+
 ## Creature Escalation (Easy -> Hard)
 - Early creatures: small, easy 
 
