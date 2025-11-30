@@ -98,7 +98,12 @@ Additional in-game backgrounds and sprites will be stored under `assets/images/`
 ### ✏️ Fonts
 
 The game uses the default in-engine font for UI, menus, and game text.
-Additional fantasy-style fonts will be added for the title screen if needed.
+Style for title screen, Pirata One font from google will be used
+
+[MystiaJungle](ttps://example.com/the/full/url)
+
+![FontSample](assets/fonts/font-sample.png)
+
 
 ### 🔊 Sounds
 
@@ -131,5 +136,6 @@ Short SFX used for actions, combat, items, and feedback:
 - **frozen.wav** — Ice/freeze effect
 - **heal.mp3** — Player healing
 - **burst_fire.mp3** — Fire burst / magic shot
+
 
 ## 📚 References
