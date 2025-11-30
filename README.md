@@ -1,4 +1,4 @@
-# 🎮 Game Design Document — Zelda-Inspired JS Game
+# 🎮 MytiaJungle
 ## 📌 Overview
 The game draws strong inspiration from the survival-adventure spirit of Jumanji storyline, with the  where characters are trapped into a dangerous, unpredictable game world filled with escalating challenges. Similarly, this game places the player inside a magical game world where they get stuck into. it is a big jungle realm they must escape by overcoming trials, defeating creatures. To return to reality, the player must conquer different regions (Scorching wilds - hot region; Frozen Platau - cold region) to find the sacred key, which is the only way to unlock the final gate
 
@@ -139,3 +139,23 @@ Short SFX used for actions, combat, items, and feedback:
 
 
 ## 📚 References
+
+This project is developed using ideas, logic structures, and engine components adapted from the teaching materials provided in class Game Programming by instructor [VikeramSingh](https://github.com/VikramSinghMTL)
+
+### General Rereference
+
+General Architecture:
+- State Machine, Factory Pattern, OOP Structures, and Game Loop Architecture. Provided in course framework by [Instructor Name], [Institution Name].
+
+Narrative Inspiration:
+
+- Part of thematic concept of this game is inspired by: The Jumanji “trapped in a game world” storyline. Region-based progression
+Creature difficulty escalation, collecting keys to escape the world.
+
+## Development Team
+- [Cuong Ngo](https://github.com/cuongngodev)
+- [Linyue](https://github.com/Linyue-dev) 
+
+
+
+
