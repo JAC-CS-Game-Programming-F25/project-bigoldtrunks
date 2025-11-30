@@ -72,6 +72,8 @@ Our project satisfies the course requirements:
 ### 🖼️ Images
 
 All wireframe images are stored in the `readme_images/` folder and are used for UI layout planning.
+Additional in-game backgrounds and sprites will be stored under `assets/images/` during production.
+
 
 ### ✏️ Fonts
 
