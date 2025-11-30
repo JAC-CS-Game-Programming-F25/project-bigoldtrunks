@@ -7,7 +7,7 @@ The game draws strong inspiration from the survival-adventure spirit of Jumanji 
 
 - Player moves using W/A/S/D keys
 - Player hit spaceBar to start a Sword swinging
-- If player can gain ability as they progress deeper in the region and collect the crystal item; hit J (first ability) or K (second ability)
+- If player can gain ability as they progress deeper in the region and collect the relics; hit J (first ability) or K (second ability)
 - Player starts playing after the FallingDownToEarthState, meaning they just get pulled to this mysterial game world. 
 - Player has 3-lives, meaning they can be dead and revive, the FallingDownToEarthState comes in to play again. 
 - If Player dead and have no lives left, they lose and game over.
@@ -49,87 +49,28 @@ Managed with state machine system:
 ### 👾 Creatures Design
 - Creates start chasing player once player come near to the (enter their radius)
     + Chasing Logic: If player come close within certain distance they start to chase, when get close to player, they attack player
-- Bomberplant has different behavior, they stay still. But it explods the player if player accidentially step on thems. 
 
 #### Creature Escalation (Easy -> Hard)
-- Early creatures: small, easy - spider, pinkbat (UI look: they  move left and right - spider, not all direction )
+- Early creatures: small, easy to kill
 
-- Mid region: more in quantity, stronger, more variety: phantom, bomberplant in addition to spider, pinkbat  
+- Mid enemies: elemental animals
 
 - Final boss: The Jungle Warden, keeper of the Final Gate
 
-## Assets
-Most of sprites are used from these link listed below:
-- Srites: https://electriclemon.itch.io/citizens-guards-warriors 
-- Item: Crystal item: https://o-lobster.itch.io/adventure-pack 
-- Slime, Skeleton: https://game-endeavor.itch.io/mystic-woods 
-- Tile set: https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites 
 
-## 🧵 Wireframes
+## 🧠 Technical Concepts & Patterns Used
 
-### Title Screen
-
-![Title Screen](./readme_images/title.png)
-
-### Play State - Summer Realm
-
-![Summer Realm](./readme_images/summer.png)
-
-### Play State - Winter Realm
-
-![Winter Realm](./readme_images/winter.png)
-
-### Victory State
-
-![Victory](./readme_images/victory.png)
-
-### Game Over State
-
-![Game Over](./readme_images/gameover.png)
-
-## 🎨 Assets
-
-### 🖼️ Images
-
-All wireframe images are stored in the `readme_images/` folder and are used for UI layout planning.
-Additional in-game backgrounds and sprites will be stored under `assets/images/` during production.
+- **State Machine** 
+- **Inheritance & Polymorphism**
+- **Factory Design Pattern** 
+- **Enum** 
+- **Game Entities & Objects**
+- **Collision Detection & Hitboxes**
+- **Persistence System**
+- **Sprites & Animations**
+- **Tween Effects**  
+- **Sounds & Music**
+- **Custom Fonts and UI elements**
+- **Score, Points, Rewards**
 
 
-### ✏️ Fonts
-
-The game uses the default in-engine font for UI, menus, and game text.
-Additional fantasy-style fonts will be added for the title screen if needed.
-
-### 🔊 Sounds
-
-Our game uses a combination of music tracks and sound effects to support
-immersion, feedback, and clarity in both exploration and combat. All
-sounds are organized into two folders: `music/` and `effects/`.
-
-#### 🎵 Music
-
-Background music for game states and environments:
-
-- **title.wav** — Title Screen music
-- **summer.wav** — Summer Realm jungle adventure theme
-- **winter.wav** — Winter Realm mystical ice theme
-- **final.wav** — Final Boss battle (epic)
-- **victory.wav** — Short triumphant fanfare played on win
-- **gameover.wav** — Short _Epic Failure Boom_ indicating defeat
-
-#### 🔊 Effects
-
-Short SFX used for actions, combat, items, and feedback:
-
-- **sword.wav** — Player sword attack (slash)
-- **key.wav** — Key pickup (magical chime)
-- **enemy_dead.wav** — Enemy defeated sound
-- **boss_dead.wav** — Boss defeat impact
-- **door-enter.wav** — Entering a portal/door
-- **door-exit.wav** — Leaving a portal/door
-- **fire.mp3** — Fire attack / skill
-- **frozen.wav** — Ice/freeze effect
-- **heal.mp3** — Player healing
-- **burst_fire.mp3** — Fire burst / magic shot
-
-## 📚 References
