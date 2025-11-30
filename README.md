@@ -94,7 +94,6 @@ Most of sprites are used from these link listed below:
 All wireframe images are stored in the `readme_images/` folder and are used for UI layout planning.
 Additional in-game backgrounds and sprites will be stored under `assets/images/` during production.
 
-
 ### ✏️ Fonts
 
 The game uses the default in-engine font for UI, menus, and game text.
@@ -103,7 +102,6 @@ Style for title screen, Pirata One font from google will be used
 [MystiaJungle](ttps://example.com/the/full/url)
 
 ![FontSample](assets/fonts/font-sample.png)
-
 
 ### 🔊 Sounds
 
@@ -115,27 +113,62 @@ sounds are organized into two folders: `music/` and `effects/`.
 
 Background music for game states and environments:
 
-- **title.wav** — Title Screen music
-- **summer.wav** — Summer Realm jungle adventure theme
-- **winter.wav** — Winter Realm mystical ice theme
-- **final.wav** — Final Boss battle (epic)
-- **victory.wav** — Short triumphant fanfare played on win
-- **gameover.wav** — Short _Epic Failure Boom_ indicating defeat
+- **title.wav** — Title Screen music  
+  https://opengameart.org/content/adventure-intro-title-cinematic-epic
+
+- **summer.wav** — Summer Realm jungle adventure theme  
+  https://opengameart.org/content/jungle
+
+- **winter.wav** — Winter Realm mystical ice theme  
+  https://opengameart.org/content/boss-battle-music
+
+- **final.wav** — Final Boss battle (epic)  
+  https://opengameart.org/content/adventure-intro-title-cinematic-epic
+
+- **victory.wav** — Short triumphant victory fanfare  
+  https://opengameart.org/content/victory-fanfare-short
+
+- **gameover.ogg** — Game Over ambient/failure sound  
+  https://opengameart.org/content/gameover-or-underwater
+
 
 #### 🔊 Effects
 
 Short SFX used for actions, combat, items, and feedback:
 
-- **sword.wav** — Player sword attack (slash)
-- **key.wav** — Key pickup (magical chime)
-- **enemy_dead.wav** — Enemy defeated sound
-- **boss_dead.wav** — Boss defeat impact
-- **door-enter.wav** — Entering a portal/door
-- **door-exit.wav** — Leaving a portal/door
-- **fire.mp3** — Fire attack / skill
-- **frozen.wav** — Ice/freeze effect
-- **heal.mp3** — Player healing
-- **burst_fire.mp3** — Fire burst / magic shot
+- **boss-dead.wav** — Boss defeat impact  
+  https://opengameart.org/content/male-dead-voice
+
+- **door-enter.wav** — Entering a portal/door  
+  (from Pokémon assignment)
+
+- **door-exit.wav** — Exiting a portal/door  
+  (from Pokémon assignment)
+
+- **enemy-dead.wav** — Enemy defeated sound  
+  https://opengameart.org/content/male-dead-voice
+
+- **fire.wav** — Fire attack / magic skill  
+  https://opengameart.org/content/magic-sfx-sample
+
+- **frozen.wav** — Ice/freeze effect  
+  https://opengameart.org/content/ice-spells
+
+- **heal.mp3** — Player healing  
+  https://opengameart.org/content/3-heal-spells
+
+- **hits.wav** — Physical hit impact  
+  https://opengameart.org/content/punches-hits-swords-and-squishes
+
+- **hurt.wav** — Hurt sound  
+  https://opengameart.org/content/punches-hits-swords-and-squishes
+
+- **key-pickup.wav** — Key pickup (magical chime)  
+  https://opengameart.org/content/key-pickup-2
+
+- **sword.wav** — Player sword attack (slash)  
+  https://opengameart.org/content/battle-sound-effects
+
 
 
 ## 📚 References
