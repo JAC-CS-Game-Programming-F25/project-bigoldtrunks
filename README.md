@@ -1,4 +1,4 @@
-# 🎮 Game Design Document — Zelda-Inspired JS Game
+# 🎮 MytiaJungle
 ## 📌 Overview
 The game draws strong inspiration from the survival-adventure spirit of Jumanji storyline, with the  where characters are trapped into a dangerous, unpredictable game world filled with escalating challenges. Similarly, this game places the player inside a magical game world where they get stuck into. it is a big jungle realm they must escape by overcoming trials, defeating creatures. To return to reality, the player must conquer different regions (Scorching wilds - hot region; Frozen Platau - cold region) to find the sacred key, which is the only way to unlock the final gate
 
@@ -96,18 +96,12 @@ Additional in-game backgrounds and sprites will be stored under `assets/images/`
 
 ### ✏️ Fonts
 
-Fantasy-style fonts are stored in `assets/fonts/` and used throughout the UI
-and title screens. The project includes:
+The game uses the default in-engine font for UI, menus, and game text.
+Style for title screen, Pirata One font from google will be used
 
-- Cinzel (title / headings)
-- Uncial Antiqua (magic / ancient elements)
-- MedievalSharp (general UI text)
+[MystiaJungle](ttps://example.com/the/full/url)
 
-### 🔊 Sounds
-
-Our game uses a combination of music tracks and sound effects to support
-immersion, feedback, and clarity in both exploration and combat. All
-sounds are organized into two folders: `music/` and `effects/`.
+![FontSample](assets/fonts/font-sample.png)
 
 ### 🔊 Sounds
 
@@ -176,4 +170,25 @@ Short SFX used for actions, combat, items, and feedback:
   https://opengameart.org/content/battle-sound-effects
 
 
+
 ## 📚 References
+
+This project is developed using ideas, logic structures, and engine components adapted from the teaching materials provided in class Game Programming by instructor [VikeramSingh](https://github.com/VikramSinghMTL)
+
+### General Rereference
+
+General Architecture:
+- State Machine, Factory Pattern, OOP Structures, and Game Loop Architecture. Provided in course framework by [Instructor Name], [Institution Name].
+
+Narrative Inspiration:
+
+- Part of thematic concept of this game is inspired by: The Jumanji “trapped in a game world” storyline. Region-based progression
+Creature difficulty escalation, collecting keys to escape the world.
+
+## Development Team
+- [Cuong Ngo](https://github.com/cuongngodev)
+- [Linyue](https://github.com/Linyue-dev) 
+
+
+
+
