@@ -58,13 +58,6 @@ Managed with state machine system:
 
 - Final boss: The Jungle Warden, keeper of the Final Gate
 
-## Assets
-Most of sprites are used from these link listed below:
-- Srites: https://electriclemon.itch.io/citizens-guards-warriors 
-- Item: Crystal item: https://o-lobster.itch.io/adventure-pack 
-- Slime, Skeleton: https://game-endeavor.itch.io/mystic-woods 
-- Tile set: https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites 
-
 ## 🧵 Wireframes
 
 ### Title Screen
@@ -88,6 +81,13 @@ Most of sprites are used from these link listed below:
 ![Game Over](./readme_images/gameover.png)
 
 ## 🎨 Assets
+
+### Sprites
+Most of sprites are used from these link listed below:
+- Srites: https://electriclemon.itch.io/citizens-guards-warriors 
+- Item: Crystal item: https://o-lobster.itch.io/adventure-pack 
+- Slime, Skeleton: https://game-endeavor.itch.io/mystic-woods 
+- Tile set: https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites 
 
 ### 🖼️ Images
 
@@ -168,7 +168,6 @@ Short SFX used for actions, combat, items, and feedback:
 
 - **sword.wav** — Player sword attack (slash)  
   https://opengameart.org/content/battle-sound-effects
-
 
 
 ## 📚 References
