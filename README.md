@@ -40,7 +40,6 @@ Our project satisfies the course requirements:
 - Fonts
 - UI & Instructions
 - Juice (Feedback effects)
--
 
 ### 🤖 State Diagram
 
@@ -72,7 +71,12 @@ Our project satisfies the course requirements:
 
 ### 🖼️ Images
 
+All wireframe images are stored in the `readme_images/` folder and are used for UI layout planning.
+
 ### ✏️ Fonts
+
+The game uses the default in-engine font for UI, menus, and game text.
+Additional fantasy-style fonts will be added for the title screen if needed.
 
 ### 🔊 Sounds
 
@@ -80,7 +84,7 @@ Our game uses a combination of music tracks and sound effects to support
 immersion, feedback, and clarity in both exploration and combat. All
 sounds are organized into two folders: `music/` and `effects/`.
 
-### 🎵 Music
+#### 🎵 Music
 
 Background music for game states and environments:
 
@@ -91,7 +95,7 @@ Background music for game states and environments:
 - **victory.wav** — Short triumphant fanfare played on win
 - **gameover.wav** — Short _Epic Failure Boom_ indicating defeat
 
-### 🔊 Sound Effects
+#### 🔊 Effects
 
 Short SFX used for actions, combat, items, and feedback:
 
