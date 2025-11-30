@@ -65,4 +65,71 @@ Most of sprites are used from these link listed below:
 - Slime, Skeleton: https://game-endeavor.itch.io/mystic-woods 
 - Tile set: https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites 
 
+## 🧵 Wireframes
 
+### Title Screen
+
+![Title Screen](./readme_images/title.png)
+
+### Play State - Summer Realm
+
+![Summer Realm](./readme_images/summer.png)
+
+### Play State - Winter Realm
+
+![Winter Realm](./readme_images/winter.png)
+
+### Victory State
+
+![Victory](./readme_images/victory.png)
+
+### Game Over State
+
+![Game Over](./readme_images/gameover.png)
+
+## 🎨 Assets
+
+### 🖼️ Images
+
+All wireframe images are stored in the `readme_images/` folder and are used for UI layout planning.
+Additional in-game backgrounds and sprites will be stored under `assets/images/` during production.
+
+
+### ✏️ Fonts
+
+The game uses the default in-engine font for UI, menus, and game text.
+Additional fantasy-style fonts will be added for the title screen if needed.
+
+### 🔊 Sounds
+
+Our game uses a combination of music tracks and sound effects to support
+immersion, feedback, and clarity in both exploration and combat. All
+sounds are organized into two folders: `music/` and `effects/`.
+
+#### 🎵 Music
+
+Background music for game states and environments:
+
+- **title.wav** — Title Screen music
+- **summer.wav** — Summer Realm jungle adventure theme
+- **winter.wav** — Winter Realm mystical ice theme
+- **final.wav** — Final Boss battle (epic)
+- **victory.wav** — Short triumphant fanfare played on win
+- **gameover.wav** — Short _Epic Failure Boom_ indicating defeat
+
+#### 🔊 Effects
+
+Short SFX used for actions, combat, items, and feedback:
+
+- **sword.wav** — Player sword attack (slash)
+- **key.wav** — Key pickup (magical chime)
+- **enemy_dead.wav** — Enemy defeated sound
+- **boss_dead.wav** — Boss defeat impact
+- **door-enter.wav** — Entering a portal/door
+- **door-exit.wav** — Leaving a portal/door
+- **fire.mp3** — Fire attack / skill
+- **frozen.wav** — Ice/freeze effect
+- **heal.mp3** — Player healing
+- **burst_fire.mp3** — Fire burst / magic shot
+
+## 📚 References
