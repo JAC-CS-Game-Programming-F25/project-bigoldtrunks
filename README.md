@@ -57,6 +57,28 @@ Managed with state machine system:
 - Mid region: more in quantity, stronger, more variety: phantom, bomberplant in addition to spider, pinkbat  
 
 - Final boss: The Jungle Warden, keeper of the Final Gate
+#### 🦇 Creature-Specific State
+#### Spider & Pinkbat (basic enemies)
+- IdleState
+- PatrolState (left/right movement)
+- ChasingState
+- AttackingState
+- HurtState
+- DyingState
+
+#### Phantom (Mid-tier enemy)
+- IdleState
+- PatrolState (can move in all directions)
+- ChasingState (faster movement)
+- AttackingState
+- TeleportState (special ability)
+- HurtState
+- DyingState
+#### BomberPlant (Special behavior - stationary)
+- AlertState (player nearby, priming to explode)
+- ExplodingState (attack animation + AOE damage)
+- DyingState (post-explosion)
+#### Skeleton & Slime
 
 ## Assets
 Most of sprites are used from these link listed below:
