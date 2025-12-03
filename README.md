@@ -105,10 +105,11 @@ Managed with state machine system:
 ## 🎨 Assets
 
 ### Sprites
-Most of sprites are used from these link listed below:
+Most of sprites included Purchase and Free Version are used from these link listed below:
 - Srites: https://electriclemon.itch.io/citizens-guards-warriors 
 - Item: Crystal item: https://o-lobster.itch.io/adventure-pack 
 - Slime, Skeleton: https://game-endeavor.itch.io/mystic-woods 
+- Bigboss: https://elthen.itch.io/2d-pixel-art-beast-monster-sprites/download/6jj8M_JTtPF6RLjL_YEVA0OL4T0s_vE8l8kHxC5v 
 - Tile set: https://anokolisa.itch.io/free-pixel-art-asset-pack-topdown-tileset-rpg-16x16-sprites 
 
 ### 🖼️ Images
@@ -194,7 +195,7 @@ Short SFX used for actions, combat, items, and feedback:
 
 ## 📚 References
 
-This project is developed using ideas, logic structures, and engine components adapted from the teaching materials provided in class Game Programming by instructor [VikeramSingh](https://github.com/VikramSinghMTL)
+This project is developed using ideas, logic structures, and engine components adapted from the teaching materials provided in class Game Programming by instructor [VikramSingh](https://github.com/VikramSinghMTL)
 
 ### General Rereference
 
