@@ -7,7 +7,7 @@ The game draws strong inspiration from the survival-adventure spirit of Jumanji 
 
 - Player moves using W/A/S/D keys
 - Player hit spaceBar to start a Sword swinging
-- If player can gain ability as they progress deeper in the region and collect the crystal item; hit J (first ability) or K (second ability)
+- If player can gain ability as they progress deeper in the region and collect the **crystal** and **fire-torch** item; hit J (first ability) or K (second ability) 
 - Player starts playing after the FallingDownToEarthState, meaning they just get pulled to this mysterial game world. 
 - Player has 3-lives, meaning they can be dead and revive, the FallingDownToEarthState comes in to play again. 
 - If Player dead and have no lives left, they lose and game over.
@@ -27,14 +27,12 @@ Futher development:
 5. Face the final boss and collect the key to finish the game
 
 
-## Game Diagram
+## Class Diagram
 
-![Flowchart](assets/diagrams/game-engine-diagram.png)
-![Flowchart](assets/diagrams/service-diagram.png)
-![Flowchart](assets/diagrams/environment-diagram.png)
-![Flowchart](assets/diagrams/entity-diagram.png)
-![Flowchart](assets/diagrams/state-diagram.png)
-![Flowchart](assets/diagrams/enum-diagram.png)
+![Flowchart](assets/diagrams/class-diagram-1.png)
+![Flowchart](assets/diagrams/class-diagram-2.png)
+
+
 
 ## Game Entities Summary
 ### Player 
@@ -46,39 +44,51 @@ Managed with state machine system:
 - `PerformFrozenFlameState`
 - `FallingDownToEartthState`
 
-### 👾 Creatures Design
-- Creates start chasing player once player come near to the (enter their radius)
-    + Chasing Logic: If player come close within certain distance they start to chase, when get close to player, they attack player
-- Bomberplant has different behavior, they stay still. But it explods the player if player accidentially step on thems. 
+### 👾 Creatures AI Design
+- Patrol logic: creatures movement with a certain patern like left, right, up, down.
+- Chasing Logic: If player come close within certain radius, creatures start to chase player, the speed increase. 
+- Attack Logic: when get close to player, they start to attack player
+- UI look: they move left and right, not all direction 
 
 #### Creature Escalation (Easy -> Hard)
-- Early creatures: small, easy - spider, pinkbat (UI look: they  move left and right - spider, not all direction )
+- **Early creatures** small, easy - **Spider**, **Pinkbat** 
 
-- Mid region: more in quantity, stronger, more variety: phantom, bomberplant in addition to spider, pinkbat  
+- **Mid creature**: more in quantity, a bit stronger, more variety: **bomberplant** in addition to spider, pinkbat  
+ **Bomberplant** has different behavior, they stay still. But it explodes the player if player accidentially step on thems. 
+- **Final creature** player faces with **WaredenBear** - the final boss, keeper of the Escape:
+ + Higher HP
+ + Larger hitbox
+ + Stronger damage
+ + Maybe slower movement 
 
-- Final boss: The Jungle Warden, keeper of the Final Gate
-#### 🦇 Creature-Specific State
+#### 🦇 Creature State Specs
+Disclaimer: Due to time constrain, it is more likely that this version only includes 4-group of creatures only with different behaviors or strength: **Spider**, **BomberPlant**, **Skeleton**, **WardenBear**. The other probably don't include at this point of this version.
+
 #### Spider & Pinkbat (basic enemies)
 - IdleState
-- PatrolState (left/right movement)
+- PatrolState
+- ChasingState
+- DyingState
+
+#### Phantom (Mid-tier enemy) (Postponed-Later version)
+- IdleState
+- PatrolState
+- ChasingState (faster movement)
+- AttackingState
+- HurtState
+- DyingState
+
+#### BomberPlant (Special behavior - stationary) (Probably later version)
+- AlertState (player nearby, priming to explode)
+- ExplodingState (attack animation + AOE damage)
+- DyingState (post-explosion).
+
+#### Skeleton & WardenBear
+- IdleState
 - ChasingState
 - AttackingState
 - HurtState
 - DyingState
-
-#### Phantom (Mid-tier enemy)
-- IdleState
-- PatrolState (can move in all directions)
-- ChasingState (faster movement)
-- AttackingState
-- TeleportState (special ability)
-- HurtState
-- DyingState
-#### BomberPlant (Special behavior - stationary)
-- AlertState (player nearby, priming to explode)
-- ExplodingState (attack animation + AOE damage)
-- DyingState (post-explosion)
-#### Skeleton & Slime
 
 ## 🧵 Wireframes
 
