@@ -1,0 +1,244 @@
+{
+  "images": [
+    {
+      "name": "Floors_Tiles",
+      "path": "./assets/images/Tiles/cold/Floors_Tiles.png",
+      "width": 400,
+      "height": 416
+    },
+    {
+      "name": "tree_size_02",
+      "path": "./assets/images/Tiles/Trees/Model_01/tree_size_02.png",
+      "width": 368,
+      "height": 256
+    },   
+    {
+      "name": "tree_size_04",
+      "path": "./assets/images/Tiles/Trees/Model_01/tree_size_04.png",
+      "width": 368,
+      "height": 256
+    },
+    {
+      "name": "Rocks",
+      "path": "./assets/images/Tiles/Rocks.png",
+      "width": 368,
+      "height": 256
+    }, 
+    {
+      "name": "player-walk",
+      "path": "./assets/images/player/player-movinging.png",
+      "width": 64,
+      "height": 196
+    },
+    {
+      "name": "player-attack",
+      "path": "./assets/images/player/player-sword-swing.png",
+      "width": 128,
+      "height": 384
+    },
+    {
+      "name": "player-fire",
+      "path": "./assets/images/player/player-fire-flame-poster.png",
+      "width": 128,
+      "height": 256
+    },
+    {
+      "name": "player-frozen",
+      "path": "./assets/images/player/player-frozen-flame-poster.png",
+      "width": 128,
+      "height": 384
+    },
+    {
+      "name": "slime-left",
+      "path": "./assets/images/creatures/slime/slime-left.png",
+      "width": 224,
+      "height": 160
+    },
+    {
+      "name": "slime-right",
+      "path": "./assets/images/creatures/slime/slime-right.png",
+      "width": 224,
+      "height": 160
+    },
+    {
+      "name": "spider-spritesheet",
+      "path": "./assets/images/creatures/spider/spider_spritesheet.png",
+      "width": 112,
+      "height": 112
+    },
+    {
+      "name": "pinkbat-spritesheet",
+      "path": "./assets/images/creatures/pinkbat/pinkbat_spritesheet.png",
+      "width": 208,
+      "height": 80
+    },
+    {
+      "name": "skeleton-left",
+      "path": "./assets/images/creatures/skeleton/skeleton-left.png",
+      "width": 384,
+      "height": 320
+    },
+    {
+      "name": "skeleton-right",
+      "path": "./assets/images/creatures/skeleton/skeleton-right.png",
+      "width": 384,
+      "height": 320
+    },
+    {
+      "name": "phantom-spritesheet",
+      "path": "./assets/images/creatures/phantom/phantom_spritesheet.png",
+      "width": 128,
+      "height": 32
+    },
+    {
+      "name": "key-item",
+      "path": "./assets/images/item/key/key_item_anim_strip_6.png",
+      "width": 96,
+      "height": 16
+    },
+    {
+      "name": "crystal-item",
+      "path": "./assets/images/item/crystal/crystal_item_anim_strip_6.png",
+      "width": 96,
+      "height": 16
+    }
+  ],
+  "fonts": [
+    {
+      "name": "Cinzel-Bold",
+      "path": "./assets/font/Cinzel-Bold.ttf"        
+    },
+    {
+      "name": "Cinzel-Regular",
+      "path": "./assets/font/Cinzel-Regular.ttf"        
+    },
+    {
+      "name": "font-sample",
+      "path": "./assets/font/font-sample.png"        
+    },
+    {
+      "name": "MedievalSharp-Regular",
+      "path": "./assets/font/MedievalSharp-Regular.ttf"        
+    },
+    {
+      "name": "UncialAntiqua-Regular",
+      "path": "./assets/font/UncialAntiqua-Regular.ttf"        
+    }        
+  ],
+  "sounds": [
+    {
+        "name": "title",
+        "path": "./assets/sounds/music/title.mp3",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "summer",
+        "path": "./assets/sounds/music/summer.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "winter",
+        "path": "./assets/sounds/music/winter.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "victory",
+        "path": "./assets/sounds/music/victory.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "gameover",
+        "path": "./assets/sounds/music/gameover.ogg",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "final",
+        "path": "./assets/sounds/music/final.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "boss-dead",
+        "path": "./assets/sounds/effects/boss-dead.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "door-enter",
+        "path": "./assets/sounds/effects/door-enter.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "door-exit",
+        "path": "./assets/sounds/effects/door-exit.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "enemy-dead",
+        "path": "./assets/sounds/effects/enemy-dead.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "fire",
+        "path": "./assets/sounds/effects/fire.wavv",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "door-enter",
+        "path": "./assets/sounds/effects/door-enter.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "fire",
+        "path": "./assets/sounds/effects/fire.wavv",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "frozen",
+        "path": "./assets/sounds/effects/frozen.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "heal",
+        "path": "./assets/sounds/effects/heal.mp3",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "hits",
+        "path": "./assets/sounds/effects/hits.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "hurt",
+        "path": "./assets/sounds/effects/hurt.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "key-pickup",
+        "path": "./assets/sounds/effects/key-pickup.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "sword",
+        "path": "./assets/sounds/effects/sword.wav",
+        "size": 1,
+        "volume": 0.2
+    }
+  ]
+}
