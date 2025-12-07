@@ -20,6 +20,7 @@ const resizeCanvas = () => {
 
   canvas.style.width = `${CANVAS_WIDTH * scale}px`;
   canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
+
 };
 
 // Listen for canvas resize events

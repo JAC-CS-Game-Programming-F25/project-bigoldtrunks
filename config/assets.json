@@ -1,6 +1,12 @@
 {
   "images": [
     {
+     "name": "title",
+      "path": "./assets/images/title.jpg",
+      "width": 1280,
+      "height": 720
+    },
+    {
       "name": "Floors_Tiles",
       "path": "./assets/images/Tiles/cold/Floors_Tiles.png",
       "width": 400,
@@ -106,23 +112,19 @@
   "fonts": [
     {
       "name": "Cinzel-Bold",
-      "path": "./assets/font/Cinzel-Bold.ttf"        
+      "path": "./assets/fonts/Cinzel-Bold.ttf"        
     },
     {
       "name": "Cinzel-Regular",
-      "path": "./assets/font/Cinzel-Regular.ttf"        
-    },
-    {
-      "name": "font-sample",
-      "path": "./assets/font/font-sample.png"        
+      "path": "./assets/fonts/Cinzel-Regular.ttf"        
     },
     {
       "name": "MedievalSharp-Regular",
-      "path": "./assets/font/MedievalSharp-Regular.ttf"        
+      "path": "./assets/fonts/MedievalSharp-Regular.ttf"        
     },
     {
       "name": "UncialAntiqua-Regular",
-      "path": "./assets/font/UncialAntiqua-Regular.ttf"        
+      "path": "./assets/fonts/UncialAntiqua-Regular.ttf"        
     }        
   ],
   "sounds": [
@@ -188,19 +190,13 @@
     },
     {
         "name": "fire",
-        "path": "./assets/sounds/effects/fire.wavv",
+        "path": "./assets/sounds/effects/fire.wav",
         "size": 1,
         "volume": 0.2
     },
     {
         "name": "door-enter",
         "path": "./assets/sounds/effects/door-enter.wav",
-        "size": 1,
-        "volume": 0.2
-    },
-    {
-        "name": "fire",
-        "path": "./assets/sounds/effects/fire.wavv",
         "size": 1,
         "volume": 0.2
     },
