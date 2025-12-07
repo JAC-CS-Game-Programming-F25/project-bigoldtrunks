@@ -1,7 +1,9 @@
 import Sprite from "../../lib/Sprite.js";
+import Animation from "../../lib/Animation.js";
 import ImageName from "../enums/ImageName.js";
 import { context, images } from "../globals.js";
 import GameEntity from "./GameEntity.js";
+import Direction from "../enums/Direction.js";
 
 export default class Player extends GameEntity {
 
@@ -25,8 +27,27 @@ export default class Player extends GameEntity {
         // set player dimensions
         this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
 
+      
+        // initialize animations for each direction, using only one frame for idling
+        this.animation = {
+                    [Direction.Right]: new Animation([0], 1),
+                    [Direction.Left]: new Animation([4], 1),
+                    [Direction.Down]: new Animation([8], 1),
+                    [Direction.Up]: new Animation([12], 1),
+                };
+        // start with player facing down
+        this.currentAnimation = this.animation[Direction.Down];
+
         console.log(this.walkingSprites);
     }
+
+    update(dt) {
+        // Update the animation
+        if (this.currentAnimation) {
+            this.currentAnimation.update(dt);
+        }
+    }
+
     render(){
         context.save();
 
