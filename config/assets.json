@@ -31,8 +31,8 @@
       "height": 256
     }, 
     {
-      "name": "player-walk",
-      "path": "./assets/images/player/player-movinging.png",
+      "name": "player",
+      "path": "./assets/images/player/player.png",
       "width": 64,
       "height": 196
     },
