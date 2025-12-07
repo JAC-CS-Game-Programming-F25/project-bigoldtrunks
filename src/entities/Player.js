@@ -4,6 +4,10 @@ import ImageName from "../enums/ImageName.js";
 import { context, images } from "../globals.js";
 import GameEntity from "./GameEntity.js";
 import Direction from "../enums/Direction.js";
+import StateMachine from "../../lib/StateMachine.js";
+import PlayerStateName from "../enums/PlayerStateName.js";
+import PlayerIdlingState from "../states/player/PlayerIdlingState.js";
+import PlayerWalkingState from "../states/player/PlayerWalkingState.js";
 
 export default class Player extends GameEntity {
 
@@ -37,8 +41,7 @@ export default class Player extends GameEntity {
                 };
         // start with player facing down
         this.currentAnimation = this.animation[Direction.Down];
-
-        console.log(this.walkingSprites);
+        this.stateMachine = this.initializeStateMachine();
     }
 
     update(dt) {
@@ -47,12 +50,25 @@ export default class Player extends GameEntity {
             this.currentAnimation.update(dt);
         }
     }
-
     render(){
         context.save();
 
         super.render(); // need to pass offset
 
         context.restore();
+    }
+    /**
+     * Initializes the state machine for the player.
+     * @returns {StateMachine} the initialized state machine
+     */
+    initializeStateMachine() {
+        const stateMachine = new StateMachine();
+
+        stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
+        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
+
+        stateMachine.change(PlayerStateName.Idle);
+
+        return stateMachine;
     }
 }

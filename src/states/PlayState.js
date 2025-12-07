@@ -1,15 +1,14 @@
 import State from "../../lib/State.js";
 import Player from "../entities/Player.js";
-import Map from "../services/Map.js";
+import Map from "../objects/Map.js";
+import Region from "../objects/Region.js";
 
 export default class PlayState extends State {
   constructor(mapDefinition) {
     super();
-    this.map = new Map(mapDefinition);
-    this.player = new Player()
+    this.region = new Region(mapDefinition);
   }
   render() {
-    this.map.render(); // ← render map
-    this.player.render(); // ← render player
+    this.region.render(); 
   }
 }

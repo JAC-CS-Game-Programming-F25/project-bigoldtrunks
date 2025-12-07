@@ -3,17 +3,17 @@ import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 
 
-export default class PlayerIdlingState extends State {
+export default class PlayerWalkingState extends State {
     constructor(player){
         super()
         this.player = player;
 
         this.animation = {
-			[Direction.Right]: new Animation([0], 1),
-			[Direction.Left]: new Animation([4], 1),
-			[Direction.Down]: new Animation([8], 1),
+            [Direction.Right]: new Animation([0], 1),
+            [Direction.Left]: new Animation([4], 1),
+            [Direction.Down]: new Animation([8], 1),
             [Direction.Up]: new Animation([12], 1),
-		};
+        };
     }
 
     enter(params){
