@@ -11,4 +11,7 @@ export default class Region {
     this.map.render(); // ← render map
     this.player.render(); // ← render player
   }
+  update(dt) {
+    this.player.update(dt);
+  }
 }
