@@ -17,7 +17,9 @@ export default class Player extends GameEntity {
     static SWORD_WIDTH = 16;
 
     constructor(){
-        super()
+        super({
+            speed: 60  // Player moves at 100 pixels per second
+        })
 
         this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Player),
@@ -27,9 +29,11 @@ export default class Player extends GameEntity {
 
         this.sprites = this.walkingSprites;
         // set initial player position
-        this.position = {x: 100, y: 100};
+                this.position = {x: 100, y: 100};
+
         // set player dimensions
-        this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
+                this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
+
 
       
         // initialize animations for each direction, using only one frame for idling
@@ -44,12 +48,6 @@ export default class Player extends GameEntity {
         this.stateMachine = this.initializeStateMachine();
     }
 
-    update(dt) {
-        // Update the animation
-        if (this.currentAnimation) {
-            this.currentAnimation.update(dt);
-        }
-    }
     render(){
         context.save();
 
