@@ -23,6 +23,7 @@ export default class Region {
   update(dt) {
     this.creatures.forEach((creature) => {
       creature.map = this.map;
+      creature.region = this;
       creature.update(dt);
     });
   }
