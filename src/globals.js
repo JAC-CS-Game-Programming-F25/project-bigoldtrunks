@@ -20,7 +20,6 @@ const resizeCanvas = () => {
 
   canvas.style.width = `${CANVAS_WIDTH * scale}px`;
   canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
-
 };
 
 // Listen for canvas resize events
@@ -35,3 +34,6 @@ export const stateMachine = new StateMachine();
 export const timer = new Timer();
 export const input = new Input(canvas);
 export const sounds = new Sounds();
+
+// If true, render all hitboxes.
+export const DEBUG = true;
