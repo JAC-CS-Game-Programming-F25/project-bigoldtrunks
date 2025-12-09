@@ -9,7 +9,6 @@ import { input } from "../../globals.js";
 export default class PlayerIdlingState extends State {
     constructor(player){
         super()
-        console.log("PlayerIdlingState constructor")
         this.player = player;
 
         this.animation = {
@@ -21,14 +20,18 @@ export default class PlayerIdlingState extends State {
     }
 
     enter(params){
-        // since we use only one spritesheet for all frames of player from idling to walking, means we use this.player.sprites the entire process
+        console.log("PlayerIdlingState enter")
+
+        this.player.sprites=this.player.walkingSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
 
     }
     
     update(dt){
-       this.checkForMovement();
-       console.log("PlayerIdlingState update")
+        console.log("PlayerIdlingState update")
+        this.checkForMovement();
+        this.handleSwordSwing();
+
     }
 
     checkForMovement(){
@@ -46,5 +49,11 @@ export default class PlayerIdlingState extends State {
                 this.player.direction = Direction.Right;
                 this.player.changeState(PlayerStateName.Walking);
             } 
+    }
+    handleSwordSwing() {
+        if (input.isKeyHeld(Input.KEYS.SPACE)) {
+            console.log("Checking for sword swing input");
+            this.player.changeState(PlayerStateName.SwordSwinging);
+        }
     }
 }

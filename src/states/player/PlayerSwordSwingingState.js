@@ -12,7 +12,6 @@ export default class PlayerSwordSwingingState extends State {
         super()
         this.player = player;
 
-        console.log("PlayerSwordSwingingState constructor");
         this.animation = {
             [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.1, 1),
             [Direction.Left]: new Animation([8, 9, 10, 11, 12, 13, 14, 15], 0.1, 1),
@@ -29,6 +28,7 @@ export default class PlayerSwordSwingingState extends State {
 
     enter(){
         // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position
+        console.log("PlayerSwordSwingingState enter");
 
         const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
         const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
@@ -46,11 +46,24 @@ export default class PlayerSwordSwingingState extends State {
     }
     
     update(dt){
-       
+       if(this.player.currentAnimation.isDone()){
+        this.player.currentAnimation.refresh();
+        this.player.changeState(PlayerStateName.Idle);
+       }
     }
 
     exit(){
-       
+        this.restorePlayerPositionAndDimensions();
     }
+    restorePlayerPositionAndDimensions() {
+        const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
+        const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
 
+        this.player.position.x += offsetX;
+        this.player.position.y += offsetY;
+
+        // Restore original dimensions
+        this.player.dimensions.x = this.originalDimensions.x;
+        this.player.dimensions.y = this.originalDimensions.y;
+    }
 }
