@@ -12,7 +12,7 @@ export default class Region {
     // Spawn 3-5 random spiders
     const spiderCount = getRandomPositiveInteger(3, 5);
 
-    for (let i = 0; i < spiderCount; i++) {
+    for (let i = 0; i < 10; i++) {
       const x = getRandomPositiveInteger(50, 330);
       const y = getRandomPositiveInteger(50, 150);
 
@@ -21,6 +21,7 @@ export default class Region {
   }
 
   update(dt) {
+    this.player.update(dt);
     this.creatures.forEach((creature) => {
       creature.map = this.map;
       creature.region = this;
@@ -32,7 +33,7 @@ export default class Region {
     this.player.render(); // ← render player
     this.creatures.forEach((creature) => creature.render());
   }
-  update(dt) {
-    this.player.update(dt);
-  }
+//   update(dt) {
+//     this.player.update(dt);
+//   }
 }
