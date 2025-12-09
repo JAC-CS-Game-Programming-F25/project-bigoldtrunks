@@ -8,21 +8,34 @@ export default class Region {
   constructor(mapDefinition) {
     this.map = new Map(mapDefinition);
     this.player = new Player();
-    this.creatures = [];
 
-    // Spawn 3-5 random spiders
-    const spiderCount = getRandomPositiveInteger(3, 5);
-    
-    for (let i = 0; i < 10; i++) {
-        const x = getRandomPositiveInteger(50, 330);
-        const y = getRandomPositiveInteger(50, 150);
-        
-        this.creatures.push(new Spider(new Vector(x, y)));
-    }
+    this.creatures = this.generateCreatures();
+
+    // All entities in the region
+    this.entities = [this.player, ...this.creatures];
 
     this.renderQueue = this.buildRenderQueue();
   }
-  
+  /**
+   * Create initial creatures: Spiders with a random amount, at random positions
+   * More creatures can be added later
+   * @returns {void}
+   */
+  generateCreatures(){
+    const entities = new Array();
+
+    // Spawn 3-5 random spiders
+    const spiderCount = getRandomPositiveInteger(3, 5);
+
+    for (let i = 0; i < spiderCount; i++) {
+        const x = getRandomPositiveInteger(50, 330);
+        const y = getRandomPositiveInteger(50, 150);
+
+        entities.push(new Spider(new Vector(x, y)));
+    }
+
+    return entities;
+  }
   update(dt) {
     this.player.update(dt);
     this.creatures.forEach((creature) => {
