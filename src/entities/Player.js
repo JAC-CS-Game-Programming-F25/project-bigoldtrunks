@@ -8,13 +8,18 @@ import StateMachine from "../../lib/StateMachine.js";
 import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdlingState from "../states/player/PlayerIdlingState.js";
 import PlayerWalkingState from "../states/player/PlayerWalkingState.js";
+import PlayerSwordSwingingState from "../states/player/PlayerSwordSwingingState.js";
 
 export default class Player extends GameEntity {
 
     // the player frame has width and height of 16 pixels, apply to all movements idle/walk
     static PLAYER_SPRITE_WIDTH = 16;
 	static PLAYER_SPRITE_HEIGHT = 16;
-    static SWORD_WIDTH = 16;
+
+    // the player sword swinging frame has width and height of 32 pixels
+    static PLAYER_SWORD_SPRITE_HEIGHT = 32;
+    static PLAYER_SWORD_SPRITE_WIDTH = 32;
+    
 
     constructor(){
         super({
@@ -25,6 +30,11 @@ export default class Player extends GameEntity {
             images.get(ImageName.Player),
             Player.PLAYER_SPRITE_WIDTH,
             Player.PLAYER_SPRITE_HEIGHT,
+        )
+        this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerSwordSwing),
+            Player.PLAYER_SWORD_SPRITE_WIDTH,
+            Player.PLAYER_SWORD_SPRITE_HEIGHT,
         )
 
         this.sprites = this.walkingSprites;
@@ -64,6 +74,7 @@ export default class Player extends GameEntity {
 
         stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
+        stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
 
         stateMachine.change(PlayerStateName.Idle);
 

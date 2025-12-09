@@ -27,7 +27,9 @@ export default class PlayerWalkingState extends State {
     
     update(dt){
         this.handleMovement(dt);
+        this.handleSwordSwing();
     }
+
     handleMovement(dt) {
 		this.player.currentAnimation = this.animation[this.player.direction];
         console.log("dt", dt)
@@ -56,4 +58,10 @@ export default class PlayerWalkingState extends State {
 			this.player.changeState(PlayerStateName.Idle);
 		}
 	}
+    handleSwordSwing() {
+        if (input.isKeyHeld(Input.KEYS.SPACE)) {
+            console.log("Checking for sword swing input");
+            this.player.changeState(PlayerStateName.SwordSwinging);
+        }
+    }
 }

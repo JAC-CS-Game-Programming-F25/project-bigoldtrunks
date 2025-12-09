@@ -21,7 +21,4 @@ export default class PlayState extends State {
   render() {
     this.region.render();
   }
-  update(dt) {
-    this.region.update(dt);
-  }
 }
