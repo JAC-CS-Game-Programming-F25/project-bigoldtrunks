@@ -11,12 +11,11 @@ export default class PlayerSwordSwingingState extends State {
     constructor(player){
         super()
         this.player = player;
-
         this.animation = {
-            [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.1, 1),
-            [Direction.Left]: new Animation([8, 9, 10, 11, 12, 13, 14, 15], 0.1, 1),
-            [Direction.Down]: new Animation([16, 17, 18, 19, 20, 21, 22, 23], 0.1, 1),
-            [Direction.Up]: new Animation([24, 25, 26, 27, 28, 29, 30, 31], 0.1, 1),
+            [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.06, 1),
+            [Direction.Left]: new Animation([8, 9, 10, 11, 12, 13, 14, 15], 0.06, 1),
+            [Direction.Down]: new Animation([16, 17, 18, 19, 20, 21, 22, 23], 0.06, 1),
+            [Direction.Up]: new Animation([24, 25, 26, 27, 28, 29, 30, 31], 0.06, 1),
         };
         
         // Store the original position for later restoration
@@ -24,12 +23,13 @@ export default class PlayerSwordSwingingState extends State {
             x: this.player.dimensions.x,
             y: this.player.dimensions.y
         };
-    }
 
+    }
+    
     enter(){
         // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position
         console.log("PlayerSwordSwingingState enter");
-
+        
         const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
         const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
         
@@ -46,15 +46,28 @@ export default class PlayerSwordSwingingState extends State {
     }
     
     update(dt){
-       if(this.player.currentAnimation.isDone()){
-        this.player.currentAnimation.refresh();
-        this.player.changeState(PlayerStateName.Idle);
-       }
+        if(this.player.currentAnimation.isDone()){
+            this.player.currentAnimation.refresh();
+            this.player.changeState(PlayerStateName.Idle);
+        }
+        /**
+		 * Only set the sword's hitbox halfway through the animation.
+		 * Otherwise, it will look like the enemy died as soon as the
+		 * animation started which visually doesn't really make sense.
+		 */
+		if (this.player.currentAnimation.isHalfwayDone()) {
+			this.setSwordHitbox();
+		}
     }
-
+    
     exit(){
         this.restorePlayerPositionAndDimensions();
+        this.player.swordHitbox.set(0, 0, 0, 0); // Clear the sword hitbox
     }
+
+    /**
+     * Restores the player's original position and dimensions.
+     */
     restorePlayerPositionAndDimensions() {
         const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
         const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
@@ -66,4 +79,33 @@ export default class PlayerSwordSwingingState extends State {
         this.player.dimensions.x = this.originalDimensions.x;
         this.player.dimensions.y = this.originalDimensions.y;
     }
+    /**
+	 * Creates a hitbox based the player's position and direction.
+	 */
+	setSwordHitbox() {
+		let hitboxX, hitboxY, hitboxWidth, hitboxHeight;
+        hitboxHeight = this.player.dimensions.y/2;
+        hitboxWidth = this.player.dimensions.x/2 ;
+
+		// The magic numbers here are to adjust the hitbox offsets to make it line up with the sword animation.
+		if (this.player.direction === Direction.Left) {
+			hitboxX = this.player.position.x - hitboxWidth/2 + 3;
+			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
+		}
+		else if (this.player.direction === Direction.Right) {
+			hitboxX = this.player.position.x + this.player.dimensions.x/2 + 4;
+			hitboxY = this.player.position.y + this.player.dimensions.y / 4;
+		}
+		else if (this.player.direction === Direction.Up) {
+			hitboxX = this.player.position.x + this.player.dimensions.x / 4;
+			hitboxY = this.player.position.y - hitboxHeight/2 + 5;
+		}
+		else {
+
+			hitboxX = this.player.position.x + this.player.dimensions.x / 4;
+			hitboxY = this.player.position.y + this.player.dimensions.y/2 + 3;
+		}
+
+		this.player.swordHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
+	}
 }
