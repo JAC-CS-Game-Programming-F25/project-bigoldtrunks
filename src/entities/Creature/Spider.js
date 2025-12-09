@@ -13,7 +13,7 @@ export default class Spider extends Creature {
 
   constructor(position) {
     super({ position, speed: Spider.SPEED, health: 1 });
-
+    this.hitboxOffsets.set(0, 6, -2, -8); // shrink hitbox
     this.loadSprites();
     this.setupAnimations();
     this.stateMachine = this.initializeStateMachine();
