@@ -32,4 +32,7 @@ export default class Region {
     this.player.render(); // ← render player
     this.creatures.forEach((creature) => creature.render());
   }
+  update(dt) {
+    this.player.update(dt);
+  }
 }
