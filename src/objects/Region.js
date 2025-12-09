@@ -26,13 +26,11 @@ export default class Region {
       creature.region = this;
       creature.update(dt);
     });
+    this.player.update(dt);
   }
   render() {
     this.map.render(); // ← render map
     this.player.render(); // ← render player
     this.creatures.forEach((creature) => creature.render());
-  }
-  update(dt) {
-    this.player.update(dt);
   }
 }
