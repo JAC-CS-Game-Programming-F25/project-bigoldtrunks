@@ -21,8 +21,9 @@ export default class Region {
   update(dt) {
     // Rebuild render queue each frame to account for movement
     this.renderQueue = this.buildRenderQueue();
-
+    this.cleanUpEntities();
     this.updateEntities(dt);
+
   }
 
   /**
@@ -32,7 +33,9 @@ export default class Region {
    */
   updateEntities(dt) {
     this.entities.forEach((entity) => {
-
+        if (entity.health <= 0) {
+				entity.isDead = true;
+			}
         if(entity instanceof Creature){
             const oldX = entity.position.x;
             const oldY = entity.position.y;
@@ -50,15 +53,15 @@ export default class Region {
        
        
 
-        // Check collision with creatures
-        if(
-            !entity.isDead && 
-            !this.player.isInVulnerable &&
-            this.player.didCollideWithEntity(entity.hitbox) &&
-            !(entity instanceof Player) // exclude player itself otherwise player immediate take damage and dead
-        ){
-            this.player.onTakingDamage(entity.damage);
-        }   
+        // // Check collision with creatures
+        // if(
+        //     !entity.isDead && 
+        //     !this.player.isInVulnerable &&
+        //     this.player.didCollideWithEntity(entity.hitbox) &&
+        //     !(entity instanceof Player) // exclude player itself otherwise player immediate take damage and dead
+        // ){
+        //     this.player.onTakingDamage(entity.damage);
+        // }   
         entity.update(dt);
 
     });
@@ -140,22 +143,25 @@ export default class Region {
 	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
 	 * @returns {Array} The sorted array of entities and objects
      * Source: Game Programming Assignment - Zelda
-	 */
-  buildRenderQueue() {
-    return [...this.creatures, this.player].sort((a, b) => {
-        let order = 0;
-        const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
-        const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
-
-        if(a.renderPriority < b.renderPriority){
-            order = -1;
-        } else if(a.renderPriority > b.renderPriority){
-            order = 1;
-        } else {
-            order = bottomA - bottomB;
-        }
-
-        return order;
-    });
-  }
+  */
+    buildRenderQueue() {
+        return [...this.entities].sort((a, b) => {
+            let order = 0;
+            const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
+            const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
+            
+            if(a.renderPriority < b.renderPriority){
+                order = -1;
+                } else if(a.renderPriority > b.renderPriority){
+                    order = 1;
+                } else {
+                    order = bottomA - bottomB;
+                }
+            return order;
+        })
+    }
+    
+    cleanUpEntities(){  
+        this.entities = this.entities.filter(entity => !entity.isDead);
+    }   
 }
