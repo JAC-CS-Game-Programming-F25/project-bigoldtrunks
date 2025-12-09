@@ -27,6 +27,7 @@ export default class Region {
     });
   }
   update(dt) {
+    this.player.update(dt);
     this.creatures.forEach((creature) => {
       const oldX = creature.position.x;
       const oldY = creature.position.y;
