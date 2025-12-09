@@ -145,7 +145,7 @@ export default class Region {
      * Source: Game Programming Assignment - Zelda
   */
     buildRenderQueue() {
-        return [...this.entities].sort((a, b) => {
+        return [...this.entities, this.player].sort((a, b) => {
             let order = 0;
             const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
             const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
