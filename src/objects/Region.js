@@ -17,7 +17,7 @@ export default class Region {
 
     this.renderQueue = this.buildRenderQueue();
   }
- 
+
   update(dt) {
     // Rebuild render queue each frame to account for movement
     this.renderQueue = this.buildRenderQueue();
@@ -28,24 +28,22 @@ export default class Region {
   /**
    * Update all entities in the region,
    * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
-   * @param {*} dt 
+   * @param {*} dt
    */
   updateEntities(dt) {
     this.entities.forEach((entity) => {
+      const oldX = entity.position.x;
+      const oldY = entity.position.y;
+      entity.update(dt);
+      if (entity instanceof Creature) {
+        // update all entities (player, creatures, etc.)
 
-        if(entity instanceof Creature){
-            const oldX = entity.position.x;
-            const oldY = entity.position.y;
-            
-            // update all entities (player, creatures, etc.)
-            
-            this.checkCreatureCollisions(entity, oldX, oldY);
-        }
-        entity.update(dt);
+        this.checkCreatureCollisions(entity, oldX, oldY);
+      }
     });
   }
 
-   /**
+  /**
    * Create initial creatures: Spiders with a random amount, at random positions
    * More creatures can be added later
    * @returns {void}
@@ -69,10 +67,10 @@ export default class Region {
 
   /**
    * Check for collisions between a creature and the environment
-   * @param {*} creature 
-   * @param {*} oldX 
-   * @param {*} oldY 
-   * @returns 
+   * @param {*} creature
+   * @param {*} oldX
+   * @param {*} oldY
+   * @returns
    */
   checkCreatureCollisions(creature, oldX, oldY) {
     let collided = false;
@@ -107,36 +105,36 @@ export default class Region {
     this.renderQueue.forEach((entity) => entity.render());
   }
   /**
-	 * Order the entities by their renderPriority fields. If the renderPriority
-	 * is the same, then sort the entities by their bottom positions. This will
-	 * put them in an order such that entities higher on the screen will appear
-	 * behind entities that are lower down.
-	 *
-	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-	 *
-	 * The spread operator (...) returns all the elements of an array separately
-	 * so that you can pass them into functions or create new arrays. What we're
-	 * doing below is combining both the entities and objects arrays into one.
-	 *
-	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-	 * @returns {Array} The sorted array of entities and objects
-     * Source: Game Programming Assignment - Zelda
-	 */
+   * Order the entities by their renderPriority fields. If the renderPriority
+   * is the same, then sort the entities by their bottom positions. This will
+   * put them in an order such that entities higher on the screen will appear
+   * behind entities that are lower down.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+   *
+   * The spread operator (...) returns all the elements of an array separately
+   * so that you can pass them into functions or create new arrays. What we're
+   * doing below is combining both the entities and objects arrays into one.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+   * @returns {Array} The sorted array of entities and objects
+   * Source: Game Programming Assignment - Zelda
+   */
   buildRenderQueue() {
     return [...this.creatures, this.player].sort((a, b) => {
-        let order = 0;
-        const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
-        const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
+      let order = 0;
+      const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
+      const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
 
-        if(a.renderPriority < b.renderPriority){
-            order = -1;
-        } else if(a.renderPriority > b.renderPriority){
-            order = 1;
-        } else {
-            order = bottomA - bottomB;
-        }
+      if (a.renderPriority < b.renderPriority) {
+        order = -1;
+      } else if (a.renderPriority > b.renderPriority) {
+        order = 1;
+      } else {
+        order = bottomA - bottomB;
+      }
 
-        return order;
+      return order;
     });
   }
 }
