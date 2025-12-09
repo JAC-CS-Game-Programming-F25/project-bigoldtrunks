@@ -21,7 +21,9 @@ export default class PlayerWalkingState extends State {
     }
 
     enter(){
-        // since we use only one spritesheet for all frames of player from idling to walking, means we use this.player.sprites the entire process
+        console.log("PlayerWalkingState enter");
+
+        this.sprites=this.player.walkingSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
     
