@@ -48,8 +48,10 @@ export default class Creature extends GameEntity {
       this.currentAnimation.refresh();
     }
   }
+  
   /**
-   * Handle collision with player sword
+   * Handles collision with player sword, if creature is not dead, reduce health, creature become dead if health <=0
+   * @param {number} damage damage received from player sword.
    */
   onTakingHit(damage){
     if(this.isDead) return;
@@ -62,6 +64,7 @@ export default class Creature extends GameEntity {
     console.log("Creature took damage, current health:", this.health);
     // play sound when creature receives damage
   }
+
   update(dt) {
     super.update(dt);
     if (this.stateMachine) {
