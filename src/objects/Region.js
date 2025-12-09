@@ -40,8 +40,27 @@ export default class Region {
             // update all entities (player, creatures, etc.)
             
             this.checkCreatureCollisions(entity, oldX, oldY);
+            
+            // check if creature is collided with player's sword -> creature takes the damae
+            if(entity.didCollideWithEntity(this.player.swordHitbox)){
+                entity.onTakingHit(this.player.damage);
+            }
         }
+
+       
+       
+
+        // Check collision with creatures
+        if(
+            !entity.isDead && 
+            !this.player.isInVulnerable &&
+            this.player.didCollideWithEntity(entity.hitbox) &&
+            !(entity instanceof Player) // exclude player itself otherwise player immediate take damage and dead
+        ){
+            this.player.onTakingDamage(entity.damage);
+        }   
         entity.update(dt);
+
     });
   }
 
