@@ -59,9 +59,14 @@ export default class Player extends GameEntity {
         // start with player facing down
         this.currentAnimation = this.animation[Direction.Down];
         this.swordHitbox = new Hitbox(0, 0, 0, 0, 'blue'); // this is set in the sword swinging state
-        
+        this.hitboxOffsets = new Hitbox(
+            4,  // x offset
+            8,  // y offset
+            -8, // width
+            -8,  // height
+            'red'
+        )
         this.stateMachine = this.initializeStateMachine();
-        console.log("Sword Hitbox initialized", this.swordHitbox);
     }
 
     render(){
