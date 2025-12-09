@@ -20,7 +20,6 @@ export default class PlayerIdlingState extends State {
     }
 
     enter(params){
-        console.log("PlayerIdlingState enter")
 
         this.player.sprites=this.player.walkingSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
@@ -28,7 +27,6 @@ export default class PlayerIdlingState extends State {
     }
     
     update(dt){
-        console.log("PlayerIdlingState update")
         this.checkForMovement();
         this.handleSwordSwing();
 
@@ -52,7 +50,6 @@ export default class PlayerIdlingState extends State {
     }
     handleSwordSwing() {
         if (input.isKeyHeld(Input.KEYS.SPACE)) {
-            console.log("Checking for sword swing input");
             this.player.changeState(PlayerStateName.SwordSwinging);
         }
     }

@@ -27,9 +27,7 @@ export default class PlayerSwordSwingingState extends State {
     }
     
     enter(){
-        // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position
-        console.log("PlayerSwordSwingingState enter");
-        
+        // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position        
         const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
         const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
         

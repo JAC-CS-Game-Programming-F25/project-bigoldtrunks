@@ -21,7 +21,6 @@ export default class PlayerWalkingState extends State {
     }
 
     enter(){
-        console.log("PlayerWalkingState enter");
 
         this.sprites=this.player.walkingSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
@@ -34,12 +33,10 @@ export default class PlayerWalkingState extends State {
 
     handleMovement(dt) {
 		this.player.currentAnimation = this.animation[this.player.direction];
-        console.log("dt", dt)
-        console.log("speed", this.player.speed)
+
 		if (input.isKeyHeld(Input.KEYS.S)) {
 			this.player.direction = Direction.Down;
 			this.player.position.y += this.player.speed * dt;
-            console.log("position", this.player.position);
 			
 		} else if (input.isKeyHeld(Input.KEYS.D)) {
 			this.player.direction = Direction.Right;
