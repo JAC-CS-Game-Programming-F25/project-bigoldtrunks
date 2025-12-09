@@ -25,7 +25,9 @@ export default class Player extends GameEntity {
 
     constructor(){
         super({
-            speed: Player.PLAYER_SPEED,})
+            speed: Player.PLAYER_SPEED,
+            health: 5
+        })
 
         this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Player),
@@ -37,7 +39,7 @@ export default class Player extends GameEntity {
             Player.PLAYER_SWORD_SPRITE_WIDTH,
             Player.PLAYER_SWORD_SPRITE_HEIGHT,
         )
-
+        this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
         this.sprites = this.walkingSprites;
         // set initial player position
                 this.position = {x: 100, y: 100};
@@ -86,5 +88,24 @@ export default class Player extends GameEntity {
         stateMachine.change(PlayerStateName.Idle);
 
         return stateMachine;
+    }
+    /**
+     *     
+     * Handles the player taking damage, player loses a amount of health, if health < 0, player become dead.
+     * @param {*} damage damage from the creature 
+     * @returns 
+     */
+    onTakingDamage(damage) {
+        if (this.isInVulnerable) {
+            return;
+        }
+        if (this.health < 0) {
+            this.isDead = true;
+            return;
+        }
+        // Handle taking damage logic here (e.g., reduce health)
+        console.log("Player took damage!, current health:", this.health);
+        
+        this.health-= damage;
     }
 }
