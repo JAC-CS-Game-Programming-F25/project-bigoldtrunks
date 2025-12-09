@@ -14,6 +14,7 @@ export default class Creature extends GameEntity {
       Creature.CREATURE_WIDTH,
       Creature.CREATURE_HEIGHT
     );
+    this.damage = creatureDefinition.damage || 1;
   }
 
   receiveDamage(damage) {
@@ -46,6 +47,20 @@ export default class Creature extends GameEntity {
         this.stateMachine.currentState.animations[this.direction];
       this.currentAnimation.refresh();
     }
+  }
+  /**
+   * Handle collision with player sword
+   */
+  onTakingHit(damage){
+    if(this.isDead) return;
+    if(this.health - damage <=0){
+      this.isDead = true;
+      console.log("Creature is dead");
+      return;
+    }
+    this.health -= damage;
+    console.log("Creature took damage, current health:", this.health);
+    // play sound when creature receives damage
   }
   update(dt) {
     super.update(dt);
