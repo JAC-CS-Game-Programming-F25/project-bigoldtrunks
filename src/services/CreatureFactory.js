@@ -1,4 +1,4 @@
-import Spider from "../entities/Spider.js";
+import Spider from "../entities/Creature/Spider.js";
 import Vector from "../../lib/Vector.js";
 
 export default class CreatureFactory {

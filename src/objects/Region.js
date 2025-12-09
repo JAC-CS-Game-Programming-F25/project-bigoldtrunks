@@ -1,58 +1,105 @@
 import State from "../../lib/State.js";
 import Player from "../entities/Player.js";
 import Map from "../objects/Map.js";
-import Spider from "../entities/Creature/Spider.js";
 import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
+import CreatureFactory from "../services/CreatureFactory.js";
+import Creature from "../entities/Creature/Creature.js";
 export default class Region {
-  constructor(mapDefinition) {
+  constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
     this.player = new Player();
 
-    this.creatures = this.generateCreatures();
+    this.creatures = this.spawnCreatures(creatureConfig);
 
     // All entities in the region
     this.entities = [this.player, ...this.creatures];
 
     this.renderQueue = this.buildRenderQueue();
   }
+ 
+  update(dt) {
+    // Rebuild render queue each frame to account for movement
+    this.renderQueue = this.buildRenderQueue();
+
+    this.updateEntities(dt);
+  }
+
   /**
+   * Update all entities in the region,
+   * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
+   * @param {*} dt 
+   */
+  updateEntities(dt) {
+    this.entities.forEach((entity) => {
+
+        if(entity instanceof Creature){
+            const oldX = entity.position.x;
+            const oldY = entity.position.y;
+            
+            // update all entities (player, creatures, etc.)
+            
+            this.checkCreatureCollisions(entity, oldX, oldY);
+        }
+        entity.update(dt);
+    });
+  }
+
+   /**
    * Create initial creatures: Spiders with a random amount, at random positions
    * More creatures can be added later
    * @returns {void}
    */
-  generateCreatures(){
+  spawnCreatures(config) {
     const entities = new Array();
 
-    // Spawn 3-5 random spiders
-    const spiderCount = getRandomPositiveInteger(3, 5);
-
-    for (let i = 0; i < spiderCount; i++) {
+    config.forEach((def) => {
+      for (let i = 0; i < def.count; i++) {
         const x = getRandomPositiveInteger(50, 330);
         const y = getRandomPositiveInteger(50, 150);
-
-        entities.push(new Spider(new Vector(x, y)));
-    }
-
+        const creature = CreatureFactory.createInstance(
+          def.type,
+          new Vector(x, y)
+        );
+        entities.push(creature);
+      }
+    });
     return entities;
   }
-  update(dt) {
-    // Rebuild render queue each frame to account for movement
-    this.renderQueue = this.buildRenderQueue();
-    // Can add player and creatures 
-    // this.player.update(dt);
-    //// why do creature have map, region?
-    // this.creatures.forEach((creature) => {
-    //   creature.map = this.map;
-    //   creature.region = this;
-    //   creature.update(dt);
-    //   console.log("Creature:", creature.region);
-    // });
-    this.updateEntities(dt);
+
+  /**
+   * Check for collisions between a creature and the environment
+   * @param {*} creature 
+   * @param {*} oldX 
+   * @param {*} oldY 
+   * @returns 
+   */
+  checkCreatureCollisions(creature, oldX, oldY) {
+    let collided = false;
+
+    const collisionObjects = this.map.getCollisionObjects();
+    for (const hitbox of collisionObjects) {
+      if (creature.didCollideWithEntity(hitbox)) {
+        creature.position.x = oldX;
+        creature.position.y = oldY;
+        creature.handleWallCollision();
+        collided = true;
+        break;
+      }
+    }
+
+    if (collided) return;
+
+    for (const other of this.creatures) {
+      if (other !== creature && creature.didCollideWithEntity(other.hitbox)) {
+        creature.position.x = oldX;
+        creature.position.y = oldY;
+        creature.handleCreatureCollision(other);
+        break;
+      }
+    }
   }
-  updateEntities(dt) {
-    this.entities.forEach((entity) => entity.update(dt));
-  }
+
   render() {
     this.map.render(); // ← render map
     // this.player.render(); // ← render player
