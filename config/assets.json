@@ -37,7 +37,7 @@
       "height": 196
     },
     {
-      "name": "player-attack",
+      "name": "player-sword-swing",
       "path": "./assets/images/player/player-sword-swing.png",
       "width": 128,
       "height": 384
