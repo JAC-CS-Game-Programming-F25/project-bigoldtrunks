@@ -17,7 +17,7 @@ export default class Map {
     // Create layers
     this.bottomLayer = new Layer(mapDefinition.layers[0], sprites);
     this.collisionLayer = new Layer(mapDefinition.layers[1], sprites);
-    // 🆕 Generate collision hitboxes
+    // Generate collision hitboxes
     this.collisionObjects = this.generateCollisionObjects();
   }
 
@@ -44,7 +44,6 @@ export default class Map {
     return collisionObjects;
   }
   getCollisionObjects() {
-    // return [];
     return this.collisionObjects;
   }
 }
