@@ -37,17 +37,27 @@ export default class Region {
     return entities;
   }
   update(dt) {
-    this.player.update(dt);
-    this.creatures.forEach((creature) => {
-      creature.map = this.map;
-      creature.region = this;
-      creature.update(dt);
-    });
+    // Rebuild render queue each frame to account for movement
+    this.renderQueue = this.buildRenderQueue();
+    // Can add player and creatures 
+    // this.player.update(dt);
+    //// why do creature have map, region?
+    // this.creatures.forEach((creature) => {
+    //   creature.map = this.map;
+    //   creature.region = this;
+    //   creature.update(dt);
+    //   console.log("Creature:", creature.region);
+    // });
+    this.updateEntities(dt);
+  }
+  updateEntities(dt) {
+    this.entities.forEach((entity) => entity.update(dt));
   }
   render() {
     this.map.render(); // ← render map
-    this.player.render(); // ← render player
-    this.creatures.forEach((creature) => creature.render());
+    // this.player.render(); // ← render player
+    // this.creatures.forEach((creature) => creature.render());
+    this.renderQueue.forEach((entity) => entity.render());
   }
   /**
 	 * Order the entities by their renderPriority fields. If the renderPriority
