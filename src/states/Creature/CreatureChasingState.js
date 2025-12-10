@@ -1,10 +1,12 @@
 import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
+import CreatureStateName from "../../enums/CreatureStateName.js";
 export default class CreatureChasingState extends State {
   static CHASE_SPEED_MULTIPLIER = 1.2; // It is 20% faster when chasing.
   static LOSE_INTEREST_RADIUS = 120; // Stop chasing beyond this distance.
   static ATTACK_RANGE = 20; // add attack distance
+
   constructor(creature, animations) {
     super();
     this.creature = creature;
@@ -32,8 +34,8 @@ export default class CreatureChasingState extends State {
     const playerCenterY =
       player.hitbox.position.y + player.hitbox.dimensions.y / 2;
     // get player position
-    const dx = player.position.x - this.creature.position.x;
-    const dy = player.position.y - this.creature.position.y;
+    const dx = playerCenterX - creatureCenterX;
+    const dy = playerCenterY - creatureCenterY;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     // The player has run too far. Stop chasing.
