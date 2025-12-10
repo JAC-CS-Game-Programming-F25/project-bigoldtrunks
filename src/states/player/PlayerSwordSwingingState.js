@@ -44,6 +44,8 @@ export default class PlayerSwordSwingingState extends State {
     }
     
     update(dt){
+        this.handlePerformingFireFlame();
+
         if(this.player.currentAnimation.isDone()){
             this.player.currentAnimation.refresh();
             this.player.changeState(PlayerStateName.Idle);
@@ -56,6 +58,7 @@ export default class PlayerSwordSwingingState extends State {
 		if (this.player.currentAnimation.isHalfwayDone()) {
 			this.setSwordHitbox();
 		}
+
     }
     
     exit(){
@@ -106,4 +109,9 @@ export default class PlayerSwordSwingingState extends State {
 
 		this.player.swordHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
 	}
+    handlePerformingFireFlame() {
+        if (input.isKeyHeld(Input.KEYS.J)) {
+            this.player.changeState(PlayerStateName.PerformingFireFlame);
+        }
+    }
 }

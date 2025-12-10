@@ -29,6 +29,7 @@ export default class PlayerIdlingState extends State {
     update(dt){
         this.checkForMovement();
         this.handleSwordSwing();
+        this.handlePerformingFireFlame();
 
     }
 
@@ -51,6 +52,11 @@ export default class PlayerIdlingState extends State {
     handleSwordSwing() {
         if (input.isKeyHeld(Input.KEYS.SPACE)) {
             this.player.changeState(PlayerStateName.SwordSwinging);
+        }
+    }
+    handlePerformingFireFlame() {
+        if (input.isKeyHeld(Input.KEYS.J)) {
+            this.player.changeState(PlayerStateName.PerformingFireFlame);
         }
     }
 }
