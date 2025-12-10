@@ -5,12 +5,14 @@ import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
+import FireFlame from "../../objects/FireFlame.js";
 
 
 export default class PlayerPerformingFireFlameState extends State {
-    constructor(player){
+    constructor(player,region){
         super()
         this.player = player;
+        this.region = region;
         this.animation = {
             [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
             [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
@@ -18,11 +20,13 @@ export default class PlayerPerformingFireFlameState extends State {
             [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
         };
         
+        
         // Store the original position for later restoration
         this.originalDimensions = {
             x: this.player.dimensions.x,
             y: this.player.dimensions.y
         };
+        this.fireFlame = null;
 
     }
     
@@ -30,7 +34,13 @@ export default class PlayerPerformingFireFlameState extends State {
         // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position        
         const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
         const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
-        
+        // add flame object to the region
+
+        this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used
+        this.fireFlame = new FireFlame(this.player.position, this.player.direction);
+        this.region.addObject(this.fireFlame);
+        console.log("FireFlame object added to region at position:");
+
         // // Adjust position so the sprite centers on the original position
         this.player.position.x -= offsetX;
         this.player.position.y -= offsetY;
@@ -62,6 +72,12 @@ export default class PlayerPerformingFireFlameState extends State {
     exit(){
         this.restorePlayerPositionAndDimensions();
         this.player.swordHitbox.set(0, 0, 0, 0); // Clear the sword hitbox
+        this.player.isUsingFireFlame = false; // Reset the flag after using FireFlame
+        
+        // Only mark for cleanup if fireFlame was actually created
+        if (this.fireFlame) {
+            this.fireFlame.cleanUp = true;
+        }
     }
 
     /**
