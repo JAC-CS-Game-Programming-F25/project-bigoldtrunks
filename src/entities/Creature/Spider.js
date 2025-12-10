@@ -10,10 +10,15 @@ import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js"
 
 export default class Spider extends Creature {
   static SPEED = 15;
+  static HEALTH = 1;
 
   constructor(position) {
-    super({ position, speed: Spider.SPEED, health: 1 });
-
+    super({
+      position,
+      speed: Spider.SPEED,
+      health: Spider.HEALTH,
+    });
+    this.hitboxOffsets.set(0, 6, -2, -8); // shrink hitbox
     this.loadSprites();
     this.setupAnimations();
     this.stateMachine = this.initializeStateMachine();

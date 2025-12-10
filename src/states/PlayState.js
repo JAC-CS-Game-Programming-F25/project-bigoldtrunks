@@ -9,8 +9,9 @@ export default class PlayState extends State {
     const summerCreatures = [
       {
         type: "spider",
-        count: getRandomPositiveInteger(3, 5), // random 3-5
+        count: getRandomPositiveInteger(3, 5),
       },
+      { type: "skeleton", count: getRandomPositiveInteger(2, 3) },
     ];
 
     this.region = new Region(mapDefinition, summerCreatures);
