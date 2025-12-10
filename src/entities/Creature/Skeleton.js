@@ -8,6 +8,7 @@ import StateMachine from "../../../lib/StateMachine.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import { DEBUG, context } from "../../globals.js";
+import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 export default class Skeleton extends Creature {
   static SPEED = 20;
   static HEALTH = 2;
@@ -62,6 +63,10 @@ export default class Skeleton extends Creature {
         [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
         [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
       },
+      [CreatureStateName.Chasing]: {
+        [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.08), // <- add Chasing animation - more fast
+        [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.08),
+      },
     };
 
     return animations;
@@ -78,6 +83,11 @@ export default class Skeleton extends Creature {
     stateMachine.add(
       CreatureStateName.Walking,
       new CreatureWalkingState(this, animations[CreatureStateName.Walking])
+    );
+    stateMachine.add(
+      // ← add Chasing state
+      CreatureStateName.Chasing,
+      new CreatureChasingState(this, animations[CreatureStateName.Chasing])
     );
 
     stateMachine.change(CreatureStateName.Idle);
