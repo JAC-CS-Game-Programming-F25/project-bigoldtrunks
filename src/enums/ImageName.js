@@ -3,7 +3,10 @@ const ImageName = {
   Summer: "Floors_Tiles",
   Winter: "Floors_Tiles",
   Player: "player",
-  PlayerSwordSwing: "player-sword-swing"
+  PlayerSwordSwing: "player-sword-swing",
+  PlayerFireFlamePoster: "player-fire-poster",
+  PlayerFrozenFlamePoster: "player-frozen-poster",
+  FireExplosion: "fire-explosion"
 };
 
 export default ImageName;

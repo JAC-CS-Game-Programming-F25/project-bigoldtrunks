@@ -21,23 +21,23 @@ export default class PlayerWalkingState extends State {
     }
 
     enter(){
-        // since we use only one spritesheet for all frames of player from idling to walking, means we use this.player.sprites the entire process
+
+        this.sprites=this.player.walkingSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
     
     update(dt){
         this.handleMovement(dt);
         this.handleSwordSwing();
+        this.handlePerformingFireFlame();
     }
 
     handleMovement(dt) {
 		this.player.currentAnimation = this.animation[this.player.direction];
-        console.log("dt", dt)
-        console.log("speed", this.player.speed)
+
 		if (input.isKeyHeld(Input.KEYS.S)) {
 			this.player.direction = Direction.Down;
 			this.player.position.y += this.player.speed * dt;
-            console.log("position", this.player.position);
 			
 		} else if (input.isKeyHeld(Input.KEYS.D)) {
 			this.player.direction = Direction.Right;
@@ -62,6 +62,11 @@ export default class PlayerWalkingState extends State {
         if (input.isKeyHeld(Input.KEYS.SPACE)) {
             console.log("Checking for sword swing input");
             this.player.changeState(PlayerStateName.SwordSwinging);
+        }
+    }
+    handlePerformingFireFlame() {
+        if (input.isKeyHeld(Input.KEYS.J)) {
+            this.player.changeState(PlayerStateName.PerformingFireFlame);
         }
     }
 }

@@ -1,7 +1,7 @@
 import Sprite from "../../lib/Sprite.js";
 import Animation from "../../lib/Animation.js";
 import ImageName from "../enums/ImageName.js";
-import { context, images } from "../globals.js";
+import { context, DEBUG, images } from "../globals.js";
 import GameEntity from "./GameEntity.js";
 import Direction from "../enums/Direction.js";
 import StateMachine from "../../lib/StateMachine.js";
@@ -9,6 +9,9 @@ import PlayerStateName from "../enums/PlayerStateName.js";
 import PlayerIdlingState from "../states/player/PlayerIdlingState.js";
 import PlayerWalkingState from "../states/player/PlayerWalkingState.js";
 import PlayerSwordSwingingState from "../states/player/PlayerSwordSwingingState.js";
+import Hitbox from "../../lib/Hitbox.js";
+import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFireFlameState.js";
+import AbilityType from "../enums/AbilityType.js";
 
 export default class Player extends GameEntity {
 
@@ -19,11 +22,13 @@ export default class Player extends GameEntity {
     // the player sword swinging frame has width and height of 32 pixels
     static PLAYER_SWORD_SPRITE_HEIGHT = 32;
     static PLAYER_SWORD_SPRITE_WIDTH = 32;
+    static PLAYER_SPEED= 60;
     
 
     constructor(){
         super({
-            speed: 60  // Player moves at 100 pixels per second
+            speed: Player.PLAYER_SPEED,
+            health: 5
         })
 
         this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
@@ -36,7 +41,12 @@ export default class Player extends GameEntity {
             Player.PLAYER_SWORD_SPRITE_WIDTH,
             Player.PLAYER_SWORD_SPRITE_HEIGHT,
         )
-
+        this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerFireFlamePoster),
+            Player.PLAYER_SWORD_SPRITE_WIDTH,
+            Player.PLAYER_SWORD_SPRITE_HEIGHT,
+        )
+        this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
         this.sprites = this.walkingSprites;
         // set initial player position
                 this.position = {x: 100, y: 100};
@@ -55,6 +65,18 @@ export default class Player extends GameEntity {
                 };
         // start with player facing down
         this.currentAnimation = this.animation[Direction.Down];
+        this.swordHitbox = new Hitbox(0, 0, 0, 0, 'blue'); // this is set in the sword swinging state
+        this.hitboxOffsets = new Hitbox(
+            4,  // x offset
+            8,  // y offset
+            -8, // width
+            -8,  // height
+            'red'
+        )
+        this.abilityUnlocked = {
+            [AbilityType.FireFlame]: false,
+            [AbilityType.FrozenFlame]: false
+        }
         this.stateMachine = this.initializeStateMachine();
     }
 
@@ -64,6 +86,9 @@ export default class Player extends GameEntity {
         super.render(); // need to pass offset
 
         context.restore();
+        if(DEBUG){
+            this.swordHitbox.render(context);
+        }
     }
     /**
      * Initializes the state machine for the player.
@@ -75,9 +100,29 @@ export default class Player extends GameEntity {
         stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
+        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this));
 
         stateMachine.change(PlayerStateName.Idle);
 
         return stateMachine;
+    }
+    /**
+     *     
+     * Handles the player taking damage, player loses a amount of health, if health < 0, player become dead.
+     * @param {*} damage damage from the creature 
+     * @returns 
+     */
+    onTakingDamage(damage) {
+        if (this.isInVulnerable) {
+            return;
+        }
+        if (this.health < 0) {
+            this.isDead = true;
+            return;
+        }
+        // Handle taking damage logic here (e.g., reduce health)
+        console.log("Player took damage!, current health:", this.health);
+        
+        this.health-= damage;
     }
 }
