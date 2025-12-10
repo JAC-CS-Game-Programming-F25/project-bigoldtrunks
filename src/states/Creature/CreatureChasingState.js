@@ -3,7 +3,7 @@ import Direction from "../../enums/Direction.js";
 
 export default class CreatureChasingState extends State {
   static CHASE_SPEED_MULTIPLIER = 1.2; // It is 20% faster when chasing.
-
+  static LOSE_INTEREST_RADIUS = 120; // Stop chasing beyond this distance.
   constructor(creature, animations) {
     super();
     this.creature = creature;
@@ -18,19 +18,20 @@ export default class CreatureChasingState extends State {
     // get player
     const player = this.creature.player;
     if (!player || !player.position) {
-      console.error(
-        `Creature ${this.creature.constructor.name} has no player reference!`
-      );
+      this.creature.changeState(CreatureStateName.Idle);
       return;
     }
-
-    if (!player) return;
 
     // get player position
     const dx = player.position.x - this.creature.position.x;
     const dy = player.position.y - this.creature.position.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
+    // The player has run too far. Stop chasing.
+    if (distance > CreatureChasingState.LOSE_INTEREST_RADIUS) {
+      this.creature.changeState(CreatureStateName.Idle);
+      return;
+    }
     if (distance > 0) {
       const velocityX =
         (dx / distance) *

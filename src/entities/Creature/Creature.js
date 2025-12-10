@@ -39,6 +39,8 @@ export default class Creature extends GameEntity {
    * @param {*} other
    */
   handleCreatureCollision(other) {
+    const currentState = this.stateMachine.currentState;
+    
     if (this.stateMachine.currentState instanceof CreatureWalkingState) {
       // reverse direction
       this.direction =
@@ -48,14 +50,14 @@ export default class Creature extends GameEntity {
       this.currentAnimation.refresh();
     }
   }
-  
+
   /**
    * Handles collision with player sword, if creature is not dead, reduce health, creature become dead if health <=0
    * @param {number} damage damage received from player sword.
    */
-  onTakingHit(damage){
-    if(this.isDead) return;
-    if(this.health - damage <=0){
+  onTakingHit(damage) {
+    if (this.isDead) return;
+    if (this.health - damage <= 0) {
       this.isDead = true;
       console.log("Creature is dead");
       return;
