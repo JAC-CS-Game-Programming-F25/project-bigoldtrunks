@@ -11,10 +11,9 @@ export default class Creature extends GameEntity {
   constructor(creatureDefinition) {
     super(creatureDefinition);
     this.position = creatureDefinition.position;
-    this.dimensions = new Vector(
-      Creature.CREATURE_WIDTH,
-      Creature.CREATURE_HEIGHT
-    );
+    this.dimensions =
+      creatureDefinition.dimensions ??
+      new Vector(Creature.CREATURE_WIDTH, Creature.CREATURE_HEIGHT);
     this.damage = creatureDefinition.damage || 1;
     this.canChase = creatureDefinition.canChase ?? false;
   }

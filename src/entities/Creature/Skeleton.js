@@ -9,6 +9,7 @@ import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import { DEBUG, context } from "../../globals.js";
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
+import Vector from "../../../lib/Vector.js";
 export default class Skeleton extends Creature {
   static SPEED = 20;
   static HEALTH = 2;
@@ -19,8 +20,9 @@ export default class Skeleton extends Creature {
       speed: Skeleton.SPEED,
       health: Skeleton.HEALTH,
       canChase: true, //✅ only Skeleton can chase
+      dimensions: new Vector(64, 64),
     });
-    this.hitboxOffsets.set(24, 48, 0, -8); // Position hitbox at feet
+    this.hitboxOffsets.set(24, 48, -48, -55); // Position hitbox at feet
 
     // game entity default function is down, add left to fix issue
     this.direction = Direction.Left;

@@ -1,6 +1,6 @@
 import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
-
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
 export default class CreatureChasingState extends State {
   static CHASE_SPEED_MULTIPLIER = 1.2; // It is 20% faster when chasing.
   static LOSE_INTEREST_RADIUS = 120; // Stop chasing beyond this distance.
@@ -32,7 +32,7 @@ export default class CreatureChasingState extends State {
       this.creature.changeState(CreatureStateName.Idle);
       return;
     }
-    if (distance > 0) {
+    if (distance > 5) {
       const velocityX =
         (dx / distance) *
         this.creature.speed *
@@ -45,6 +45,20 @@ export default class CreatureChasingState extends State {
       // move
       this.creature.position.x += velocityX * dt;
       this.creature.position.y += velocityY * dt;
+
+      const minX = 0;
+      const minY = 0;
+      const maxX = CANVAS_WIDTH - this.creature.dimensions.x;
+      const maxY = CANVAS_HEIGHT - this.creature.dimensions.y;
+
+      this.creature.position.x = Math.max(
+        minX,
+        Math.min(this.creature.position.x, maxX)
+      );
+      this.creature.position.y = Math.max(
+        minY,
+        Math.min(this.creature.position.y, maxY)
+      );
 
       // update direction
       if (dx < 0) {

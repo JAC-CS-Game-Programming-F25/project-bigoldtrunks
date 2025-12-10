@@ -1,13 +1,10 @@
-import State from "../../lib/State.js";
 import Player from "../entities/Player.js";
 import Map from "../objects/Map.js";
 import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import Hitbox from "../../lib/Hitbox.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
-import Tile from "./Tile.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -120,28 +117,16 @@ export default class Region {
    * @returns
    */
   checkCreatureCollisions(creature, oldX, oldY) {
-    let collided = false;
-    // Dynamically obtain the size of the sprite
-    let spriteWidth, spriteHeight;
-
-    if (creature.constructor.name === "Spider") {
-      spriteWidth = Tile.SIZE;
-      spriteHeight = Tile.SIZE;
-      console.log("Spider");
-    } else if (creature.constructor.name === "Skeleton") {
-      spriteWidth = Tile.SIZE * 4;
-      spriteHeight = Tile.SIZE * 4;
-      console.log("Skeleton");
-    } else {
-      spriteWidth = Tile.SIZE * 2;
-      spriteHeight = Tile.SIZE * 2;
-    }
-
+    // use hitbox as boundary checking
+    const hitboxX = creature.position.x + creature.hitboxOffsets.position.x;
+    const hitboxY = creature.position.y + creature.hitboxOffsets.position.y;
+    const hitboxW = creature.dimensions.x + creature.hitboxOffsets.dimensions.x;
+    const hitboxH = creature.dimensions.y + creature.hitboxOffsets.dimensions.y;
     if (
-      creature.position.x < 0 ||
-      creature.position.x + spriteWidth > CANVAS_WIDTH ||
-      creature.position.y < 0 ||
-      creature.position.y + spriteHeight > CANVAS_HEIGHT
+      hitboxX < 0 ||
+      hitboxX + hitboxW > CANVAS_WIDTH ||
+      hitboxY < 0 ||
+      hitboxY + hitboxH > CANVAS_HEIGHT
     ) {
       creature.position.x = Math.round(oldX);
       creature.position.y = Math.round(oldY);
@@ -150,12 +135,11 @@ export default class Region {
     }
     // check object collision
     const collisionObjects = this.map.getCollisionObjects();
-    for (const hitbox of collisionObjects) {
-      if (creature.didCollideWithEntity(hitbox)) {
+    for (const object of collisionObjects) {
+      if (creature.didCollideWithEntity(object)) {
         creature.position.x = Math.round(oldX);
         creature.position.y = Math.round(oldY);
         creature.handleWallCollision();
-        collided = true;
         break;
       }
     }
