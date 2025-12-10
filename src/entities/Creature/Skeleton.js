@@ -20,6 +20,9 @@ export default class Skeleton extends Creature {
     });
     this.hitboxOffsets.set(24, 48, 0, -8); // shrink hitbox
 
+    // game entity default function is down, add left to fix issue
+    this.direction = Direction.Left;
+
     this.loadSprites();
     console.log(
       "💀 Skeleton sprites loaded:",
