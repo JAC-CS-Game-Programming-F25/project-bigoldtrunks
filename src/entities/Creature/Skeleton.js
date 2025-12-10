@@ -18,18 +18,12 @@ export default class Skeleton extends Creature {
       speed: Skeleton.SPEED,
       health: Skeleton.HEALTH,
     });
-    this.hitboxOffsets.set(24, 48, 0, -8); // shrink hitbox
+    this.hitboxOffsets.set(24, 48, 0, -8); // Position hitbox at feet
 
     // game entity default function is down, add left to fix issue
     this.direction = Direction.Left;
 
     this.loadSprites();
-    console.log(
-      "💀 Skeleton sprites loaded:",
-      this.spritesLeft?.length,
-      this.spritesRight?.length
-    );
-
     this.stateMachine = this.initializeStateMachine();
   }
 
@@ -40,14 +34,7 @@ export default class Skeleton extends Creature {
     this.spritesLeft = [];
     this.spritesRight = [];
 
-    const idleFrames = [
-      { x: 0, y: 0 },
-      { x: 64, y: 0 },
-      { x: 128, y: 0 },
-      { x: 192, y: 0 },
-      { x: 256, y: 0 },
-      { x: 320, y: 0 },
-    ];
+    const idleFrames = [{ x: 0, y: 0 }];
 
     const walkFrames = [
       { x: 0, y: 64 },
@@ -64,18 +51,16 @@ export default class Skeleton extends Creature {
       this.spritesLeft.push(new Sprite(leftImage, frame.x, frame.y, 64, 64));
       this.spritesRight.push(new Sprite(rightImage, frame.x, frame.y, 64, 64));
     });
-
-    console.log("💀 Loaded sprites:", this.spritesLeft.length);
   }
   setupAnimations() {
     const animations = {
       [CreatureStateName.Idle]: {
-        [Direction.Left]: new Animation([0, 1, 2, 3, 4, 5], 0.15),
-        [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5], 0.15),
+        [Direction.Left]: new Animation([0], 0.15),
+        [Direction.Right]: new Animation([0], 0.15),
       },
       [CreatureStateName.Walking]: {
-        [Direction.Left]: new Animation([6, 7, 8, 9, 10, 11], 0.1),
-        [Direction.Right]: new Animation([6, 7, 8, 9, 10, 11], 0.1),
+        [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
+        [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
       },
     };
 
@@ -110,8 +95,6 @@ export default class Skeleton extends Creature {
           : this.spritesRight;
 
       const frameIndex = this.currentAnimation.getCurrentFrame();
-
-      console.log("💀 Direction:", this.direction, "Frame:", frameIndex);
 
       spriteSet[frameIndex].render(Math.floor(x), Math.floor(y));
     }

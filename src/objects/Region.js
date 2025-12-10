@@ -5,6 +5,7 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
+import Hitbox from "../../lib/Hitbox.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -53,16 +54,52 @@ export default class Region {
 
     config.forEach((def) => {
       for (let i = 0; i < def.count; i++) {
-        const x = getRandomPositiveInteger(50, 330);
-        const y = getRandomPositiveInteger(50, 150);
-        const creature = CreatureFactory.createInstance(
-          def.type,
-          new Vector(x, y)
+        let position;
+        let attempts = 0;
+        const maxAttempts = 50;
+        do {
+          const x = getRandomPositiveInteger(50, 330);
+          const y = getRandomPositiveInteger(50, 150);
+          position = new Vector(x, y);
+          attempts++;
+        } while (
+          (this.isPositionOccupied(position, entities) ||
+            this.isPositionOnCollision(position)) &&
+          attempts < maxAttempts
         );
-        entities.push(creature);
+
+        if (attempts < maxAttempts) {
+          const creature = CreatureFactory.createInstance(def.type, position);
+          entities.push(creature);
+        }
       }
     });
     return entities;
+  }
+
+  isPositionOnCollision(position) {
+    const collisionObjects = this.map.getCollisionObjects();
+    const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
+
+    for (const hitbox of collisionObjects) {
+      if (tempHitbox.didCollide(hitbox)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isPositionOccupied(position, existingCreatures) {
+    const minDistance = 32; // Minimum spacing 2 tile
+    for (const creature of existingCreatures) {
+      const dx = creature.position.x - position.x;
+      const dy = creature.position.y - position.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < minDistance) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
