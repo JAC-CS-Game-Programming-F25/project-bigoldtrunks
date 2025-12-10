@@ -10,7 +10,7 @@ export default class GameObject {
 	 * @param {Vector} dimensions The height and width of the game object.
 	 * @param {Vector} position The x and y coordinates of the game object.
 	 */
-	constructor(dimensions, position) {
+	constructor(position,dimensions) {
 		this.dimensions = dimensions;
 		this.position = position;
 		this.hitboxOffsets = new Hitbox();
@@ -24,6 +24,7 @@ export default class GameObject {
 		this.currentFrame = 0;
 		this.cleanUp = false;
 		this.renderPriority = 0;
+		this.currentAnimation = null;
 
 		// If an entity can overlap with this game object.
 		this.isSolid = false;
@@ -41,7 +42,20 @@ export default class GameObject {
 		this.wasConsumed = false;
 	}
 
+	update(){
+		if (this.currentAnimation) {
+			
+			this.currentAnimation.update();
+		}
 
+		// Update hitbox position
+		this.hitbox.set(
+			this.position.x + this.hitboxOffsets.position.x,
+			this.position.y + this.hitboxOffsets.position.y,
+			this.dimensions.x + this.hitboxOffsets.dimensions.x,
+			this.dimensions.y + this.hitboxOffsets.dimensions.y
+		);
+	}
 	render(offset = { x: 0, y: 0 }) {
 		const x = this.position.x + offset.x;
 		const y = this.position.y + offset.y;

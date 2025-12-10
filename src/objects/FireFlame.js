@@ -9,10 +9,10 @@ export default class FireFlame extends GameObject {
     static HEIGHT = 32;
 
     constructor(position, direction) {
-        super({
+        super(
             position,
-            dimension,
-            });
+            {x: FireFlame.WIDTH, y: FireFlame.HEIGHT}
+        );
         this.direction = direction;
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.FireExplosion),
@@ -20,13 +20,14 @@ export default class FireFlame extends GameObject {
             FireFlame.HEIGHT        
         );
         this.animation = new Animation([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 0.4, 1);
-        this.currentAnimation = this.animation.getCurrentFrame();
-        this.currentFrame = 0;
+        this.currentAnimation = this.animation;  // Store the Animation object, not the frame number
+
+        console.log("FireFlame created at position:", position, "with direction:", direction);
     }
 
     update(dt) {
+        // Update the animation
         super.update(dt);
-        // Additional update logic for FireFlame
     }
 
     render(context) {
