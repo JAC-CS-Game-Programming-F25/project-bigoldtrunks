@@ -1,19 +1,19 @@
-import Animation from "../../lib/Animation";
-import Sprite from "../../lib/Sprite";
-import ImageName from "../enums/ImageName";
-import { images } from "../globals";
-import GameObject from "./GameObject";
+import Animation from "../../lib/Animation.js";
+import Sprite from "../../lib/Sprite.js";
+import ImageName from "../enums/ImageName.js";
+import { images } from "../globals.js";
+import GameObject from "./GameObject.js";
 
 export default class FireFlame extends GameObject {
     static WIDTH = 32;
     static HEIGHT = 32;
 
-    constructor(position) {
+    constructor(position, direction) {
         super({
             position,
-            dimensions: { x: 32, y: 32 },
+            dimension,
             });
-
+        this.direction = direction;
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.FireExplosion),
             FireFlame.WIDTH,
