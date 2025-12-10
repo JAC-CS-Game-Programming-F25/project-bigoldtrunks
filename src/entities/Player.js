@@ -22,15 +22,16 @@ export default class Player extends GameEntity {
     // the player sword swinging frame has width and height of 32 pixels
     static PLAYER_SWORD_SPRITE_HEIGHT = 32;
     static PLAYER_SWORD_SPRITE_WIDTH = 32;
-    static PLAYER_SPEED= 60;
+    static PLAYER_SPEED= 90;
     
 
-    constructor(){
+    constructor(region){
         super({
             speed: Player.PLAYER_SPEED,
             health: 5
         })
-
+        this.region = region;   
+        console.log("Player entity created in region:", region);
         this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Player),
             Player.PLAYER_SPRITE_WIDTH,
@@ -49,13 +50,11 @@ export default class Player extends GameEntity {
         this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
         this.sprites = this.walkingSprites;
         // set initial player position
-                this.position = {x: 100, y: 100};
+        this.position = {x: 100, y: 100};
 
         // set player dimensions
-                this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
+        this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
 
-
-      
         // initialize animations for each direction, using only one frame for idling
         this.animation = {
                     [Direction.Right]: new Animation([0], 1),
@@ -77,6 +76,7 @@ export default class Player extends GameEntity {
             [AbilityType.FireFlame]: false,
             [AbilityType.FrozenFlame]: false
         }
+        this.fireFlame = null;
         this.stateMachine = this.initializeStateMachine();
     }
 
@@ -100,7 +100,7 @@ export default class Player extends GameEntity {
         stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
-        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this));
+        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
 
         stateMachine.change(PlayerStateName.Idle);
 
@@ -125,4 +125,30 @@ export default class Player extends GameEntity {
         
         this.health-= damage;
     }
+    /**
+     *    * Handles the player unlocking a new ability, such as Fire Flame or Frozen Flame.
+     * add new state to the state machine when ability is unlocked 
+     * @param {AbilityType} type The type of ability the player has gained.
+     */
+    // unlockAbility(type){
+    //     // Mark the ability as unlocked
+    //     this.abilityUnlocked[type] = true;
+    //     if(type === AbilityType.FireFlame){
+    //         console.log("Player gained Fire Flame ability!");
+    //         this.stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region));
+    //     } else if (type === AbilityType.FrozenFlame){
+    //         // Future implementation for Frozen Flame ability
+    //         console.log("Player gained Frozen Flame ability!");
+    //     }
+    // }
+    /**
+     * Checks if the player has unlocked the Fire Flame ability.
+     * @returns {boolean} true if player has unlocked Fire Flame ability
+     */
+    isUnlockedFireFlameAbility(){
+        return this.abilityUnlocked[AbilityType.FireFlame];
+    }
+
+    
+    
 }
