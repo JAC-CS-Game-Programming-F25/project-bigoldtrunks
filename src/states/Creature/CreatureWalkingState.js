@@ -54,12 +54,6 @@ export default class CreatureWalkingState extends State {
     );
   }
   shouldChasePlayer() {
-    console.log(
-      "canChase:",
-      this.creature.canChase,
-      "player:",
-      this.creature.player
-    );
     if (!this.creature.canChase) return false;
 
     const player = this.creature.player;

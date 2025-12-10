@@ -2,6 +2,7 @@ import Vector from "../../../lib/Vector.js";
 import GameEntity from "../GameEntity.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import Direction from "../../enums/Direction.js";
+import CreatureChasingState from "../../states/Creature/CreatureWalkingState.js";
 
 export default class Creature extends GameEntity {
   static CREATURE_WIDTH = 16;
@@ -15,6 +16,7 @@ export default class Creature extends GameEntity {
       Creature.CREATURE_HEIGHT
     );
     this.damage = creatureDefinition.damage || 1;
+    this.canChase = creatureDefinition.canChase ?? false;
   }
 
   receiveDamage(damage) {
@@ -40,14 +42,20 @@ export default class Creature extends GameEntity {
    */
   handleCreatureCollision(other) {
     const currentState = this.stateMachine.currentState;
-    
-    if (this.stateMachine.currentState instanceof CreatureWalkingState) {
+
+    if (
+      this.stateMachine.currentState instanceof CreatureWalkingState ||
+      currentState instanceof CreatureChasingState
+    ) {
       // reverse direction
       this.direction =
         this.direction === Direction.Left ? Direction.Right : Direction.Left;
       this.currentAnimation =
         this.stateMachine.currentState.animations[this.direction];
-      this.currentAnimation.refresh();
+      if (currentState.animations) {
+        this.currentAnimation = currentState.animations[this.direction];
+        this.currentAnimation.refresh();
+      }
     }
   }
 

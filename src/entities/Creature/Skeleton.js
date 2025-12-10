@@ -18,6 +18,7 @@ export default class Skeleton extends Creature {
       position,
       speed: Skeleton.SPEED,
       health: Skeleton.HEALTH,
+      canChase: true, //✅ only Skeleton can chase
     });
     this.hitboxOffsets.set(24, 48, 0, -8); // Position hitbox at feet
 
