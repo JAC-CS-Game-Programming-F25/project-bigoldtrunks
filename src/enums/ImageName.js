@@ -6,6 +6,7 @@ const ImageName = {
   PlayerSwordSwing: "player-sword-swing",
   PlayerFireFlamePoster: "player-fire-poster",
   PlayerFrozenFlamePoster: "player-frozen-poster",
+  FireExplosion: "fire-explosion"
 };
 
 export default ImageName;

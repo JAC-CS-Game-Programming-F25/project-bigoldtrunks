@@ -48,6 +48,14 @@
       "width": 128,
       "height": 256
     },
+    
+    {
+      "name": "fire-explosion",
+      "path": "./assets/images/player/fire-explosion.png",
+      "width": 128,
+      "height": 256
+    },
+
     {
       "name": "player-frozen-poster",
       "path": "./assets/images/player/player-frozen-poster.png",
