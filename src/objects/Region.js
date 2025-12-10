@@ -5,6 +5,7 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
+import Hitbox from "../../lib/Hitbox.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -17,7 +18,7 @@ export default class Region {
 
     this.renderQueue = this.buildRenderQueue();
   }
- 
+
   update(dt) {
     // Rebuild render queue each frame to account for movement
     this.renderQueue = this.buildRenderQueue();
@@ -29,7 +30,7 @@ export default class Region {
   /**
    * Update all entities in the region,
    * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
-   * @param {*} dt 
+   * @param {*} dt
    */
   updateEntities(dt) {
     this.entities.forEach((entity) => {
@@ -67,7 +68,7 @@ export default class Region {
     });
   }
 
-   /**
+  /**
    * Create initial creatures: Spiders with a random amount, at random positions
    * More creatures can be added later
    * @returns {void}
@@ -77,24 +78,60 @@ export default class Region {
 
     config.forEach((def) => {
       for (let i = 0; i < def.count; i++) {
-        const x = getRandomPositiveInteger(50, 330);
-        const y = getRandomPositiveInteger(50, 150);
-        const creature = CreatureFactory.createInstance(
-          def.type,
-          new Vector(x, y)
+        let position;
+        let attempts = 0;
+        const maxAttempts = 50;
+        do {
+          const x = getRandomPositiveInteger(50, 330);
+          const y = getRandomPositiveInteger(50, 150);
+          position = new Vector(x, y);
+          attempts++;
+        } while (
+          (this.isPositionOccupied(position, entities) ||
+            this.isPositionOnCollision(position)) &&
+          attempts < maxAttempts
         );
-        entities.push(creature);
+
+        if (attempts < maxAttempts) {
+          const creature = CreatureFactory.createInstance(def.type, position);
+          entities.push(creature);
+        }
       }
     });
     return entities;
   }
 
+  isPositionOnCollision(position) {
+    const collisionObjects = this.map.getCollisionObjects();
+    const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
+
+    for (const hitbox of collisionObjects) {
+      if (tempHitbox.didCollide(hitbox)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isPositionOccupied(position, existingCreatures) {
+    const minDistance = 32; // Minimum spacing 2 tile
+    for (const creature of existingCreatures) {
+      const dx = creature.position.x - position.x;
+      const dy = creature.position.y - position.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < minDistance) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   /**
    * Check for collisions between a creature and the environment
-   * @param {*} creature 
-   * @param {*} oldX 
-   * @param {*} oldY 
-   * @returns 
+   * @param {*} creature
+   * @param {*} oldX
+   * @param {*} oldY
+   * @returns
    */
   checkCreatureCollisions(creature, oldX, oldY) {
     let collided = false;

@@ -32,9 +32,6 @@ export default class CreatureWalkingState extends State {
   }
 
   update(dt) {
-    const oldX = this.creature.position.x;
-    const oldY = this.creature.position.y;
-
     // Move
     if (this.creature.direction === Direction.Left) {
       this.creature.position.x -= this.creature.speed * dt;
@@ -49,75 +46,6 @@ export default class CreatureWalkingState extends State {
       this.creature.dimensions.x + this.creature.hitboxOffsets.dimensions.x,
       this.creature.dimensions.y + this.creature.hitboxOffsets.dimensions.y
     );
-
-    // Check map bound collision
-    if (this.creature.map) {
-      const collisionObjects = this.creature.map.getCollisionObjects();
-
-      for (const hitbox of collisionObjects) {
-        if (this.creature.didCollideWithEntity(hitbox)) {
-          // Revert position
-          this.creature.position.x = oldX;
-          this.creature.position.y = oldY;
-
-          // Reverse direction
-          this.creature.direction =
-            this.creature.direction === Direction.Left
-              ? Direction.Right
-              : Direction.Left;
-
-          this.creature.currentAnimation =
-            this.animations[this.creature.direction];
-          this.creature.currentAnimation.refresh();
-
-          // Update hitbox to reverted position
-          this.creature.hitbox.set(
-            this.creature.position.x + this.creature.hitboxOffsets.position.x,
-            this.creature.position.y + this.creature.hitboxOffsets.position.y,
-            this.creature.dimensions.x +
-              this.creature.hitboxOffsets.dimensions.x,
-            this.creature.dimensions.y +
-              this.creature.hitboxOffsets.dimensions.y
-          );
-
-          break;
-        }
-      }
-    }
-
-    // 🆕 Check creature vs creature collision
-    if (this.creature.region) {
-      for (const other of this.creature.region.creatures) {
-        if (
-          other !== this.creature &&
-          this.creature.didCollideWithEntity(other.hitbox)
-        ) {
-          // Revert
-          this.creature.position.x = oldX;
-          this.creature.position.y = oldY;
-
-          // Reverse
-          this.creature.direction =
-            this.creature.direction === Direction.Left
-              ? Direction.Right
-              : Direction.Left;
-          this.creature.currentAnimation =
-            this.animations[this.creature.direction];
-          this.creature.currentAnimation.refresh();
-
-          // Update hitbox to reverted position
-          this.creature.hitbox.set(
-            this.creature.position.x + this.creature.hitboxOffsets.position.x,
-            this.creature.position.y + this.creature.hitboxOffsets.position.y,
-            this.creature.dimensions.x +
-              this.creature.hitboxOffsets.dimensions.x,
-            this.creature.dimensions.y +
-              this.creature.hitboxOffsets.dimensions.y
-          );
-          break;
-        }
-      }
-    }
   }
 
   async startTimer() {

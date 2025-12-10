@@ -1,8 +1,7 @@
-import { DEBUG } from "../globals.js";
+import { DEBUG, context } from "../globals.js";
 import Hitbox from "../../lib/Hitbox.js";
 import Vector from "../../lib/Vector.js";
 import Direction from "../enums/Direction.js";
-import { context } from "../globals.js";
 
 export default class GameEntity {
   /**
