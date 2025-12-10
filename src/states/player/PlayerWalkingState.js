@@ -29,6 +29,7 @@ export default class PlayerWalkingState extends State {
     update(dt){
         this.handleMovement(dt);
         this.handleSwordSwing();
+        this.handlePerformingFireFlame();
     }
 
     handleMovement(dt) {
@@ -61,6 +62,11 @@ export default class PlayerWalkingState extends State {
         if (input.isKeyHeld(Input.KEYS.SPACE)) {
             console.log("Checking for sword swing input");
             this.player.changeState(PlayerStateName.SwordSwinging);
+        }
+    }
+    handlePerformingFireFlame() {
+        if (input.isKeyHeld(Input.KEYS.J)) {
+            this.player.changeState(PlayerStateName.PerformingFireFlame);
         }
     }
 }

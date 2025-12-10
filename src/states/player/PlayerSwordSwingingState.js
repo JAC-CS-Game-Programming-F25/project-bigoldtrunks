@@ -44,7 +44,6 @@ export default class PlayerSwordSwingingState extends State {
     }
     
     update(dt){
-        this.handlePerformingFireFlame();
 
         if(this.player.currentAnimation.isDone()){
             this.player.currentAnimation.refresh();
@@ -109,9 +108,4 @@ export default class PlayerSwordSwingingState extends State {
 
 		this.player.swordHitbox.set(hitboxX, hitboxY, hitboxWidth, hitboxHeight);
 	}
-    handlePerformingFireFlame() {
-        if (input.isKeyHeld(Input.KEYS.J)) {
-            this.player.changeState(PlayerStateName.PerformingFireFlame);
-        }
-    }
 }
