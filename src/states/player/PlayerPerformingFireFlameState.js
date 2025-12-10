@@ -7,15 +7,15 @@ import PlayerStateName from "../../enums/PlayerStateName.js";
 import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
 
 
-export default class PlayerSwordSwingingState extends State {
+export default class PlayerPerformingFireFlameState extends State {
     constructor(player){
         super()
         this.player = player;
         this.animation = {
-            [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.06, 1),
-            [Direction.Left]: new Animation([8, 9, 10, 11, 12, 13, 14, 15], 0.06, 1),
-            [Direction.Down]: new Animation([16, 17, 18, 19, 20, 21, 22, 23], 0.06, 1),
-            [Direction.Up]: new Animation([24, 25, 26, 27, 28, 29, 30, 31], 0.06, 1),
+            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
+            [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
+            [Direction.Down]: new Animation([8, 9, 10, 11], 0.2, 1),
+            [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
         };
         
         // Store the original position for later restoration
@@ -38,13 +38,13 @@ export default class PlayerSwordSwingingState extends State {
         // // Update dimensions for the sword swing sprite
         this.player.dimensions.x = Player.PLAYER_SWORD_SPRITE_WIDTH;
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
-        
-        this.player.sprites = this.player.swordSwingingSprites;
+
+        console.log("Entering PlayerPerformingFireFlameState");
+        this.player.sprites = this.player.performFirePosterSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
     
     update(dt){
-
         if(this.player.currentAnimation.isDone()){
             this.player.currentAnimation.refresh();
             this.player.changeState(PlayerStateName.Idle);
@@ -57,7 +57,6 @@ export default class PlayerSwordSwingingState extends State {
 		if (this.player.currentAnimation.isHalfwayDone()) {
 			this.setSwordHitbox();
 		}
-
     }
     
     exit(){
