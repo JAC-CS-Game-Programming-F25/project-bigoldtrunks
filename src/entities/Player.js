@@ -11,6 +11,7 @@ import PlayerWalkingState from "../states/player/PlayerWalkingState.js";
 import PlayerSwordSwingingState from "../states/player/PlayerSwordSwingingState.js";
 import Hitbox from "../../lib/Hitbox.js";
 import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFireFlameState.js";
+import AbilityType from "../enums/AbilityType.js";
 
 export default class Player extends GameEntity {
 
@@ -72,6 +73,10 @@ export default class Player extends GameEntity {
             -8,  // height
             'red'
         )
+        this.abilityUnlocked = {
+            [AbilityType.FireFlame]: false,
+            [AbilityType.FrozenFlame]: false
+        }
         this.stateMachine = this.initializeStateMachine();
     }
 
