@@ -6,6 +6,8 @@ import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
 import Hitbox from "../../lib/Hitbox.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
+import Tile from "./Tile.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -63,8 +65,7 @@ export default class Region {
           position = new Vector(x, y);
           attempts++;
         } while (
-          (this.isPositionOccupied(position, entities) ||
-            this.isPositionOnCollision(position)) &&
+          this.isPositionOccupied(position, entities) &&
           attempts < maxAttempts
         );
 
@@ -75,18 +76,6 @@ export default class Region {
       }
     });
     return entities;
-  }
-
-  isPositionOnCollision(position) {
-    const collisionObjects = this.map.getCollisionObjects();
-    const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
-
-    for (const hitbox of collisionObjects) {
-      if (tempHitbox.didCollide(hitbox)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   isPositionOccupied(position, existingCreatures) {
@@ -111,12 +100,39 @@ export default class Region {
    */
   checkCreatureCollisions(creature, oldX, oldY) {
     let collided = false;
+    // Dynamically obtain the size of the sprite
+    let spriteWidth, spriteHeight;
 
+    if (creature.constructor.name === "Spider") {
+      spriteWidth = Tile.SIZE;
+      spriteHeight = Tile.SIZE;
+      console.log("Spider");
+    } else if (creature.constructor.name === "Skeleton") {
+      spriteWidth = Tile.SIZE * 4;
+      spriteHeight = Tile.SIZE * 4;
+      console.log("Skeleton");
+    } else {
+      spriteWidth = Tile.SIZE * 2;
+      spriteHeight = Tile.SIZE * 2;
+    }
+
+    if (
+      creature.position.x < 0 ||
+      creature.position.x + spriteWidth > CANVAS_WIDTH ||
+      creature.position.y < 0 ||
+      creature.position.y + spriteHeight > CANVAS_HEIGHT
+    ) {
+      creature.position.x = Math.round(oldX);
+      creature.position.y = Math.round(oldY);
+      creature.handleWallCollision();
+      return;
+    }
+    // check object collision
     const collisionObjects = this.map.getCollisionObjects();
     for (const hitbox of collisionObjects) {
       if (creature.didCollideWithEntity(hitbox)) {
-        creature.position.x = oldX;
-        creature.position.y = oldY;
+        creature.position.x = Math.round(oldX);
+        creature.position.y = Math.round(oldY);
         creature.handleWallCollision();
         collided = true;
         break;
@@ -125,10 +141,11 @@ export default class Region {
 
     if (collided) return;
 
+    // check collision with other
     for (const other of this.creatures) {
       if (other !== creature && creature.didCollideWithEntity(other.hitbox)) {
-        creature.position.x = oldX;
-        creature.position.y = oldY;
+        creature.position.x = Math.round(oldX);
+        creature.position.y = Math.round(oldY);
         creature.handleCreatureCollision(other);
         break;
       }
