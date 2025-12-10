@@ -51,9 +51,9 @@
     
     {
       "name": "fire-explosion",
-      "path": "./assets/images/player/fire-explosion.png",
-      "width": 128,
-      "height": 256
+      "path": "./assets/images/ability/fire-explosion.png",
+      "width": 384,
+      "height": 32
     },
 
     {
