@@ -43,14 +43,14 @@
       "height": 384
     },
     {
-      "name": "player-fire",
-      "path": "./assets/images/player/player-fire-flame-poster.png",
+      "name": "player-fire-poster",
+      "path": "./assets/images/player/player-fire-poster.png",
       "width": 128,
       "height": 256
     },
     {
-      "name": "player-frozen",
-      "path": "./assets/images/player/player-frozen-flame-poster.png",
+      "name": "player-frozen-poster",
+      "path": "./assets/images/player/player-frozen-poster.png",
       "width": 128,
       "height": 384
     },
