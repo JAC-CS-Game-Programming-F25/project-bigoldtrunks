@@ -1,5 +1,4 @@
 import Vector from "../../lib/Vector.js";
-import { getCollisionDirection } from "../../lib/CollisionHelpers.js";
 import Hitbox from "../../lib/Hitbox.js";
 import Direction from "../enums/Direction.js";
 import { context, DEBUG } from "../globals.js";
