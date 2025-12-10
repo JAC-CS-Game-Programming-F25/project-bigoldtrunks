@@ -10,6 +10,7 @@ import PlayerIdlingState from "../states/player/PlayerIdlingState.js";
 import PlayerWalkingState from "../states/player/PlayerWalkingState.js";
 import PlayerSwordSwingingState from "../states/player/PlayerSwordSwingingState.js";
 import Hitbox from "../../lib/Hitbox.js";
+import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFireFlameState.js";
 
 export default class Player extends GameEntity {
 
@@ -36,6 +37,11 @@ export default class Player extends GameEntity {
         )
         this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerSwordSwing),
+            Player.PLAYER_SWORD_SPRITE_WIDTH,
+            Player.PLAYER_SWORD_SPRITE_HEIGHT,
+        )
+        this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerFireFlamePoster),
             Player.PLAYER_SWORD_SPRITE_WIDTH,
             Player.PLAYER_SWORD_SPRITE_HEIGHT,
         )
@@ -89,6 +95,7 @@ export default class Player extends GameEntity {
         stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
+        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this));
 
         stateMachine.change(PlayerStateName.Idle);
 
