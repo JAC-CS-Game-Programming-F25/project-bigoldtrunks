@@ -159,18 +159,6 @@ export default class Region {
         break;
       }
     }
-
-    if (collided) return;
-
-    // check collision with other
-    for (const other of this.creatures) {
-      if (other !== creature && creature.didCollideWithEntity(other.hitbox)) {
-        creature.position.x = Math.round(oldX);
-        creature.position.y = Math.round(oldY);
-        creature.handleCreatureCollision(other);
-        break;
-      }
-    }
   }
 
   render() {
