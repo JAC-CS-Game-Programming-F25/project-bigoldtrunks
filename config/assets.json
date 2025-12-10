@@ -14,9 +14,9 @@
     },
     {
       "name": "tree_size_02",
-      "path": "./assets/images/Tiles/Trees/Model_01/tree_size_02.png",
-      "width": 368,
-      "height": 256
+      "path": "./assets/images/Tiles/Trees/Model_02/Size_02.png",
+      "width": 128,
+      "height": 96
     },   
     {
       "name": "tree_size_04",

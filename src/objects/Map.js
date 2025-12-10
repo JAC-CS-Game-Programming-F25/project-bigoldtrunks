@@ -14,17 +14,31 @@ export default class Map {
       Tile.SIZE,
       Tile.SIZE
     );
+    const spritesDecoration = Sprite.generateSpritesFromSpriteSheet(
+      images.get("tree_size_02"),
+      Tile.SIZE,
+      Tile.SIZE
+    );
     // Create layers
     this.bottomLayer = new Layer(mapDefinition.layers[0], sprites);
-    this.collisionLayer = new Layer(mapDefinition.layers[1], sprites);
+    this.collisionLayer = new Layer(
+      mapDefinition.layers[1],
+      spritesDecoration,
+      651
+    );
+    this.topLayer = new Layer(mapDefinition.layers[2], spritesDecoration, 651);
     // Generate collision hitboxes
     this.collisionObjects = this.generateCollisionObjects();
   }
 
   render() {
     this.bottomLayer.render();
+    this.collisionLayer.render();
   }
 
+  renderTop() {
+    this.topLayer.render();
+  }
   // Generate hitboxes from collision tiles
   generateCollisionObjects() {
     const collisionObjects = [];

@@ -140,6 +140,7 @@ export default class Region {
     // this.player.render(); // ← render player
     // this.creatures.forEach((creature) => creature.render());
     this.renderQueue.forEach((entity) => entity.render());
+    this.map.renderTop();
   }
   /**
    * Order the entities by their renderPriority fields. If the renderPriority
