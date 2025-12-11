@@ -12,6 +12,9 @@ const SoundName = {
   BossDead: "boss-dead",
   Key: "key-pickup",
   Select: "select",
+  EnemyDead: "enemy-dead",
+  EnemyHurt: "hurt",
+  Hit: "hits",
 };
 
 export default SoundName;

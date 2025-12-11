@@ -146,7 +146,7 @@
         "name": "summer",
         "path": "./assets/sounds/music/summer.wav",
         "size": 1,
-        "volume": 0.3,
+        "volume": 0.2,
         "loop": true
     },
     {
@@ -227,13 +227,13 @@
         "name": "hits",
         "path": "./assets/sounds/effects/hits.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.4
     },
     {
         "name": "hurt",
         "path": "./assets/sounds/effects/hurt.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3
     },
     {
         "name": "key-pickup",

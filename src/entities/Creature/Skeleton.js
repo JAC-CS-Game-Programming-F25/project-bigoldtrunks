@@ -13,6 +13,7 @@ import Vector from "../../../lib/Vector.js";
 import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
 import Hitbox from "../../../lib/Hitbox.js";
 import ImageName from "../../enums/ImageName.js";
+
 export default class Skeleton extends Creature {
   static SPEED = 20;
   static HEALTH = 2;
@@ -118,6 +119,11 @@ export default class Skeleton extends Creature {
     return stateMachine;
   }
   render(offset = { x: 0, y: 0 }) {
+    // glimmering after injured
+    if (this.isHurt && Math.floor(Date.now() / 50) % 2 === 0) {
+      return;
+    }
+
     const x = this.position.x + offset.x;
     const y = this.position.y + offset.y;
 

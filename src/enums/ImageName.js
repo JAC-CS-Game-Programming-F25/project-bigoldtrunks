@@ -10,6 +10,7 @@ const ImageName = {
   Spider: "spider-spritesheet",
   Skeleton_Left: "skeleton-left",
   Skeleton_Right: "skeleton-right",
+  Tree: "tree_size_02"
 };
 
 export default ImageName;

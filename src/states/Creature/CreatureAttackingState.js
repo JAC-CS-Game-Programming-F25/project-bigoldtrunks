@@ -1,6 +1,8 @@
 import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import CreatureStateName from "../../enums/CreatureStateName.js";
+import { sounds } from "../../globals.js";
+import SoundName from "../../enums/SoundName.js";
 export default class CreatureAttackingState extends State {
   static ATTACK_DURATION = 0.5;
 
@@ -25,6 +27,7 @@ export default class CreatureAttackingState extends State {
       const dx = playerCenterX - creatureCenter.x;
       this.creature.direction = dx < 0 ? Direction.Left : Direction.Right;
     }
+    sounds.play(SoundName.Hit);
     this.creature.currentAnimation = this.animations[this.creature.direction];
     this.creature.currentAnimation.refresh();
   }

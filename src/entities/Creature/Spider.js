@@ -18,6 +18,7 @@ export default class Spider extends Creature {
       position,
       speed: Spider.SPEED,
       health: Spider.HEALTH,
+      isContactDamage: true,
     });
     this.hitboxOffsets.set(0, 6, -2, -8); // shrink hitbox
     this.loadSprites();
