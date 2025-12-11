@@ -2,10 +2,11 @@ import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
 import CreatureStateName from "../../enums/CreatureStateName.js";
+
 export default class CreatureChasingState extends State {
   static CHASE_SPEED_MULTIPLIER = 1.2; // It is 20% faster when chasing.
   static LOSE_INTEREST_RADIUS = 120; // Stop chasing beyond this distance.
-  static ATTACK_RANGE = 20; // add attack distance
+  static ATTACK_RANGE = 10; // Distance to start chasing player (in pixels)
 
   constructor(creature, animations) {
     super();
@@ -24,18 +25,15 @@ export default class CreatureChasingState extends State {
       this.creature.changeState(CreatureStateName.Idle);
       return;
     }
-    // Calculate the distance using the center of the hitbox.
-    const creatureCenterX =
-      this.creature.hitbox.position.x + this.creature.hitbox.dimensions.x / 2;
-    const creatureCenterY =
-      this.creature.hitbox.position.y + this.creature.hitbox.dimensions.y / 2;
+    // use hitbox center calculate distance
+    const creatureCenter = this.creature.getCenter();
     const playerCenterX =
       player.hitbox.position.x + player.hitbox.dimensions.x / 2;
     const playerCenterY =
       player.hitbox.position.y + player.hitbox.dimensions.y / 2;
-    // get player position
-    const dx = playerCenterX - creatureCenterX;
-    const dy = playerCenterY - creatureCenterY;
+
+    const dx = playerCenterX - creatureCenter.x;
+    const dy = playerCenterY - creatureCenter.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     // The player has run too far. Stop chasing.
@@ -48,6 +46,7 @@ export default class CreatureChasingState extends State {
       this.creature.changeState(CreatureStateName.Attacking);
       return;
     }
+
     const velocityX =
       (dx / distance) *
       this.creature.speed *
@@ -61,17 +60,15 @@ export default class CreatureChasingState extends State {
     this.creature.position.x += velocityX * dt;
     this.creature.position.y += velocityY * dt;
 
-    const minX = 0;
-    const minY = 0;
     const maxX = CANVAS_WIDTH - this.creature.dimensions.x;
     const maxY = CANVAS_HEIGHT - this.creature.dimensions.y;
 
     this.creature.position.x = Math.max(
-      minX,
+      0,
       Math.min(this.creature.position.x, maxX)
     );
     this.creature.position.y = Math.max(
-      minY,
+      0,
       Math.min(this.creature.position.y, maxY)
     );
 

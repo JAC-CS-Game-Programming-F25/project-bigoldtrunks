@@ -1,8 +1,8 @@
 import State from "../../../lib/State.js";
+import Direction from "../../enums/Direction.js";
+import CreatureStateName from "../../enums/CreatureStateName.js";
 export default class CreatureAttackingState extends State {
-  static ATTACK_RANGE = 20;
   static ATTACK_DURATION = 0.5;
-  static ATTACK_COOLDOWN = 1;
 
   constructor(creature, animations) {
     super();
@@ -15,55 +15,47 @@ export default class CreatureAttackingState extends State {
   enter() {
     this.attackTimer = 0;
     this.hasDealtDamage = false;
-    this.creature.currentAnimation = this.animations[this.creature.direction];
-    this.setAttackHitbox();
-  }
 
-  setAttackHitbox() {
-    const hitbox = this.creature.hitbox;
-    const attackWidth = 20;
-    const attackHeight = 16;
-
-    if (this.creature.direction === Direction.Left) {
-      this.creature.attackHitbox.set(
-        hitbox.position.x - attackWidth,
-        hitbox.position.y,
-        attackWidth,
-        attackHeight
-      );
-    } else {
-      this.creature.attackHitbox.set(
-        hitbox.position.x + hitbox.dimensions.x,
-        hitbox.position.y,
-        attackWidth,
-        attackHeight
-      );
+    // update direction and face on player
+    const player = this.creature.player;
+    if (player) {
+      const creatureCenter = this.creature.getCenter();
+      const playerCenterX =
+        player.hitbox.position.x + player.hitbox.dimensions.x / 2;
+      const dx = playerCenterX - creatureCenter.x;
+      this.creature.direction = dx < 0 ? Direction.Left : Direction.Right;
     }
+    this.creature.currentAnimation = this.animations[this.creature.direction];
+    this.creature.currentAnimation.refresh();
   }
-
   update(dt) {
     this.attackTimer += dt;
-
     // attack center
     if (
       !this.hasDealtDamage &&
       this.attackTimer >= CreatureAttackingState.ATTACK_DURATION / 2
     ) {
-      this.checkHitPlayer();
+      this.dealDamage();
       this.hasDealtDamage = true;
     }
 
     // finish attack
     if (this.attackTimer >= CreatureAttackingState.ATTACK_DURATION) {
-      this.creature.attackHitbox.set(0, 0, 0, 0); // clear hitbox
       this.creature.changeState(CreatureStateName.Chasing);
     }
   }
 
-  checkHitPlayer() {
+  dealDamage() {
     const player = this.creature.player;
-    if (player && this.creature.attackHitbox.didCollide(player.hitbox)) {
+    console.log("⚔️ dealDamage called, player:", player);
+
+    // stop attack if player health is less than zero
+    // if (!player || player.health <= 0) return;
+    if (!player) return;
+
+    if (this.creature.hitbox.didCollide(player.hitbox)) {
       player.onTakingDamage(this.creature.damage);
+      console.log("📌 Skeleton hit player! Player health:", player.health);
     }
   }
 }

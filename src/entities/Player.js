@@ -116,6 +116,8 @@ export default class Player extends GameEntity {
         if (this.isInVulnerable) {
             return;
         }
+        this.health-= damage;
+        
         if (this.health < 0) {
             this.isDead = true;
             return;
@@ -123,6 +125,5 @@ export default class Player extends GameEntity {
         // Handle taking damage logic here (e.g., reduce health)
         console.log("Player took damage!, current health:", this.health);
         
-        this.health-= damage;
     }
 }

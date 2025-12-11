@@ -10,7 +10,8 @@ import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js"
 import { DEBUG, context } from "../../globals.js";
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import Vector from "../../../lib/Vector.js";
-import CreatureAttackingState from "../../states/Creature/CreatureChasingState.js";
+import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
+import Hitbox from "../../../lib/Hitbox.js";
 export default class Skeleton extends Creature {
   static SPEED = 20;
   static HEALTH = 2;
@@ -51,11 +52,10 @@ export default class Skeleton extends Creature {
     ];
 
     const attackFrames = [
-      { x: 0, y: 128 },
       { x: 64, y: 128 },
       { x: 128, y: 128 },
       { x: 192, y: 128 },
-      // { x: 256, y: 128 },
+      { x: 256, y: 128 },
     ];
 
     const allFrames = [...idleFrames, ...walkFrames, ...attackFrames];

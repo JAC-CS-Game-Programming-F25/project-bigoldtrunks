@@ -80,4 +80,11 @@ export default class Creature extends GameEntity {
       this.stateMachine.update(dt);
     }
   }
+  getCenter() {
+    const hb = this.hitbox;
+    return {
+      x: hb.position.x + hb.dimensions.x / 2,
+      y: hb.position.y + hb.dimensions.y / 2,
+    };
+  }
 }
