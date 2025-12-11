@@ -6,7 +6,10 @@ const ImageName = {
   PlayerSwordSwing: "player-sword-swing",
   PlayerFireFlamePoster: "player-fire-poster",
   PlayerFrozenFlamePoster: "player-frozen-poster",
-  FireExplosion: "fire-explosion"
+  FireExplosion: "fire-explosion",
+  Spider: "spider-spritesheet",
+  Skeleton_Left: "skeleton-left",
+  Skeleton_Right: "skeleton-right",
 };
 
 export default ImageName;
