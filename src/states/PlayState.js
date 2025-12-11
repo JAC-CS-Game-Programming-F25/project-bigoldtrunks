@@ -26,4 +26,7 @@ export default class PlayState extends State {
   render() {
     this.region.render();
   }
+  exit() {
+    sounds.stop(SoundName.Summer);
+  }
 }
