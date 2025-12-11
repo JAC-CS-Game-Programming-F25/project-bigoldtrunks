@@ -12,6 +12,7 @@ import CreatureChasingState from "../../states/Creature/CreatureChasingState.js"
 import Vector from "../../../lib/Vector.js";
 import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
 import Hitbox from "../../../lib/Hitbox.js";
+import ImageName from "../../enums/ImageName.js";
 export default class Skeleton extends Creature {
   static SPEED = 20;
   static HEALTH = 2;
@@ -21,7 +22,7 @@ export default class Skeleton extends Creature {
       position,
       speed: Skeleton.SPEED,
       health: Skeleton.HEALTH,
-      canChase: true, //✅ only Skeleton can chase
+      canChase: true, // only Skeleton can chase
       dimensions: new Vector(64, 64),
     });
     this.hitboxOffsets.set(24, 48, -48, -55); // Position hitbox at feet
@@ -34,8 +35,8 @@ export default class Skeleton extends Creature {
   }
 
   loadSprites() {
-    const leftImage = images.get("skeleton-left");
-    const rightImage = images.get("skeleton-right");
+    const leftImage = images.get(ImageName.Skeleton_Left);
+    const rightImage = images.get(ImageName.Skeleton_Right);
 
     this.spritesLeft = [];
     this.spritesRight = [];

@@ -7,6 +7,7 @@ import Direction from "../../enums/Direction.js";
 import StateMachine from "../../../lib/StateMachine.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
+import ImageName from "../../enums/ImageName.js";
 
 export default class Spider extends Creature {
   static SPEED = 15;
@@ -26,7 +27,7 @@ export default class Spider extends Creature {
 
   loadSprites() {
     this.sprites = Sprite.generateSpritesFromSpriteSheet(
-      images.get("spider-spritesheet"),
+      images.get(ImageName.Spider),
       16,
       16
     );

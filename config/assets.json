@@ -140,19 +140,22 @@
         "name": "title",
         "path": "./assets/sounds/music/title.mp3",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3
     },
     {
         "name": "summer",
         "path": "./assets/sounds/music/summer.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3,
+        "loop": true
     },
     {
         "name": "winter",
         "path": "./assets/sounds/music/winter.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3,
+        "loop": true
+
     },
     {
         "name": "victory",

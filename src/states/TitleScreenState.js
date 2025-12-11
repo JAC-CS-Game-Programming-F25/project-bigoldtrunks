@@ -11,6 +11,7 @@ import {
 import GameStateName from "../enums/GameStateName.js";
 import Input from "../../lib/Input.js";
 import SoundName from "../enums/SoundName.js";
+import ImageName from "../enums/ImageName.js";
 export default class TitleScreenState extends State {
   constructor() {
     super();
@@ -72,7 +73,7 @@ export default class TitleScreenState extends State {
 
   render() {
     // background
-    images.render("title", 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    images.render(ImageName.Title, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     context.fillStyle = "rgba(0, 0, 0, 0.3)";
     context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);

@@ -1,7 +1,8 @@
 import State from "../../lib/State.js";
 import Region from "../objects/Region.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
-
+import { sounds } from "../globals.js";
+import SoundName from "../enums/SoundName.js";
 export default class PlayState extends State {
   constructor(mapDefinition) {
     super();
@@ -15,6 +16,9 @@ export default class PlayState extends State {
     ];
 
     this.region = new Region(mapDefinition, summerCreatures);
+  }
+  enter() {
+    sounds.play(SoundName.Summer);
   }
   update(dt) {
     this.region.update(dt);
