@@ -3,7 +3,8 @@ import GameEntity from "../GameEntity.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import Direction from "../../enums/Direction.js";
 import CreatureChasingState from "../../states/Creature/CreatureWalkingState.js";
-
+import { sounds } from "../../globals.js";
+import SoundName from "../../enums/SoundName.js";
 export default class Creature extends GameEntity {
   static CREATURE_WIDTH = 16;
   static CREATURE_HEIGHT = 16;
@@ -17,6 +18,7 @@ export default class Creature extends GameEntity {
     this.damage = creatureDefinition.damage || 1;
     this.canChase = creatureDefinition.canChase ?? false;
     this.isContactDamage = creatureDefinition.isContactDamage ?? false;
+    this.isHurt = false;
   }
 
   receiveDamage(damage) {
@@ -65,14 +67,26 @@ export default class Creature extends GameEntity {
    */
   onTakingHit(damage) {
     if (this.isDead) return;
-    if (this.health - damage <= 0) {
+
+    // reduce health first
+    this.health -= damage;
+
+    if (this.health <= 0) {
       this.isDead = true;
+      sounds.play(SoundName.EnemyDead);
       console.log("Creature is dead");
       return;
     }
-    this.health -= damage;
-    console.log("Creature took damage, current health:", this.health);
+    // add glimmering after injured (Juice)
+
+    this.isHurt = true;
+
+    setTimeout(() => {
+      this.isHurt = false;
+    }, 300);
+    console.log("Creature took damage, Creature current health:", this.health);
     // play sound when creature receives damage
+    sounds.play(SoundName.EnemyHurt);
   }
 
   update(dt) {

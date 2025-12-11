@@ -4,18 +4,19 @@ import Tile from "./Tile.js";
 import Hitbox from "../../lib/Hitbox.js";
 
 import { CANVAS_HEIGHT, CANVAS_WIDTH, context, images } from "../globals.js";
+import ImageName from "../enums/ImageName.js";
 export default class Map {
   constructor(mapDefinition) {
     // Generate sprites from tileset
     this.width = mapDefinition.width;
     this.height = mapDefinition.height;
     const sprites = Sprite.generateSpritesFromSpriteSheet(
-      images.get("Floors_Tiles"),
+      images.get(ImageName.Summer),
       Tile.SIZE,
       Tile.SIZE
     );
     const spritesDecoration = Sprite.generateSpritesFromSpriteSheet(
-      images.get("tree_size_02"),
+      images.get(ImageName.Tree),
       Tile.SIZE,
       Tile.SIZE
     );

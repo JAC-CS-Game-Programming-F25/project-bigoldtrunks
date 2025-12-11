@@ -47,7 +47,10 @@ export default class Region {
         this.checkCreatureCollisions(entity, oldX, oldY);
 
         // check if creature is collided with player's sword -> creature takes the damae
-        if (entity.didCollideWithEntity(this.player.swordHitbox)) {
+        if (
+          !entity.isHurt &&
+          entity.didCollideWithEntity(this.player.swordHitbox)
+        ) {
           entity.onTakingHit(this.player.damage);
         }
 

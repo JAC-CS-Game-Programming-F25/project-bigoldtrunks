@@ -129,9 +129,9 @@ export default class Player extends GameEntity {
     }
     // Handle taking damage logic here (e.g., reduce health)
     console.log("Player took damage!, current health:", this.health);
-    // this.isInVulnerable = true;
-    // setTimeout(() => {
-    //   this.isInVulnerable = false;
-    // }, 1000);
+    this.isInVulnerable = true;
+    setTimeout(() => {
+      this.isInVulnerable = false;
+    }, 1000);
   }
 }
