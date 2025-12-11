@@ -8,6 +8,10 @@ import StateMachine from "../../../lib/StateMachine.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import { DEBUG, context } from "../../globals.js";
+import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
+import Vector from "../../../lib/Vector.js";
+import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
+import Hitbox from "../../../lib/Hitbox.js";
 export default class Skeleton extends Creature {
   static SPEED = 20;
   static HEALTH = 2;
@@ -17,8 +21,10 @@ export default class Skeleton extends Creature {
       position,
       speed: Skeleton.SPEED,
       health: Skeleton.HEALTH,
+      canChase: true, //✅ only Skeleton can chase
+      dimensions: new Vector(64, 64),
     });
-    this.hitboxOffsets.set(24, 48, 0, -8); // Position hitbox at feet
+    this.hitboxOffsets.set(24, 48, -48, -55); // Position hitbox at feet
 
     // game entity default function is down, add left to fix issue
     this.direction = Direction.Left;
@@ -45,7 +51,14 @@ export default class Skeleton extends Creature {
       { x: 320, y: 64 },
     ];
 
-    const allFrames = [...idleFrames, ...walkFrames];
+    const attackFrames = [
+      { x: 64, y: 128 },
+      { x: 128, y: 128 },
+      { x: 192, y: 128 },
+      { x: 256, y: 128 },
+    ];
+
+    const allFrames = [...idleFrames, ...walkFrames, ...attackFrames];
 
     allFrames.forEach((frame) => {
       this.spritesLeft.push(new Sprite(leftImage, frame.x, frame.y, 64, 64));
@@ -61,6 +74,14 @@ export default class Skeleton extends Creature {
       [CreatureStateName.Walking]: {
         [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
         [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
+      },
+      [CreatureStateName.Chasing]: {
+        [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.08), // <- add Chasing animation
+        [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.08),
+      },
+      [CreatureStateName.Attacking]: {
+        [Direction.Left]: new Animation([7, 8, 9, 10], 0.12), // <- add Attacking animation
+        [Direction.Right]: new Animation([7, 8, 9, 10], 0.12),
       },
     };
 
@@ -78,6 +99,17 @@ export default class Skeleton extends Creature {
     stateMachine.add(
       CreatureStateName.Walking,
       new CreatureWalkingState(this, animations[CreatureStateName.Walking])
+    );
+    stateMachine.add(
+      // ← add Chasing state
+      CreatureStateName.Chasing,
+      new CreatureChasingState(this, animations[CreatureStateName.Chasing])
+    );
+
+    stateMachine.add(
+      // ← add Attacking state
+      CreatureStateName.Attacking,
+      new CreatureAttackingState(this, animations[CreatureStateName.Attacking])
     );
 
     stateMachine.change(CreatureStateName.Idle);

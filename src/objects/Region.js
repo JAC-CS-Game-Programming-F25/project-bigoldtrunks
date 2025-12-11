@@ -1,18 +1,19 @@
-import State from "../../lib/State.js";
 import Player from "../entities/Player.js";
 import Map from "../objects/Map.js";
 import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import Hitbox from "../../lib/Hitbox.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
     this.player = new Player();
-
     this.creatures = this.spawnCreatures(creatureConfig);
 
+    this.creatures.forEach((creature) => {
+      creature.player = this.player;
+    });
     // All entities in the region
     this.entities = [this.player, ...this.creatures];
 
@@ -24,7 +25,6 @@ export default class Region {
     this.renderQueue = this.buildRenderQueue();
     this.cleanUpEntities();
     this.updateEntities(dt);
-
   }
 
   /**
@@ -34,37 +34,33 @@ export default class Region {
    */
   updateEntities(dt) {
     this.entities.forEach((entity) => {
-        if (entity.health <= 0) {
-				entity.isDead = true;
-			}
-        if(entity instanceof Creature){
-            const oldX = entity.position.x;
-            const oldY = entity.position.y;
-            
-            // update all entities (player, creatures, etc.)
-            
-            this.checkCreatureCollisions(entity, oldX, oldY);
-            
-            // check if creature is collided with player's sword -> creature takes the damae
-            if(entity.didCollideWithEntity(this.player.swordHitbox)){
-                entity.onTakingHit(this.player.damage);
-            }
+      if (entity.health <= 0) {
+        entity.isDead = true;
+      }
+      if (entity instanceof Creature) {
+        const oldX = entity.position.x;
+        const oldY = entity.position.y;
+
+        // update all entities (player, creatures, etc.)
+
+        this.checkCreatureCollisions(entity, oldX, oldY);
+
+        // check if creature is collided with player's sword -> creature takes the damae
+        if (entity.didCollideWithEntity(this.player.swordHitbox)) {
+          entity.onTakingHit(this.player.damage);
         }
+      }
 
-       
-       
-
-        // // Check collision with creatures
-        // if(
-        //     !entity.isDead && 
-        //     !this.player.isInVulnerable &&
-        //     this.player.didCollideWithEntity(entity.hitbox) &&
-        //     !(entity instanceof Player) // exclude player itself otherwise player immediate take damage and dead
-        // ){
-        //     this.player.onTakingDamage(entity.damage);
-        // }   
-        entity.update(dt);
-
+      // // Check collision with creatures
+      // if(
+      //     !entity.isDead &&
+      //     !this.player.isInVulnerable &&
+      //     this.player.didCollideWithEntity(entity.hitbox) &&
+      //     !(entity instanceof Player) // exclude player itself otherwise player immediate take damage and dead
+      // ){
+      //     this.player.onTakingDamage(entity.damage);
+      // }
+      entity.update(dt);
     });
   }
 
@@ -87,8 +83,7 @@ export default class Region {
           position = new Vector(x, y);
           attempts++;
         } while (
-          (this.isPositionOccupied(position, entities) ||
-            this.isPositionOnCollision(position)) &&
+          this.isPositionOccupied(position, entities) &&
           attempts < maxAttempts
         );
 
@@ -99,18 +94,6 @@ export default class Region {
       }
     });
     return entities;
-  }
-
-  isPositionOnCollision(position) {
-    const collisionObjects = this.map.getCollisionObjects();
-    const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
-
-    for (const hitbox of collisionObjects) {
-      if (tempHitbox.didCollide(hitbox)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   isPositionOccupied(position, existingCreatures) {
@@ -134,26 +117,29 @@ export default class Region {
    * @returns
    */
   checkCreatureCollisions(creature, oldX, oldY) {
-    let collided = false;
-
-    const collisionObjects = this.map.getCollisionObjects();
-    for (const hitbox of collisionObjects) {
-      if (creature.didCollideWithEntity(hitbox)) {
-        creature.position.x = oldX;
-        creature.position.y = oldY;
-        creature.handleWallCollision();
-        collided = true;
-        break;
-      }
+    // use hitbox as boundary checking
+    const hitboxX = creature.position.x + creature.hitboxOffsets.position.x;
+    const hitboxY = creature.position.y + creature.hitboxOffsets.position.y;
+    const hitboxW = creature.dimensions.x + creature.hitboxOffsets.dimensions.x;
+    const hitboxH = creature.dimensions.y + creature.hitboxOffsets.dimensions.y;
+    if (
+      hitboxX < 0 ||
+      hitboxX + hitboxW > CANVAS_WIDTH ||
+      hitboxY < 0 ||
+      hitboxY + hitboxH > CANVAS_HEIGHT
+    ) {
+      creature.position.x = Math.round(oldX);
+      creature.position.y = Math.round(oldY);
+      creature.handleWallCollision();
+      return;
     }
-
-    if (collided) return;
-
-    for (const other of this.creatures) {
-      if (other !== creature && creature.didCollideWithEntity(other.hitbox)) {
-        creature.position.x = oldX;
-        creature.position.y = oldY;
-        creature.handleCreatureCollision(other);
+    // check object collision
+    const collisionObjects = this.map.getCollisionObjects();
+    for (const object of collisionObjects) {
+      if (creature.didCollideWithEntity(object)) {
+        creature.position.x = Math.round(oldX);
+        creature.position.y = Math.round(oldY);
+        creature.handleWallCollision();
         break;
       }
     }
@@ -164,41 +150,42 @@ export default class Region {
     // this.player.render(); // ← render player
     // this.creatures.forEach((creature) => creature.render());
     this.renderQueue.forEach((entity) => entity.render());
+    this.map.renderTop();
   }
   /**
-	 * Order the entities by their renderPriority fields. If the renderPriority
-	 * is the same, then sort the entities by their bottom positions. This will
-	 * put them in an order such that entities higher on the screen will appear
-	 * behind entities that are lower down.
-	 *
-	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-	 *
-	 * The spread operator (...) returns all the elements of an array separately
-	 * so that you can pass them into functions or create new arrays. What we're
-	 * doing below is combining both the entities and objects arrays into one.
-	 *
-	 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-	 * @returns {Array} The sorted array of entities and objects
-     * Source: Game Programming Assignment - Zelda
-  */
-    buildRenderQueue() {
-        return [...this.entities, this.player].sort((a, b) => {
-            let order = 0;
-            const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
-            const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
-            
-            if(a.renderPriority < b.renderPriority){
-                order = -1;
-                } else if(a.renderPriority > b.renderPriority){
-                    order = 1;
-                } else {
-                    order = bottomA - bottomB;
-                }
-            return order;
-        })
-    }
-    
-    cleanUpEntities(){  
-        this.entities = this.entities.filter(entity => !entity.isDead);
-    }   
+   * Order the entities by their renderPriority fields. If the renderPriority
+   * is the same, then sort the entities by their bottom positions. This will
+   * put them in an order such that entities higher on the screen will appear
+   * behind entities that are lower down.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+   *
+   * The spread operator (...) returns all the elements of an array separately
+   * so that you can pass them into functions or create new arrays. What we're
+   * doing below is combining both the entities and objects arrays into one.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax
+   * @returns {Array} The sorted array of entities and objects
+   * Source: Game Programming Assignment - Zelda
+   */
+  buildRenderQueue() {
+    return [...this.entities, this.player].sort((a, b) => {
+      let order = 0;
+      const bottomA = a.hitbox.position.y + a.hitbox.dimensions.y;
+      const bottomB = b.hitbox.position.y + b.hitbox.dimensions.y;
+
+      if (a.renderPriority < b.renderPriority) {
+        order = -1;
+      } else if (a.renderPriority > b.renderPriority) {
+        order = 1;
+      } else {
+        order = bottomA - bottomB;
+      }
+      return order;
+    });
+  }
+
+  cleanUpEntities() {
+    this.entities = this.entities.filter((entity) => !entity.isDead);
+  }
 }
