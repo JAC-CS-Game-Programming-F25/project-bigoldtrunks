@@ -5,6 +5,7 @@ import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
+import Spider from "../entities/Creature/Spider.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -49,17 +50,20 @@ export default class Region {
         if (entity.didCollideWithEntity(this.player.swordHitbox)) {
           entity.onTakingHit(this.player.damage);
         }
+
+        //
+        if (
+          !entity.isDead &&
+          !this.player.isInVulnerable &&
+          entity.isContactDamage &&
+          this.player.hitbox &&
+          entity.hitbox.didCollide(this.player.hitbox)
+        ) {
+          console.log("spider hit player");
+          this.player.onTakingDamage(entity.damage);
+        }
       }
 
-      // // Check collision with creatures
-      // if(
-      //     !entity.isDead &&
-      //     !this.player.isInVulnerable &&
-      //     this.player.didCollideWithEntity(entity.hitbox) &&
-      //     !(entity instanceof Player) // exclude player itself otherwise player immediate take damage and dead
-      // ){
-      //     this.player.onTakingDamage(entity.damage);
-      // }
       entity.update(dt);
     });
   }

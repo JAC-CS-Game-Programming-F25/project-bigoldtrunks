@@ -16,6 +16,7 @@ export default class Creature extends GameEntity {
       new Vector(Creature.CREATURE_WIDTH, Creature.CREATURE_HEIGHT);
     this.damage = creatureDefinition.damage || 1;
     this.canChase = creatureDefinition.canChase ?? false;
+    this.isContactDamage = creatureDefinition.isContactDamage ?? false;
   }
 
   receiveDamage(damage) {

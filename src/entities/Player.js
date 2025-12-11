@@ -14,116 +14,124 @@ import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFir
 import AbilityType from "../enums/AbilityType.js";
 
 export default class Player extends GameEntity {
+  // the player frame has width and height of 16 pixels, apply to all movements idle/walk
+  static PLAYER_SPRITE_WIDTH = 16;
+  static PLAYER_SPRITE_HEIGHT = 16;
 
-    // the player frame has width and height of 16 pixels, apply to all movements idle/walk
-    static PLAYER_SPRITE_WIDTH = 16;
-	static PLAYER_SPRITE_HEIGHT = 16;
+  // the player sword swinging frame has width and height of 32 pixels
+  static PLAYER_SWORD_SPRITE_HEIGHT = 32;
+  static PLAYER_SWORD_SPRITE_WIDTH = 32;
+  static PLAYER_SPEED = 60;
 
-    // the player sword swinging frame has width and height of 32 pixels
-    static PLAYER_SWORD_SPRITE_HEIGHT = 32;
-    static PLAYER_SWORD_SPRITE_WIDTH = 32;
-    static PLAYER_SPEED= 60;
-    
+  constructor() {
+    super({
+      speed: Player.PLAYER_SPEED,
+      health: 5,
+    });
 
-    constructor(){
-        super({
-            speed: Player.PLAYER_SPEED,
-            health: 5
-        })
+    this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.Player),
+      Player.PLAYER_SPRITE_WIDTH,
+      Player.PLAYER_SPRITE_HEIGHT
+    );
+    this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerSwordSwing),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerFireFlamePoster),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
+    this.sprites = this.walkingSprites;
+    // set initial player position
+    this.position = { x: 100, y: 100 };
 
-        this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.Player),
-            Player.PLAYER_SPRITE_WIDTH,
-            Player.PLAYER_SPRITE_HEIGHT,
-        )
-        this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerSwordSwing),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerFireFlamePoster),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
-        this.sprites = this.walkingSprites;
-        // set initial player position
-                this.position = {x: 100, y: 100};
+    // set player dimensions
+    this.dimensions = {
+      x: Player.PLAYER_SPRITE_WIDTH,
+      y: Player.PLAYER_SPRITE_HEIGHT,
+    };
 
-        // set player dimensions
-                this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
+    // initialize animations for each direction, using only one frame for idling
+    this.animation = {
+      [Direction.Right]: new Animation([0], 1),
+      [Direction.Left]: new Animation([4], 1),
+      [Direction.Down]: new Animation([8], 1),
+      [Direction.Up]: new Animation([12], 1),
+    };
+    // start with player facing down
+    this.currentAnimation = this.animation[Direction.Down];
+    this.swordHitbox = new Hitbox(0, 0, 0, 0, "blue"); // this is set in the sword swinging state
+    this.hitboxOffsets = new Hitbox(
+      4, // x offset
+      8, // y offset
+      -8, // width
+      -8, // height
+      "red"
+    );
+    this.abilityUnlocked = {
+      [AbilityType.FireFlame]: false,
+      [AbilityType.FrozenFlame]: false,
+    };
+    this.stateMachine = this.initializeStateMachine();
+  }
 
+  render() {
+    context.save();
 
-      
-        // initialize animations for each direction, using only one frame for idling
-        this.animation = {
-                    [Direction.Right]: new Animation([0], 1),
-                    [Direction.Left]: new Animation([4], 1),
-                    [Direction.Down]: new Animation([8], 1),
-                    [Direction.Up]: new Animation([12], 1),
-                };
-        // start with player facing down
-        this.currentAnimation = this.animation[Direction.Down];
-        this.swordHitbox = new Hitbox(0, 0, 0, 0, 'blue'); // this is set in the sword swinging state
-        this.hitboxOffsets = new Hitbox(
-            4,  // x offset
-            8,  // y offset
-            -8, // width
-            -8,  // height
-            'red'
-        )
-        this.abilityUnlocked = {
-            [AbilityType.FireFlame]: false,
-            [AbilityType.FrozenFlame]: false
-        }
-        this.stateMachine = this.initializeStateMachine();
+    super.render(); // need to pass offset
+
+    context.restore();
+    if (DEBUG) {
+      this.swordHitbox.render(context);
     }
+  }
+  /**
+   * Initializes the state machine for the player.
+   * @returns {StateMachine} the initialized state machine
+   */
+  initializeStateMachine() {
+    const stateMachine = new StateMachine();
 
-    render(){
-        context.save();
+    stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
+    stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
+    stateMachine.add(
+      PlayerStateName.SwordSwinging,
+      new PlayerSwordSwingingState(this)
+    );
+    stateMachine.add(
+      PlayerStateName.PerformingFireFlame,
+      new PlayerPerformingFireFlameState(this)
+    );
 
-        super.render(); // need to pass offset
+    stateMachine.change(PlayerStateName.Idle);
 
-        context.restore();
-        if(DEBUG){
-            this.swordHitbox.render(context);
-        }
+    return stateMachine;
+  }
+  /**
+   *
+   * Handles the player taking damage, player loses a amount of health, if health < 0, player become dead.
+   * @param {*} damage damage from the creature
+   * @returns
+   */
+  onTakingDamage(damage) {
+    if (this.isInVulnerable) {
+      return;
     }
-    /**
-     * Initializes the state machine for the player.
-     * @returns {StateMachine} the initialized state machine
-     */
-    initializeStateMachine() {
-        const stateMachine = new StateMachine();
+    this.health -= damage;
 
-        stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
-        stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
-        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this));
-
-        stateMachine.change(PlayerStateName.Idle);
-
-        return stateMachine;
+    if (this.health < 0) {
+      this.isDead = true;
+      return;
     }
-    /**
-     *     
-     * Handles the player taking damage, player loses a amount of health, if health < 0, player become dead.
-     * @param {*} damage damage from the creature 
-     * @returns 
-     */
-    onTakingDamage(damage) {
-        if (this.isInVulnerable) {
-            return;
-        }
-        this.health-= damage;
-        
-        if (this.health < 0) {
-            this.isDead = true;
-            return;
-        }
-        // Handle taking damage logic here (e.g., reduce health)
-        console.log("Player took damage!, current health:", this.health);
-        
-    }
+    // Handle taking damage logic here (e.g., reduce health)
+    console.log("Player took damage!, current health:", this.health);
+    // this.isInVulnerable = true;
+    // setTimeout(() => {
+    //   this.isInVulnerable = false;
+    // }, 1000);
+  }
 }
