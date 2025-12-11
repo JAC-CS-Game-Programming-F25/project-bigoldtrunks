@@ -243,6 +243,12 @@
         "path": "./assets/sounds/effects/sword.wav",
         "size": 1,
         "volume": 0.2
+    },
+    {
+        "name": "select",
+        "path": "./assets/sounds/effects/select.wav",
+        "size": 1,
+        "volume": 0.2
     }
   ]
 }
