@@ -6,7 +6,10 @@ import SoundName from "../enums/SoundName.js";
 export default class PlayState extends State {
   constructor(mapDefinition) {
     super();
-
+    this.mapDefinition = mapDefinition;
+  }
+  enter() {
+    sounds.play(SoundName.Summer);
     const summerCreatures = [
       {
         type: "spider",
@@ -15,10 +18,7 @@ export default class PlayState extends State {
       { type: "skeleton", count: getRandomPositiveInteger(2, 3) },
     ];
 
-    this.region = new Region(mapDefinition, summerCreatures);
-  }
-  enter() {
-    sounds.play(SoundName.Summer);
+    this.region = new Region(this.mapDefinition, summerCreatures);
   }
   update(dt) {
     this.region.update(dt);
