@@ -6,18 +6,17 @@ import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
+import FrozenBlast from "../../objects/FrozenBlast.js";
 
 
-export default class PlayerPerformingFireFlameState extends State {
+export default class PlayerPerformingFrozenBlastState extends State {
     constructor(player,region){
         super()
         this.player = player;
         this.region = region;
         this.animation = {
-            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
-            [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
-            [Direction.Down]: new Animation([8, 9, 10, 11], 0.2, 1),
-            [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
+            [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.06, 1),
+            [Direction.Left]: new Animation([8, 9, 10, 11, 12, 13, 14, 15], 0.06, 1),
         };
         
         
@@ -26,24 +25,24 @@ export default class PlayerPerformingFireFlameState extends State {
             x: this.player.dimensions.x,
             y: this.player.dimensions.y
         };
-        this.fireFlame = null;
+        this.frozenBlast = null;
         
     }
     /**
-     * Adds a FireFlame object to the current region.
+     * Adds a FrozenBlast object to the current region.
      */
-    addFireFlameToRegion() {
+    addFrozenBlastToRegion() {
         // Pass player position, direction, and dimensions to properly position the flame
-        this.fireFlame = new FireFlame(
-            this.player.position, 
+        this.frozenBlast = new FrozenBlast(
+            this.player.position,
             this.player.direction,
             {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT}
         );
-        this.region.addObject(this.fireFlame);
+        this.region.addObject(this.frozenBlast);
     }
     /**
-     * Processes the player's position and dimensions for the FireFlame state.
-     * Adjusts the player's position and dimensions to accommodate the FireFlame animation.
+     * Processes the player's position and dimensions for the FrozenBlast state.
+     * Adjusts the player's position and dimensions to accommodate the FrozenBlast animation.
      */
     processPositionAndDimensions() {
         // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position        
@@ -58,16 +57,16 @@ export default class PlayerPerformingFireFlameState extends State {
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
     }
     enter(){
-        
+        console.log("Entering Frozen Blast State");
         // add flame object to the region
 
-        this.addFireFlameToRegion();
+        this.addFrozenBlastToRegion();
         
         this.processPositionAndDimensions();
 
         this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used
 
-        this.player.sprites = this.player.performFirePosterSprites;
+        this.player.sprites = this.player.performFrozenPosterSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
     
@@ -92,8 +91,8 @@ export default class PlayerPerformingFireFlameState extends State {
         this.player.isUsingFireFlame = false; // Reset the flag after using FireFlame
         
         // Only mark for cleanup if fireFlame was actually created
-        if (this.fireFlame) {
-            this.fireFlame.cleanUp = true;
+        if (this.frozenBlast) {
+            this.frozenBlast.cleanUp = true;
         }
     }
 
