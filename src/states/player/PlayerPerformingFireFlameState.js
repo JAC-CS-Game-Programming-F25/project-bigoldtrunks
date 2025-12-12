@@ -5,14 +5,12 @@ import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
-import FireFlame from "../../objects/FireFlame.js";
 
 
 export default class PlayerPerformingFireFlameState extends State {
-    constructor(player,region){
+    constructor(player){
         super()
         this.player = player;
-        this.region = region;
         this.animation = {
             [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
             [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
@@ -20,53 +18,28 @@ export default class PlayerPerformingFireFlameState extends State {
             [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
         };
         
-        
         // Store the original position for later restoration
         this.originalDimensions = {
             x: this.player.dimensions.x,
             y: this.player.dimensions.y
         };
-        this.fireFlame = null;
-        
+
     }
-    /**
-     * Adds a FireFlame object to the current region.
-     */
-    addFireFlameToRegion() {
-        // Pass player position, direction, and dimensions to properly position the flame
-        this.fireFlame = new FireFlame(
-            this.player.position, 
-            this.player.direction,
-            {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT}
-        );
-        this.region.addObject(this.fireFlame);
-    }
-    /**
-     * Processes the player's position and dimensions for the FireFlame state.
-     * Adjusts the player's position and dimensions to accommodate the FireFlame animation.
-     */
-    processPositionAndDimensions() {
+    
+    enter(){
         // // Calculate offset to center the 32x32 sprite on the player's original 16x16 position        
         const offsetX = (Player.PLAYER_SWORD_SPRITE_WIDTH - Player.PLAYER_SPRITE_WIDTH) / 2;
         const offsetY = (Player.PLAYER_SWORD_SPRITE_HEIGHT - Player.PLAYER_SPRITE_HEIGHT) / 2;
-        // Adjust position so the sprite centers on the original position
+        
+        // // Adjust position so the sprite centers on the original position
         this.player.position.x -= offsetX;
         this.player.position.y -= offsetY;
         
         // // Update dimensions for the sword swing sprite
         this.player.dimensions.x = Player.PLAYER_SWORD_SPRITE_WIDTH;
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
-    }
-    enter(){
-        
-        // add flame object to the region
 
-        this.addFireFlameToRegion();
-        
-        this.processPositionAndDimensions();
-
-        this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used
-
+        console.log("Entering PlayerPerformingFireFlameState");
         this.player.sprites = this.player.performFirePosterSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
@@ -89,12 +62,6 @@ export default class PlayerPerformingFireFlameState extends State {
     exit(){
         this.restorePlayerPositionAndDimensions();
         this.player.swordHitbox.set(0, 0, 0, 0); // Clear the sword hitbox
-        this.player.isUsingFireFlame = false; // Reset the flag after using FireFlame
-        
-        // Only mark for cleanup if fireFlame was actually created
-        if (this.fireFlame) {
-            this.fireFlame.cleanUp = true;
-        }
     }
 
     /**

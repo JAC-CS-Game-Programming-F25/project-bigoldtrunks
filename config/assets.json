@@ -51,21 +51,9 @@
     
     {
       "name": "fire-explosion",
-      "path": "./assets/images/ability/fire-explosion.png",
-      "width": 336,
-      "height": 28
-    },
-    {
-      "name": "frozen-blast-right",
-      "path": "./assets/images/ability/frozen-blast-right.png",
-      "width": 488,
-      "height": 18
-    },
-    {
-      "name": "frozen-blast-left",
-      "path": "./assets/images/ability/frozen-blast-left.png",
-      "width": 488,
-      "height": 18
+      "path": "./assets/images/player/fire-explosion.png",
+      "width": 128,
+      "height": 256
     },
 
     {

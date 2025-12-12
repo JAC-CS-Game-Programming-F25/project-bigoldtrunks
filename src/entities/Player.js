@@ -12,7 +12,6 @@ import PlayerSwordSwingingState from "../states/player/PlayerSwordSwingingState.
 import Hitbox from "../../lib/Hitbox.js";
 import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFireFlameState.js";
 import AbilityType from "../enums/AbilityType.js";
-import PlayerPerformingFrozenBlastState from "../states/player/PlayerPerformingFrozenBlast.js";
 
 export default class Player extends GameEntity {
 
@@ -20,74 +19,66 @@ export default class Player extends GameEntity {
     static PLAYER_SPRITE_WIDTH = 16;
 	static PLAYER_SPRITE_HEIGHT = 16;
 
-    // the player sword swinging frame has width and height of 32 pixels
-    static PLAYER_SWORD_SPRITE_HEIGHT = 32;
-    static PLAYER_SWORD_SPRITE_WIDTH = 32;
-    static PLAYER_SPEED= 90;
-    
+  constructor() {
+    super({
+      speed: Player.PLAYER_SPEED,
+      health: Player.MAX_HEALTH,
+    });
 
-    constructor(region){
-        super({
-            speed: Player.PLAYER_SPEED,
-            health: 5
-        })
-        this.region = region;   
-        console.log("Player entity created in region:", region);
-        this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.Player),
-            Player.PLAYER_SPRITE_WIDTH,
-            Player.PLAYER_SPRITE_HEIGHT,
-        )
-        this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerSwordSwing),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerFireFlamePoster),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.performFrozenPosterSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerFrozenFlamePoster),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
-        this.sprites = this.walkingSprites;
-        // set initial player position
-        this.position = {x: 100, y: 100};
+    this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.Player),
+      Player.PLAYER_SPRITE_WIDTH,
+      Player.PLAYER_SPRITE_HEIGHT
+    );
+    this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerSwordSwing),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerFireFlamePoster),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
+    this.sprites = this.walkingSprites;
+    // set initial player position
+    this.position = { x: 100, y: 100 };
 
-        // set player dimensions
-        this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
+    // set player dimensions
+    this.dimensions = {
+      x: Player.PLAYER_SPRITE_WIDTH,
+      y: Player.PLAYER_SPRITE_HEIGHT,
+    };
 
-        // initialize animations for each direction, using only one frame for idling
-        this.animation = {
-                    [Direction.Right]: new Animation([0], 1),
-                    [Direction.Left]: new Animation([4], 1),
-                    [Direction.Down]: new Animation([8], 1),
-                    [Direction.Up]: new Animation([12], 1),
-                };
-        // start with player facing down
-        this.currentAnimation = this.animation[Direction.Down];
-        this.swordHitbox = new Hitbox(0, 0, 0, 0, 'blue'); // this is set in the sword swinging state
-        this.hitboxOffsets = new Hitbox(
-            4,  // x offset
-            8,  // y offset
-            -8, // width
-            -8,  // height
-            'red'
-        )
-        this.abilityUnlocked = {
-            [AbilityType.FireFlame]: false,
-            [AbilityType.FrozenFlame]: false
-        }
-        this.fireFlame = null;
-        this.stateMachine = this.initializeStateMachine();
-    }
+    // initialize animations for each direction, using only one frame for idling
+    this.animation = {
+      [Direction.Right]: new Animation([0], 1),
+      [Direction.Left]: new Animation([4], 1),
+      [Direction.Down]: new Animation([8], 1),
+      [Direction.Up]: new Animation([12], 1),
+    };
+    // start with player facing down
+    this.currentAnimation = this.animation[Direction.Down];
+    this.swordHitbox = new Hitbox(0, 0, 0, 0, "blue"); // this is set in the sword swinging state
+    this.hitboxOffsets = new Hitbox(
+      4, // x offset
+      8, // y offset
+      -8, // width
+      -8, // height
+      "red"
+    );
+    this.abilityUnlocked = {
+      [AbilityType.FireFlame]: false,
+      [AbilityType.FrozenFlame]: false,
+    };
+    this.stateMachine = this.initializeStateMachine();
+  }
 
-    render(){
-        context.save();
+  render() {
+    context.save();
+
+    super.render(); // need to pass offset
 
         super.render(); // need to pass offset
 
@@ -103,12 +94,18 @@ export default class Player extends GameEntity {
     initializeStateMachine() {
         const stateMachine = new StateMachine();
 
-        stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
-        stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
-        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
-        stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
-        stateMachine.change(PlayerStateName.Idle);
+    stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
+    stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
+    stateMachine.add(
+      PlayerStateName.SwordSwinging,
+      new PlayerSwordSwingingState(this)
+    );
+    stateMachine.add(
+      PlayerStateName.PerformingFireFlame,
+      new PlayerPerformingFireFlameState(this)
+    );
+
+    stateMachine.change(PlayerStateName.Idle);
 
         return stateMachine;
     }
