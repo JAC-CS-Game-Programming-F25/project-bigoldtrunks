@@ -8,7 +8,11 @@ const ImageName = {
   PlayerFrozenFlamePoster: "player-frozen-poster",
   FireExplosion: "fire-explosion",
   FrozenBlastRight: "frozen-blast-right",
-  FrozenBlastLeft: "frozen-blast-left"
+  FrozenBlastLeft: "frozen-blast-left",
+  Spider: "spider-spritesheet",
+  Skeleton_Left: "skeleton-left",
+  Skeleton_Right: "skeleton-right",
+  Tree: "tree_size_02"
 };
 
 export default ImageName;

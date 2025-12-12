@@ -20,6 +20,7 @@ const resizeCanvas = () => {
 
   canvas.style.width = `${CANVAS_WIDTH * scale}px`;
   canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
+  canvas.style.imageRendering = "pixelated"; // When zoomed in, the pixel blocks are clearly visible.
 };
 
 // Listen for canvas resize events
@@ -37,5 +38,4 @@ export const sounds = new Sounds();
 
 // If true, render all hitboxes.
 export const DEBUG = true;
-
-//testing changes
+// testing change
