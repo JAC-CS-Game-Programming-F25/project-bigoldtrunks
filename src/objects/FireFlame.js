@@ -37,7 +37,7 @@ export default class FireFlame extends GameObject {
         this.tweenTime = 0;
         this.tweenDuration = FireFlame.TRAVEL_DURATION;
 
-        console.log("FireFlame created at position:", startPosition, "moving to:", this.endPosition, "direction:", direction);
+        this.damage = 2; // Damage dealt by the flame
     }
 
     /**
