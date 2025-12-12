@@ -34,12 +34,9 @@ export default class Map {
       spritesDecoration,
       651
     );
-    /**
-     * The top layer of the map
-     * @type {Layer}
-     */
     this.topLayer = new Layer(mapDefinition.layers[2], spritesDecoration, 651);
-  
+    // Generate collision hitboxes
+    this.collisionObjects = this.generateCollisionObjects();
   }
 
   render() {
