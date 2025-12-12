@@ -11,7 +11,7 @@ import ImageName from "../../enums/ImageName.js";
 
 export default class Spider extends Creature {
   static SPEED = 15;
-  static HEALTH = 1;
+  static HEALTH = 100;
 
   constructor(position) {
     super({
