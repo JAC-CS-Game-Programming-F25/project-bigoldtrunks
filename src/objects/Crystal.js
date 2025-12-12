@@ -4,6 +4,7 @@ import ImageName from "../enums/ImageName.js";
 import { images } from "../globals.js";
 import GameObject from "./GameObject.js";
 import Vector from "../../lib/Vector.js";
+import ItemType from "../enums/ItemType.js";
 
 export default class Crystal extends GameObject {
     static WIDTH = 16;
@@ -25,6 +26,7 @@ export default class Crystal extends GameObject {
         this.currentAnimation = this.animation;
         this.currentFrame = 0;
         this.setHitboxPosition(6, 6, -10, -10);
+        this.itemType = ItemType.Crystal; // Type of ability this crystal unlocks
     }
     
    
