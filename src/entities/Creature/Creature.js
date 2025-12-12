@@ -28,6 +28,7 @@ export default class Creature extends GameEntity {
     this.itemTypeToKeep = null;
     /**
      * Item to be spawned when creature is dead (created at death time)
+     * Item is managed by region after creature is dead, and is added to region.items during the removal process
      * @type {Crystal|FireTorch|null}
      */
     this.itemKept = null; // item to be kept when creature is dead

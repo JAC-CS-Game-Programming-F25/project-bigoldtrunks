@@ -82,7 +82,11 @@ export default class GameEntity {
       this.hitbox.render(context);
     }
   }
-  // Add collision check method
+  /**
+   * Checks for collision with another entity's hitbox.
+   * @param {*} hitbox 
+   * @returns {boolean}
+   */
   didCollideWithEntity(hitbox) {
     return this.hitbox.didCollide(hitbox);
   }
