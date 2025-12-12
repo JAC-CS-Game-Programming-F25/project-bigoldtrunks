@@ -11,12 +11,17 @@ import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
+import Crystal from "./Crystal.js";
 export default class Region {
     constructor(mapDefinition, creatureConfig = []) {        
         this.map = new Map(mapDefinition);
         this.creatures = this.spawnCreatures(creatureConfig);
         this.player = new Player(this); // Pass the region instance to the player
-        
+        /**
+         * Items present in the region (e.g., crystals, fire torch, etc.)
+         */
+        this.items = [];
+        this.items.push(new Crystal(new Vector(100, 100)));
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;
@@ -41,9 +46,28 @@ export default class Region {
         this.cleanUpObjects();  
         this.updateEntities(dt);
         this.updateObjects(dt);
+        this.items.forEach((item) => {
+            item.update(dt);
+        });
 
     }
+    
+    render() {
+        this.map.render(); // ← render map
 
+        this.renderQueue.forEach((entity) => {
+            if(entity)
+                entity.render();
+        }); // ← render all entities in the render queue
+        this.objects.forEach((object) => {
+            object.render();
+        });  
+       this.map.renderTop();
+       this.ui.render();
+       this.items.forEach((item) => {
+            item.render();
+        });
+    }
     /**
      * Update all objects in the region (Player's abilitys objects, etc.)
      */
@@ -254,19 +278,6 @@ export default class Region {
     }
   }
 
-    render() {
-        this.map.render(); // ← render map
-
-        this.renderQueue.forEach((entity) => {
-            if(entity)
-                entity.render();
-        }); // ← render all entities in the render queue
-        this.objects.forEach((object) => {
-            object.render();
-        });  
-       this.map.renderTop();
-       this.ui.render();
-    }
     /**
      * Order the entities by their renderPriority fields. If the renderPriority
      * is the same, then sort the entities by their bottom positions. This will
