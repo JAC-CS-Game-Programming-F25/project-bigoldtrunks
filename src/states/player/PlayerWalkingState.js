@@ -7,9 +7,10 @@ import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
 
 
 export default class PlayerWalkingState extends State {
-    constructor(player){
-        super()
+    constructor(player, region) {
+        super();
         this.player = player;
+        this.region = region;
 
         console.log("PlayerWalkingState constructor");
         this.animation = {
@@ -35,25 +36,44 @@ export default class PlayerWalkingState extends State {
 
     handleMovement(dt) {
 		this.player.currentAnimation = this.animation[this.player.direction];
-
+        
+        // Calculate movement delta
+        const movementSpeed = this.player.speed * dt;
+        let newX = this.player.position.x;
+        let newY = this.player.position.y;
+        
 		if (input.isKeyHeld(Input.KEYS.S)) {
 			this.player.direction = Direction.Down;
-			this.player.position.y += this.player.speed * dt;
+			newY = this.player.position.y + movementSpeed;
+			
+			// Check if the new position is valid before moving
+			if (this.region.isValidMove(newX, newY, this.player.dimensions.x, this.player.dimensions.y)) {
+				this.player.position.y = newY;
+			}
 			
 		} else if (input.isKeyHeld(Input.KEYS.D)) {
 			this.player.direction = Direction.Right;
-			this.player.position.x += this.player.speed * dt;
-
+			newX = this.player.position.x + movementSpeed;
+			
+			if (this.region.isValidMove(newX, newY, this.player.dimensions.x, this.player.dimensions.y)) {
+				this.player.position.x = newX;
+			}
 		
 		} else if (input.isKeyHeld(Input.KEYS.W)) {
 			this.player.direction = Direction.Up;
-			this.player.position.y -= this.player.speed * dt;
-
+			newY = this.player.position.y - movementSpeed;
+			
+			if (this.region.isValidMove(newX, newY, this.player.dimensions.x, this.player.dimensions.y)) {
+				this.player.position.y = newY;
+			}
 			
 		} else if (input.isKeyHeld(Input.KEYS.A)) {
 			this.player.direction = Direction.Left;
-			this.player.position.x -= this.player.speed * dt;
-
+			newX = this.player.position.x - movementSpeed;
+			
+			if (this.region.isValidMove(newX, newY, this.player.dimensions.x, this.player.dimensions.y)) {
+				this.player.position.x = newX;
+			}
 			
 		} else {
 			this.player.changeState(PlayerStateName.Idle);

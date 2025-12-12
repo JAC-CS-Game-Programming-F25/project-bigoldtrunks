@@ -118,7 +118,7 @@ export default class Player extends GameEntity {
     const stateMachine = new StateMachine();
 
         stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
+        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this, this.region));
         stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
         stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
         stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
