@@ -55,6 +55,18 @@
       "width": 336,
       "height": 28
     },
+    {
+      "name": "frozen-blast-right",
+      "path": "./assets/images/ability/frozen-blast-right.png",
+      "width": 488,
+      "height": 18
+    },
+    {
+      "name": "frozen-blast-left",
+      "path": "./assets/images/ability/frozen-blast-left.png",
+      "width": 488,
+      "height": 18
+    },
 
     {
       "name": "player-frozen-poster",
