@@ -15,10 +15,8 @@ export default class PlayerPerformingFrozenBlastState extends State {
         this.player = player;
         this.region = region;
         this.animation = {
-            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
-            [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
-            [Direction.Down]: new Animation([8, 9, 10, 11], 0.2, 1),
-            [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
+            [Direction.Right]: new Animation([0, 1, 2, 3, 4, 5, 6, 7], 0.06, 1),
+            [Direction.Left]: new Animation([8, 9, 10, 11, 12, 13, 14, 15], 0.06, 1),
         };
         
         
@@ -68,7 +66,7 @@ export default class PlayerPerformingFrozenBlastState extends State {
 
         this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used
 
-        this.player.sprites = this.player.performFirePosterSprites;
+        this.player.sprites = this.player.performFrozenPosterSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
     
