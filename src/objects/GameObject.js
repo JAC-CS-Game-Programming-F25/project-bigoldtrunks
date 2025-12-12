@@ -42,10 +42,9 @@ export default class GameObject {
 		this.wasConsumed = false;
 	}
 
-	update(){
+	update(dt){
 		if (this.currentAnimation) {
-			
-			this.currentAnimation.update();
+			this.currentAnimation.update(dt);
 		}
 
 		// Update hitbox position
@@ -56,6 +55,7 @@ export default class GameObject {
 			this.dimensions.y + this.hitboxOffsets.dimensions.y
 		);
 	}
+	
 	render(offset = { x: 0, y: 0 }) {
 		const x = this.position.x + offset.x;
 		const y = this.position.y + offset.y;
