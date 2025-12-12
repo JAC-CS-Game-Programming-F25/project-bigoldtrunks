@@ -22,7 +22,6 @@ export default class Region {
 
     this.renderQueue = this.buildRenderQueue();
     this.isGameOver = false;
-    this.score = 0;
     this.ui = new UserInterface(this.player, this);
   }
 

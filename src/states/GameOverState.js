@@ -17,7 +17,6 @@ import FontName from "../enums/FontName.js";
 export default class GameOverState extends State {
   constructor() {
     super();
-    this.score = 0;
   }
 
   enter(params) {
@@ -45,11 +44,6 @@ export default class GameOverState extends State {
     context.font = `32px ${FontName.CinzelBold}`;
     context.textAlign = "center";
     context.fillText("Game Over", CANVAS_WIDTH / 2, 70);
-
-    // Score
-    context.fillStyle = "#FFFFFF";
-    context.font = `16px ${FontName.MedievalSharp}`;
-    context.fillText(`Score: ${this.score}`, CANVAS_WIDTH / 2, 110);
 
     // reminde
     context.fillStyle = "#888888";
