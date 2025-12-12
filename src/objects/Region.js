@@ -74,7 +74,7 @@ export default class Region {
         });
     }
     /**
-     * Update all objects in the region (Player's abilitys objects, etc.)
+     * Update all objects in the region (Player's abilitys objects, items(Crystal, FireTorch, etc.) etc.)
      */
     updateObjects(dt){
         this.objects.forEach((object) => {
@@ -237,6 +237,7 @@ export default class Region {
         creatures[randomIndex].keepItem(itemType);
         console.log(`Creature at index ${randomIndex} will keep item of type ${itemType}`);
     }
+
     isPositionOnCollision(position) {
     const collisionObjects = this.map.getCollisionObjects();
     const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
@@ -346,6 +347,7 @@ export default class Region {
             if (entity.isDead && entity instanceof Creature && entity.itemKept) {
                 console.log(`Creature died and dropped item at position:`, entity.itemKept.position);
                 this.objects.push(entity.itemKept);
+                
                 entity.itemKept = null; // Clear the reference so it doesn't get added multiple times
             }
             
