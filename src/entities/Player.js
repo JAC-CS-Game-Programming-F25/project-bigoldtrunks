@@ -94,6 +94,9 @@ export default class Player extends GameEntity {
             -8,  // height
             'red'
         )
+        /**
+         * Tracks which abilities have been unlocked by the player.
+         */
         this.abilityUnlocked = {
             [AbilityType.FireFlame]: false,
             [AbilityType.FrozenFlame]: false
@@ -109,7 +112,7 @@ export default class Player extends GameEntity {
       if(item.itemType == ItemType.Crystal)
       {
         this.abilityUnlocked[AbilityType.FrozenFlame] = true;
-        console.log("Player unlocked ability Crystal:", AbilityType.Crystal);
+        console.log("Player unlocked ability Crystal:", AbilityType.FrozenFlame);
       }
       // fire other abilities can be added here
 
