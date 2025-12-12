@@ -1,6 +1,7 @@
 import Animation from "../../../lib/Animation.js";
 import Input from "../../../lib/Input.js";
 import State from "../../../lib/State.js";
+import AbilityType from "../../enums/AbilityType.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
@@ -93,13 +94,17 @@ export default class PlayerWalkingState extends State {
             this.player.changeState(PlayerStateName.PerformingFireFlame);
         }
     }
-  
+
     handlePerformingFrozenBlast() {
-        // Only allow FrozenBlast when facing Left or Right (no sprites for Up/Down)
+        // Only allow FrozenFlame when facing Left or Right (no sprites for Up/Down)
         if (input.isKeyHeld(Input.KEYS.K) && 
-            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
-            console.log("K pressed - FrozenBlast allowed");
-            this.player.changeState(PlayerStateName.PerformingFrozenBlast);
+        (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
+            if(this.player.abilityUnlocked[AbilityType.FrozenFlame]) {
+                console.log("K pressed - FrozenFlame allowed");
+                this.player.changeState(PlayerStateName.PerformingFrozenBlast);
+            }
+            console.log("FrozenFlame ability is not unlocked");
+            return;
         }
     }
 }
