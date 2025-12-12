@@ -37,7 +37,7 @@ export default class Player extends GameEntity {
     constructor(region){
         super({
             speed: Player.PLAYER_SPEED,
-            health: 1
+            health: Player.MAX_HEALTH
         })
         this.lives= Player.MAX_LIVES;
         this.region = region;   
