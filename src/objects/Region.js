@@ -10,12 +10,13 @@ import FireFlame from "./FireFlame.js";
 import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
+import Tile from "./Tile.js";
 export default class Region {
     constructor(mapDefinition, creatureConfig = []) {        
         this.map = new Map(mapDefinition);
         this.creatures = this.spawnCreatures(creatureConfig);
         this.player = new Player(this); // Pass the region instance to the player
-
+        
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;
@@ -25,6 +26,8 @@ export default class Region {
         this.entities = [this.player, ...this.creatures];
         // All objects in the region
         this.objects = []; // contain objects like FireFlame added by the player, etc. more later
+
+        this.collisionLayer = this.map.collisionLayer;
         this.renderQueue = this.buildRenderQueue();
         this.isGameOver = false;
         this.ui = new UserInterface(this.player, this);
@@ -106,7 +109,41 @@ export default class Region {
             });
         }
     }
-  
+    
+	/**
+	 * Checks if the player can move to a given position without colliding with collision tiles
+	 * @param {number} x - Pixel X position
+	 * @param {number} y - Pixel Y position
+	 * @param {number} width - Player width
+	 * @param {number} height - Player height
+	 * @returns {boolean} Whether the player can move to this position
+	 */
+	isValidMove(x, y, width, height) {
+		// Convert pixel position to tile coordinates
+		const tileX = Math.floor(x / Tile.SIZE);
+		const tileY = Math.floor(y / Tile.SIZE);
+		
+		// Check the tile coordinates for all corners of the player's hitbox
+		const topLeftTile = this.map.collisionLayer.getTile(tileX, tileY);
+		const topRightTile = this.map.collisionLayer.getTile(
+			Math.floor((x + width) / Tile.SIZE),
+			tileY
+		);
+		const bottomLeftTile = this.map.collisionLayer.getTile(
+			tileX,
+			Math.floor((y + height) / Tile.SIZE)
+		);
+		const bottomRightTile = this.map.collisionLayer.getTile(
+			Math.floor((x + width) / Tile.SIZE),
+			Math.floor((y + height) / Tile.SIZE)
+		);
+		
+		// If any of the corners are on a collision tile, the move is invalid
+		return topLeftTile === null && 
+		       topRightTile === null && 
+		       bottomLeftTile === null && 
+		       bottomRightTile === null;
+	}
     checkCollisionWithObjects(entity) {
         this.objects.forEach((object) => {
             if (entity.didCollideWithEntity(object.hitbox)) {
