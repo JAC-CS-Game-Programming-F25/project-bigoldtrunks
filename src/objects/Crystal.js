@@ -13,7 +13,7 @@ export default class Crystal extends GameObject {
     constructor(position) {
         super(
             {x: Crystal.WIDTH, y: Crystal.HEIGHT},
-            new Vector(0, 0)
+            position
         );
        
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
