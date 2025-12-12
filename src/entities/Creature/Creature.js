@@ -22,8 +22,13 @@ export default class Creature extends GameEntity {
     this.isContactDamage = creatureDefinition.isContactDamage ?? false;
     this.isHurt = false;
     /**
-     * Item to be kept when creature is dead
-     * @type {Crystal| FireTorch ||null}
+     * Type of item this creature should drop when dead
+     * @type {string|null}
+     */
+    this.itemTypeToKeep = null;
+    /**
+     * Item to be spawned when creature is dead (created at death time)
+     * @type {Crystal|FireTorch|null}
      */
     this.itemKept = null; // item to be kept when creature is dead
   }
@@ -33,18 +38,17 @@ export default class Creature extends GameEntity {
    * @param {ItemType} itemType 
    */
   keepItem(itemType) {
-    // default do nothing, to be overridden by subclasses
-    if(itemType === ItemType.Crystal){
-        this.itemKept = new Crystal(this.position);
-    }
-    else if(itemType === ItemType.FireTorch){
-      // Fire torch initialize here
-    }
+    // Store which type of item to drop, create later upon death
+    // The item will be created at death position in onTakingHit()
+    this.itemTypeToKeep = itemType;
   }
+
   receiveDamage(damage) { 
     this.health -= damage;
     // play sound
+    sounds.play(SoundName.EnemyHurt);
   }
+
   /**
    * Handle collision wtih wall
    */
@@ -58,6 +62,7 @@ export default class Creature extends GameEntity {
       this.currentAnimation.refresh();
     }
   }
+
   /**
    * Handle collison with other creatures
    * @param {*} other
@@ -93,6 +98,8 @@ export default class Creature extends GameEntity {
 
     if (this.health <= 0) {
       this.isDead = true; // Important: mark as dead so item can be dropped
+      this.spawnItemIfKeep();
+
       sounds.play(SoundName.EnemyDead);
       console.log("Creature is dead, will drop item:", this.itemKept !== null);
       return;
@@ -107,6 +114,25 @@ export default class Creature extends GameEntity {
     console.log("Creature took damage, Creature current health:", this.health);
     // play sound when creature receives damage
     sounds.play(SoundName.EnemyHurt);
+  }
+
+  /**
+   * Spawn the item that the creature is keeping at its death position
+   */
+  spawnItemIfKeep(){
+    // Create the item at the creature's current death position
+      if (this.itemTypeToKeep) {
+        // Create a NEW Vector with current position values (not a reference)
+        const deathPosition = new Vector(this.position.x, this.position.y);
+        
+        if (this.itemTypeToKeep === ItemType.Crystal) {
+          this.itemKept = new Crystal(deathPosition);
+          console.log(`Crystal created at death position: (${deathPosition.x}, ${deathPosition.y})`);
+        } else if (this.itemTypeToKeep === ItemType.FireTorch) {
+          // Fire torch initialize here when implemented
+          // this.itemKept = new FireTorch(deathPosition);
+        }
+      }
   }
 
   update(dt) {
