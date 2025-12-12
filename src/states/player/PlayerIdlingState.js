@@ -30,7 +30,7 @@ export default class PlayerIdlingState extends State {
         this.checkForMovement();
         this.handleSwordSwing();
         this.handlePerformingFireFlame();
-        this.handlePerformingFrozenBlast();
+
     }
 
     checkForMovement(){
@@ -55,17 +55,8 @@ export default class PlayerIdlingState extends State {
         }
     }
     handlePerformingFireFlame() {
-        // Only allow FireFlame when facing Left or Right (no sprites for Up/Down)
-        if (input.isKeyHeld(Input.KEYS.J) && 
-            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
+        if (input.isKeyHeld(Input.KEYS.J)) {
             this.player.changeState(PlayerStateName.PerformingFireFlame);
-        }
-    }
-    handlePerformingFrozenBlast() {
-        // Only allow FrozenBlast when facing Left or Right (no sprites for Up/Down)
-        if (input.isKeyHeld(Input.KEYS.K) && 
-            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
-            this.player.changeState(PlayerStateName.PerformingFrozenBlast);
         }
     }
 }
