@@ -54,6 +54,7 @@ export default class GameObject {
 
   onConsume(consumer) {
     this.wasConsumed = true;
+    this.cleanUp = true;
   }
   
   update(dt) {
