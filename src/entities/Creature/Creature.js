@@ -5,6 +5,8 @@ import Direction from "../../enums/Direction.js";
 import CreatureChasingState from "../../states/Creature/CreatureWalkingState.js";
 import { sounds } from "../../globals.js";
 import SoundName from "../../enums/SoundName.js";
+import ItemType from "../../enums/ItemType.js";
+import Crystal from "../../objects/Crystal.js";
 export default class Creature extends GameEntity {
   static CREATURE_WIDTH = 16;
   static CREATURE_HEIGHT = 16;
@@ -19,9 +21,27 @@ export default class Creature extends GameEntity {
     this.canChase = creatureDefinition.canChase ?? false;
     this.isContactDamage = creatureDefinition.isContactDamage ?? false;
     this.isHurt = false;
+    /**
+     * Item to be kept when creature is dead
+     * @type {Crystal| FireTorch ||null}
+     */
+    this.itemKept = null; // item to be kept when creature is dead
   }
 
-  receiveDamage(damage) {
+  /**
+   * Keep an item when the creature is dead, this is decided by the region through function assignItemToCreature 
+   * @param {ItemType} itemType 
+   */
+  keepItem(itemType) {
+    // default do nothing, to be overridden by subclasses
+    if(itemType === ItemType.Crystal){
+        this.itemKept = new Crystal(this.position);
+    }
+    else if(itemType === ItemType.FireTorch){
+      // Fire torch initialize here
+    }
+  }
+  receiveDamage(damage) { 
     this.health -= damage;
     // play sound
   }
@@ -72,9 +92,9 @@ export default class Creature extends GameEntity {
     this.health -= damage;
 
     if (this.health <= 0) {
-      // this.isDead = true;
+      this.isDead = true; // Important: mark as dead so item can be dropped
       sounds.play(SoundName.EnemyDead);
-      console.log("Creature is dead");
+      console.log("Creature is dead, will drop item:", this.itemKept !== null);
       return;
     }
     // add glimmering after injured (Juice)
@@ -95,6 +115,11 @@ export default class Creature extends GameEntity {
       this.stateMachine.update(dt);
     }
   }
+  
+  render(offset = { x: 0, y: 0 }) {
+    super.render(offset);
+  }
+
   getCenter() {
     const hb = this.hitbox;
     return {
