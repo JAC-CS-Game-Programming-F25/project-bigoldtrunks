@@ -30,6 +30,7 @@ export default class PlayerWalkingState extends State {
         this.handleMovement(dt);
         this.handleSwordSwing();
         this.handlePerformingFireFlame();
+        this.handlePerformingFrozenBlast();
     }
 
     handleMovement(dt) {
@@ -64,9 +65,17 @@ export default class PlayerWalkingState extends State {
             this.player.changeState(PlayerStateName.SwordSwinging);
         }
     }
+
     handlePerformingFireFlame() {
         if (input.isKeyHeld(Input.KEYS.J)) {
             this.player.changeState(PlayerStateName.PerformingFireFlame);
+        }
+    }
+  
+    handlePerformingFrozenBlast() {
+        if (input.isKeyHeld(Input.KEYS.K)) {
+            console.log("K pressed");
+            this.player.changeState(PlayerStateName.PerformingFrozenBlast);
         }
     }
 }

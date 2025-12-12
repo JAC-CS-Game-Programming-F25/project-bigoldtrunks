@@ -12,6 +12,7 @@ import PlayerSwordSwingingState from "../states/player/PlayerSwordSwingingState.
 import Hitbox from "../../lib/Hitbox.js";
 import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFireFlameState.js";
 import AbilityType from "../enums/AbilityType.js";
+import PlayerPerformingFrozenBlastState from "../states/player/PlayerPerformingFrozenBlast.js";
 
 export default class Player extends GameEntity {
 
@@ -101,7 +102,7 @@ export default class Player extends GameEntity {
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
         stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
         stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
-
+        stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
         stateMachine.change(PlayerStateName.Idle);
 
         return stateMachine;
