@@ -5,9 +5,8 @@ import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
-import Spider from "../entities/Creature/Spider.js";
-import GameStateName from "../enums/GameStateName.js";
 import { stateMachine } from "../globals.js";
+import GameStateName from "../enums/GameStateName.js";
 
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
@@ -22,6 +21,8 @@ export default class Region {
     this.entities = [this.player, ...this.creatures];
 
     this.renderQueue = this.buildRenderQueue();
+    this.isGameOver = false;
+    this.score = 0;
   }
 
   update(dt) {
@@ -69,13 +70,17 @@ export default class Region {
           this.player.onTakingDamage(entity.damage);
         }
       }
-      if (this.player.isDead || this.player.health <= 0) {
-        console.log("GameOver -> ⚔️");
-        stateMachine.change(GameStateName.GameOver, { score: this.score });
-      }
-
       entity.update(dt);
     });
+    if (this.player.isDead || this.player.health <= 0) {
+      // console.log("GameOver -> ⚔️");
+      // stateMachine.change(GameStateName.GameOver, { score: this.score });
+      stateMachine.change(GameStateName.Transition, {
+        fromState: stateMachine.currentState,
+        toState: stateMachine.states[GameStateName.GameOver],
+        toStateEnterParameters: { score: this.score },
+      });
+    }
   }
 
   /**

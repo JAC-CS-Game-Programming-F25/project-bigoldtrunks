@@ -12,6 +12,7 @@ import {
   sounds,
   stateMachine,
 } from "../globals.js";
+import FontName from "../enums/FontName.js";
 
 export default class GameOverState extends State {
   constructor() {
@@ -32,7 +33,7 @@ export default class GameOverState extends State {
     sounds.stop(SoundName.Gameover);
   }
   render() {
-    //
+    // background
     images.render(ImageName.Title, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     //
@@ -41,18 +42,18 @@ export default class GameOverState extends State {
 
     // Game Over
     context.fillStyle = "#FF0000";
-    context.font = "32px Cinzel-Bold";
+    context.font = `32px ${FontName.CinzelBold}`;
     context.textAlign = "center";
     context.fillText("Game Over", CANVAS_WIDTH / 2, 70);
 
     // Score
     context.fillStyle = "#FFFFFF";
-    context.font = "16px MedievalSharp-Regular";
+    context.font = `16px ${FontName.MedievalSharp}`;
     context.fillText(`Score: ${this.score}`, CANVAS_WIDTH / 2, 110);
 
     // reminde
     context.fillStyle = "#888888";
-    context.font = "12px MedievalSharp-Regular";
+    context.font = `12px ${FontName.MedievalSharp}`;
     context.fillText("Press Enter to continue", CANVAS_WIDTH / 2, 150);
   }
 }
