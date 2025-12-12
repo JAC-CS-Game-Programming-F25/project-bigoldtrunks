@@ -27,7 +27,7 @@ export default class PlayerPerformingFireFlameState extends State {
             y: this.player.dimensions.y
         };
         this.fireFlame = null;
-
+        
     }
     /**
      * Adds a FireFlame object to the current region.

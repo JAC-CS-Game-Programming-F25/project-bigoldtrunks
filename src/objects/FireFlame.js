@@ -10,7 +10,7 @@ import Vector from "../../lib/Vector.js";
 export default class FireFlame extends GameObject {
     static WIDTH = 28;
     static HEIGHT = 28;
-    static TRAVEL_DISTANCE = 40; // How far the flame travels in pixels
+    static TRAVEL_DISTANCE = 70; // How far the flame travels in pixels
     static TRAVEL_DURATION = 1.2; // Duration of the tween in seconds
 
     constructor(position, direction, playerDimensions = {x: 16, y: 16}) {
@@ -49,7 +49,7 @@ export default class FireFlame extends GameObject {
      */
     static calculateStartPosition(playerPosition, direction, playerDimensions) {
         const startPos = new Vector(playerPosition.x, playerPosition.y);
-        const offsetDistance = 8; // Distance in front of the player to spawn the flame
+        const offsetDistance =1; // Distance in front of the player to spawn the flame
         
         switch(direction) {
             case Direction.Up:
@@ -120,14 +120,14 @@ export default class FireFlame extends GameObject {
             this.tweenTime += dt;
             
             // Use easing function to smoothly move from start to end position
-            this.position.x = Easing.easeInOutQuad(
+            this.position.x = Easing.easeInQuad(
                 this.tweenTime,
                 this.startPosition.x,
                 this.endPosition.x - this.startPosition.x,
                 this.tweenDuration
             );
             
-            this.position.y = Easing.easeInOutBack(
+            this.position.y = Easing.easeInQuad(
                 this.tweenTime,
                 this.startPosition.y,
                 this.endPosition.y - this.startPosition.y,
