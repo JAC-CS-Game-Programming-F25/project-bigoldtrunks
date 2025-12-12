@@ -20,7 +20,6 @@ const resizeCanvas = () => {
 
   canvas.style.width = `${CANVAS_WIDTH * scale}px`;
   canvas.style.height = `${CANVAS_HEIGHT * scale}px`;
-  canvas.style.imageRendering = "pixelated"; // When zoomed in, the pixel blocks are clearly visible.
 };
 
 // Listen for canvas resize events
