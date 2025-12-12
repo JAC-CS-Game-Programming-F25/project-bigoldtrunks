@@ -40,11 +40,8 @@ export default class FireFlame extends GameObject {
         this.damage = 2; // Damage dealt by the flame
         
         // Reduce hitbox size to make it more accurate (smaller than the visual sprite)
-    
-        this.hitboxOffsets.position.x = 6; 
-        this.hitboxOffsets.position.y = 6; 
-        this.hitboxOffsets.dimensions.x = -15;
-        this.hitboxOffsets.dimensions.y = -15; 
+
+        this.setHitboxPosition(6, 6, -15, -15);
     }
 
     /**

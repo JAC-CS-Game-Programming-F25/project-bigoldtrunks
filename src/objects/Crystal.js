@@ -24,8 +24,9 @@ export default class Crystal extends GameObject {
         this.animation = new Animation([0, 1, 2, 3, 4, 5], 0.2); // Looping animation
         this.currentAnimation = this.animation;
         this.currentFrame = 0;
-        
+        this.setHitboxPosition(6, 6, -10, -10);
     }
+    
    
     update(dt) {
         this.currentFrame = this.currentAnimation.getCurrentFrame();
