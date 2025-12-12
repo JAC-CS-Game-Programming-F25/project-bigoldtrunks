@@ -7,7 +7,7 @@ import Creature from "../entities/Creature/Creature.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import { stateMachine } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
-
+import UserInterface from "./UserInterface.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -171,6 +171,7 @@ export default class Region {
     // this.creatures.forEach((creature) => creature.render());
     this.renderQueue.forEach((entity) => entity.render());
     this.map.renderTop();
+    this.ui.render();
   }
   /**
    * Order the entities by their renderPriority fields. If the renderPriority

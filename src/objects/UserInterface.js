@@ -7,7 +7,6 @@ export default class UserInterface {
   }
   render() {
     this.renderHealth();
-    this.renderScore();
   }
   renderHealth() {
     context.fillStyle = "#FF0000";
