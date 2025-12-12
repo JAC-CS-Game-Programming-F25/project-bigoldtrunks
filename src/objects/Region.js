@@ -26,7 +26,7 @@ export default class Region {
          * Items present in the region (e.g., crystals, fire torch, etc.)
          */
         this.items = [];
-        this.items.push(new Crystal(new Vector(100, 100)));
+        this.items.push(new Crystal(new Vector(300, 100)));
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;
@@ -51,9 +51,7 @@ export default class Region {
         this.cleanUpObjects();  
         this.updateEntities(dt);
         this.updateObjects(dt);
-        this.items.forEach((item) => {
-            item.update(dt);
-        });
+        this.updateItems(dt);
 
     }
     
@@ -67,10 +65,12 @@ export default class Region {
         this.objects.forEach((object) => {
             object.render();
         });  
-       this.map.renderTop();
-       this.ui.render();
-       this.items.forEach((item) => {
-            item.render();
+        this.map.renderTop();
+        this.ui.render();
+
+        this.items.forEach((item) => {
+            if(item)
+                item.render();
         });
     }
     /**
@@ -88,6 +88,13 @@ export default class Region {
     addObject(object){
         this.objects.push(object);
     }
+    
+    updateItems(dt){
+        this.items.forEach((item) => {
+            if(item)
+                item.update(dt);
+        });
+    }
 
     /**
      * Update all entities in the region,
@@ -100,7 +107,9 @@ export default class Region {
             if (entity.health <= 0) {
                 entity.isDead = true;
             }
+            // Specific logic for Creature entities
             if (entity instanceof Creature) {
+                
                 const oldX = entity.position.x;
                 const oldY = entity.position.y;
 
@@ -109,11 +118,12 @@ export default class Region {
                 // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
                 this.checkCollisionWithObjects(entity);
 
-                // check entity hurt
+                // sword hit detection on the creature
                 if (
                     !entity.isHurt &&
                     entity.didCollideWithEntity(this.player.swordHitbox)
                 ) {
+                    // Creature deal with player's sword hit or ability hit
                     entity.onTakingHit(this.player.damage);
                 }
 
@@ -127,6 +137,9 @@ export default class Region {
                 ) {
                     this.player.onTakingDamage(entity.damage);
                 }
+            } else if (entity instanceof Player) {
+                // Player specific update logic can go here
+                this.checkCollisionWithItem(entity);
             }
             entity.update(dt);
         })
@@ -140,10 +153,20 @@ export default class Region {
             });
         }
     }
+
     isGameOver() {
         return this.player.isDead && this.player.lives < 0;
     }
-    
+    checkCollisionWithItem(player) {
+        this.items.forEach((item,index) => {
+            if (player.didCollideWithEntity(item.hitbox)) {
+                item.onConsume(player);
+                player.unlockAbility(item);
+                // Remove item from region after consumption
+                this.items.splice(index, 1);
+            }
+        });
+    }
 	/**
 	 * Checks if the player can move to a given position without colliding with collision tiles
 	 * @param {number} x - Pixel X position
@@ -179,7 +202,8 @@ export default class Region {
 		       bottomRightTile === null;
 	}
     /**
-     * Check for collisions between an entity and all objects in the region such as FireFlame, etc.
+     * Check for collisions between an Creature and all objects in the region such as FireFlame, etc.
+     * Call Creature's onTakingHit method to process if collision detected
      * @param {*} entity 
      */
     checkCollisionWithObjects(entity) {
@@ -317,7 +341,7 @@ export default class Region {
      */
     buildRenderQueue() {
         // this.entities already contains the player, don't add it twice
-        return [...this.entities].sort((a, b) => {
+        return [...this.entities,...this.items].sort((a, b) => {
             let order = 0;
             const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
             const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
@@ -333,6 +357,12 @@ export default class Region {
         })
     }
     /**
+     * Update the render queue to ensure the correct drawing order
+     */
+    updateRenderQueue() {
+        this.renderQueue = this.buildRenderQueue();
+    }
+    /**
      * Cleans up dead entities from the region, except the player
      */
     cleanUpEntities(){
@@ -346,8 +376,8 @@ export default class Region {
             // If creature is dead and has an item, spawn it into the world
             if (entity.isDead && entity instanceof Creature && entity.itemKept) {
                 console.log(`Creature died and dropped item at position:`, entity.itemKept.position);
-                this.objects.push(entity.itemKept);
-                
+                this.items.push(entity.itemKept); // Add to items array for collectables
+                this.updateRenderQueue(); // Ensure it's rendered in order
                 entity.itemKept = null; // Clear the reference so it doesn't get added multiple times
             }
             
