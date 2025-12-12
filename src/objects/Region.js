@@ -7,6 +7,8 @@ import Creature from "../entities/Creature/Creature.js";
 import Hitbox from "../../lib/Hitbox.js";
 import AbilityType from "../enums/AbilityType.js";
 import FireFlame from "./FireFlame.js";
+import { stateMachine } from "../globals.js";
+import GameStateName from "../enums/GameStateName.js";
 export default class Region {
     constructor(mapDefinition, creatureConfig = []) {
         
@@ -78,10 +80,14 @@ export default class Region {
                 // check if creature is collided with player's sword -> creature takes the damae
                 if(entity.didCollideWithEntity(this.player.swordHitbox)){
                     entity.onTakingHit(this.player.damage);
+                    
                 }
             }
             entity.update(dt);
         });
+    }
+    isGameOver(){
+        return this.player.isDead || this.player.health < 0;
     }
     checkCollisionWithObjects(entity){
         this.objects.forEach((object) => {

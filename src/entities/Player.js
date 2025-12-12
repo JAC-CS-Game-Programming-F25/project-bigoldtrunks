@@ -34,7 +34,7 @@ export default class Player extends GameEntity {
     constructor(region){
         super({
             speed: Player.PLAYER_SPEED,
-            health: 5
+            health: 2
         })
         this.region = region;   
         console.log("Player entity created in region:", region);
@@ -131,6 +131,7 @@ export default class Player extends GameEntity {
 
     if (this.health < 0) {
       this.isDead = true;
+      this.cleanUp = true;
       return;
     }
     // Handle taking damage logic here (e.g., reduce health)
