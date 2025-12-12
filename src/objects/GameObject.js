@@ -54,6 +54,7 @@ export default class GameObject {
 
   onConsume(consumer) {
     this.wasConsumed = true;
+    this.cleanUp = true;
   }
   
   update(dt) {
@@ -129,4 +130,17 @@ export default class GameObject {
   getEntityCollisionDirection(hitbox) {
     return this.hitbox.getCollisionDirection(hitbox);
   }
+  /**
+   * Sets the hitbox position and dimensions.
+   * @param {*} x 
+   * @param {*} y 
+   * @param {*} width 
+   * @param {*} height 
+   */
+   setHitboxPosition(x, y, width, height) {
+        this.hitboxOffsets.position.x = x;
+        this.hitboxOffsets.position.y = y;
+        this.hitboxOffsets.dimensions.x = width;
+        this.hitboxOffsets.dimensions.y = height;
+    }
 }

@@ -15,6 +15,8 @@ import AbilityType from "../enums/AbilityType.js";
 import PlayerPerformingFrozenBlastState from "../states/player/PlayerPerformingFrozenBlast.js";
 import PlayerDeadState from "../states/player/PlayerDeadState.js";
 import PlayerFallingDownToEarth from "../states/player/PlayerFallingDownToEarth.js";
+import ItemType from "../enums/ItemType.js";
+import Crystal from "../objects/Crystal.js";
 
 export default class Player extends GameEntity {
   // the player frame has width and height of 16 pixels, apply to all movements idle/walk
@@ -92,6 +94,9 @@ export default class Player extends GameEntity {
             -8,  // height
             'red'
         )
+        /**
+         * Tracks which abilities have been unlocked by the player.
+         */
         this.abilityUnlocked = {
             [AbilityType.FireFlame]: false,
             [AbilityType.FrozenFlame]: false
@@ -99,7 +104,19 @@ export default class Player extends GameEntity {
         this.fireFlame = null;
         this.stateMachine = this.initializeStateMachine();
     }
+    /**
+     * Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
+     * @param {Crystal || FireTorch} item 
+     */
+    unlockAbility(item){
+      if(item.itemType == ItemType.Crystal)
+      {
+        this.abilityUnlocked[AbilityType.FrozenFlame] = true;
+        console.log("Player unlocked ability Crystal:", AbilityType.FrozenFlame);
+      }
+      // fire other abilities can be added here
 
+    }
     render(){
         context.save();
         

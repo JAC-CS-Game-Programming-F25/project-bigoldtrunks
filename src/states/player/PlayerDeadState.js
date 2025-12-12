@@ -48,7 +48,7 @@ export default class PlayerDeadState extends State {
         // Decrease a life after death animation
         this.player.lives -= 1;
         if(this.player.lives < 0) {
-            this.player.lives = 0; // Prevent negative lives display
+            this.player.lives = -1; // Prevent negative lives display
             console.log(`No Lives remain -> Game OVer ${this.player.lives}`);
         }
         

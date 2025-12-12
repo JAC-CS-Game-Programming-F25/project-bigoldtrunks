@@ -124,7 +124,7 @@
     },
     {
       "name": "crystal-item",
-      "path": "./assets/images/item/crystal/crystal_item_anim_strip_6.png",
+      "path": "./assets/images/item/crystal/crystal_item.png",
       "width": 96,
       "height": 16
     }

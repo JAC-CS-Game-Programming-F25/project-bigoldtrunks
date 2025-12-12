@@ -11,12 +11,22 @@ import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
+import Crystal from "./Crystal.js";
+import ItemType from "../enums/ItemType.js";
 export default class Region {
     constructor(mapDefinition, creatureConfig = []) {        
         this.map = new Map(mapDefinition);
         this.creatures = this.spawnCreatures(creatureConfig);
+
+        // Once we have the creature now we decide which one will keep the item
+        this.assignWhichCreatureKeepItem(this.creatures, ItemType.Crystal);
+
         this.player = new Player(this); // Pass the region instance to the player
-        
+        /**
+         * Items present in the region (e.g., crystals, fire torch, etc.)
+         */
+        this.items = [];
+        this.items.push(new Crystal(new Vector(150, 100)));
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;
@@ -41,11 +51,30 @@ export default class Region {
         this.cleanUpObjects();  
         this.updateEntities(dt);
         this.updateObjects(dt);
+        this.updateItems(dt);
 
     }
+    
+    render() {
+        this.map.render(); // ← render map
 
+        this.renderQueue.forEach((entity) => {
+            if(entity)
+                entity.render();
+        }); // ← render all entities in the render queue
+        this.objects.forEach((object) => {
+            object.render();
+        });  
+        this.map.renderTop();
+        this.ui.render();
+
+        this.items.forEach((item) => {
+            if(item)
+                item.render();
+        });
+    }
     /**
-     * Update all objects in the region (Player's abilitys objects, etc.)
+     * Update all objects in the region (Player's abilitys objects, items(Crystal, FireTorch, etc.) etc.)
      */
     updateObjects(dt){
         this.objects.forEach((object) => {
@@ -60,6 +89,13 @@ export default class Region {
         this.objects.push(object);
     }
 
+    updateItems(dt){
+        this.items.forEach((item) => {
+            if(item)
+                item.update(dt);
+        });
+    }
+
     /**
      * Update all entities in the region,
      * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
@@ -71,7 +107,9 @@ export default class Region {
             if (entity.health <= 0) {
                 entity.isDead = true;
             }
+            // Specific logic for Creature entities
             if (entity instanceof Creature) {
+                
                 const oldX = entity.position.x;
                 const oldY = entity.position.y;
 
@@ -80,11 +118,12 @@ export default class Region {
                 // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
                 this.checkCollisionWithObjects(entity);
 
-                // check entity hurt
+                // sword hit detection on the creature
                 if (
                     !entity.isHurt &&
                     entity.didCollideWithEntity(this.player.swordHitbox)
                 ) {
+                    // Creature deal with player's sword hit or ability hit
                     entity.onTakingHit(this.player.damage);
                 }
 
@@ -98,6 +137,9 @@ export default class Region {
                 ) {
                     this.player.onTakingDamage(entity.damage);
                 }
+            } else if (entity instanceof Player) {
+                // Player specific update logic can go here
+                this.checkCollisionWithItem(entity);
             }
             entity.update(dt);
         })
@@ -111,10 +153,20 @@ export default class Region {
             });
         }
     }
+
     isGameOver() {
         return this.player.isDead && this.player.lives < 0;
     }
-    
+    checkCollisionWithItem(player) {
+        this.items.forEach((item,index) => {
+            if (player.didCollideWithEntity(item.hitbox)) {
+                item.onConsume(player);
+                player.unlockAbility(item);
+                // Remove item from region after consumption
+                this.items.splice(index, 1);
+            }
+        });
+    }
 	/**
 	 * Checks if the player can move to a given position without colliding with collision tiles
 	 * @param {number} x - Pixel X position
@@ -150,7 +202,8 @@ export default class Region {
 		       bottomRightTile === null;
 	}
     /**
-     * Check for collisions between an entity and all objects in the region such as FireFlame, etc.
+     * Check for collisions between an Creature and all objects in the region such as FireFlame, etc.
+     * Call Creature's onTakingHit method to process if collision detected
      * @param {*} entity 
      */
     checkCollisionWithObjects(entity) {
@@ -167,30 +220,46 @@ export default class Region {
      * @returns {void}
      */
     spawnCreatures(config) {
-    const entities = new Array();
+        // array to hold all spawned creatures
+        const creatures = new Array();
 
-    config.forEach((def) => {
-        for (let i = 0; i < def.count; i++) {
-        let position;
-        let attempts = 0;
-        const maxAttempts = 50;
-        do {
-            const x = getRandomPositiveInteger(50, 330);
-            const y = getRandomPositiveInteger(50, 150);
-            position = new Vector(x, y);
-            attempts++;
-        } while (
-          this.isPositionOccupied(position, entities) &&
-          attempts < maxAttempts
-        );
+        // spawn creatures based on the config
+        config.forEach((def) => {
+            for (let i = 0; i < def.count; i++) {
+                let position;
+                let attempts = 0;
+                const maxAttempts = 50;
+                do {
+                    const x = getRandomPositiveInteger(50, 330);
+                    const y = getRandomPositiveInteger(50, 150);
+                    position = new Vector(x, y);
+                    attempts++;
+                } while (
+                this.isPositionOccupied(position, creatures) &&
+                attempts < maxAttempts
+                );
 
-        if (attempts < maxAttempts) {
-            const creature = CreatureFactory.createInstance(def.type, position);
-            entities.push(creature);
-        }
-        }
-    });
-    return entities;
+                if (attempts < maxAttempts) {
+                    const creature = CreatureFactory.createInstance(def.type, position);
+                    creatures.push(creature);
+                }
+            }
+        });
+        return creatures;
+    }
+    /**
+     * Decide which creature will keep the item by randomly selecting one from the list
+     * if we decide specific item to be kept, pass specificCreatureIndex or leave null for random,
+     * Probably Modify later for Warden to keep the key item
+     * @param {[Creature]} creatures list of all creature 
+     * @param {ItemType} itemType type of item to be kept
+     * @param {number|null} specificCreatureIndex 
+     */
+    assignWhichCreatureKeepItem(creatures, itemType, specificCreatureIndex = null) {
+        const randomIndex = specificCreatureIndex !== null ? specificCreatureIndex : getRandomPositiveInteger(0, creatures.length - 1);
+
+        creatures[randomIndex].keepItem(itemType);
+        console.log(`Creature at index ${randomIndex} will keep item of type ${itemType}`);
     }
 
     isPositionOnCollision(position) {
@@ -254,19 +323,6 @@ export default class Region {
     }
   }
 
-    render() {
-        this.map.render(); // ← render map
-
-        this.renderQueue.forEach((entity) => {
-            if(entity)
-                entity.render();
-        }); // ← render all entities in the render queue
-        this.objects.forEach((object) => {
-            object.render();
-        });  
-       this.map.renderTop();
-       this.ui.render();
-    }
     /**
      * Order the entities by their renderPriority fields. If the renderPriority
      * is the same, then sort the entities by their bottom positions. This will
@@ -285,7 +341,7 @@ export default class Region {
      */
     buildRenderQueue() {
         // this.entities already contains the player, don't add it twice
-        return [...this.entities].sort((a, b) => {
+        return [...this.entities,...this.items].sort((a, b) => {
             let order = 0;
             const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
             const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
@@ -301,6 +357,12 @@ export default class Region {
         })
     }
     /**
+     * Update the render queue to ensure the correct drawing order
+     */
+    updateRenderQueue() {
+        this.renderQueue = this.buildRenderQueue();
+    }
+    /**
      * Cleans up dead entities from the region, except the player
      */
     cleanUpEntities(){
@@ -310,6 +372,15 @@ export default class Region {
             if (entity instanceof Player) {
                 return true; // Always keep player
             }
+            
+            // If creature is dead and has an item, spawn it into the world
+            if (entity.isDead && entity instanceof Creature && entity.itemKept) {
+                console.log(`Creature died and dropped item at position:`, entity.itemKept.position);
+                this.items.push(entity.itemKept); // Add to items array for collectables
+                this.updateRenderQueue(); // Ensure it's rendered in order
+                entity.itemKept = null; // Clear the reference so it doesn't get added multiple times
+            }
+            
             return !entity.isDead; // Remove dead creatures
         });
     } 

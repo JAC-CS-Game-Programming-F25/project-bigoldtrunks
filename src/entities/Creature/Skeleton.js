@@ -16,7 +16,7 @@ import ImageName from "../../enums/ImageName.js";
 
 export default class Skeleton extends Creature {
   static SPEED = 20;
-  static HEALTH = 2;
+  static HEALTH = 180;
 
   constructor(position) {
     super({
