@@ -48,6 +48,11 @@ export default class Player extends GameEntity {
             Player.PLAYER_SWORD_SPRITE_WIDTH,
             Player.PLAYER_SWORD_SPRITE_HEIGHT,
         )
+        this.performFrozenPosterSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.PlayerFrozenFlamePoster),
+            Player.PLAYER_SWORD_SPRITE_WIDTH,
+            Player.PLAYER_SWORD_SPRITE_HEIGHT,
+        )
         this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
         this.sprites = this.walkingSprites;
         // set initial player position
