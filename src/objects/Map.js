@@ -20,16 +20,26 @@ export default class Map {
       Tile.SIZE,
       Tile.SIZE
     );
-    // Create layers
+    /**
+     * The bottom layer of the map
+     * @type {Layer}
+     */
     this.bottomLayer = new Layer(mapDefinition.layers[0], sprites);
+    /**
+     * The layer that contains all collision tiles
+     * @type {Layer}
+     */
     this.collisionLayer = new Layer(
       mapDefinition.layers[1],
       spritesDecoration,
       651
     );
+    /**
+     * The top layer of the map
+     * @type {Layer}
+     */
     this.topLayer = new Layer(mapDefinition.layers[2], spritesDecoration, 651);
-    // Generate collision hitboxes
-    this.collisionObjects = this.generateCollisionObjects();
+  
   }
 
   render() {
