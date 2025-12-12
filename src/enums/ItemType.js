@@ -1,3 +1,4 @@
+import AbilityType from "./AbilityType.js";
 
 /**
  * Enumeration for different item types.
