@@ -68,13 +68,22 @@ export default class Region {
                 // update all entities (player, creatures, etc.)
                 
                 this.checkCreatureCollisions(entity, oldX, oldY);
-                
+                // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
+                this.checkCollisionWithObjects(entity);
+
                 // check if creature is collided with player's sword -> creature takes the damae
                 if(entity.didCollideWithEntity(this.player.swordHitbox)){
                     entity.onTakingHit(this.player.damage);
                 }
             }
             entity.update(dt);
+        });
+    }
+    checkCollisionWithObjects(entity){
+        this.objects.forEach((object) => {
+            if(entity.didCollideWithEntity(object.hitbox)){
+                entity.onTakingHit(object.damage);
+            }
         });
     }
 
