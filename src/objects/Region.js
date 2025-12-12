@@ -12,10 +12,15 @@ import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
 import Crystal from "./Crystal.js";
+import ItemType from "../enums/ItemType.js";
 export default class Region {
     constructor(mapDefinition, creatureConfig = []) {        
         this.map = new Map(mapDefinition);
         this.creatures = this.spawnCreatures(creatureConfig);
+
+        // Once we have the creature now we decide which one will keep the item
+        this.assignWhichCreatureKeepItem(this.creatures, ItemType.Crystal);
+
         this.player = new Player(this); // Pass the region instance to the player
         /**
          * Items present in the region (e.g., crystals, fire torch, etc.)
@@ -191,32 +196,47 @@ export default class Region {
      * @returns {void}
      */
     spawnCreatures(config) {
-    const entities = new Array();
+        // array to hold all spawned creatures
+        const creatures = new Array();
 
-    config.forEach((def) => {
-        for (let i = 0; i < def.count; i++) {
-        let position;
-        let attempts = 0;
-        const maxAttempts = 50;
-        do {
-            const x = getRandomPositiveInteger(50, 330);
-            const y = getRandomPositiveInteger(50, 150);
-            position = new Vector(x, y);
-            attempts++;
-        } while (
-          this.isPositionOccupied(position, entities) &&
-          attempts < maxAttempts
-        );
+        // spawn creatures based on the config
+        config.forEach((def) => {
+            for (let i = 0; i < def.count; i++) {
+                let position;
+                let attempts = 0;
+                const maxAttempts = 50;
+                do {
+                    const x = getRandomPositiveInteger(50, 330);
+                    const y = getRandomPositiveInteger(50, 150);
+                    position = new Vector(x, y);
+                    attempts++;
+                } while (
+                this.isPositionOccupied(position, creatures) &&
+                attempts < maxAttempts
+                );
 
-        if (attempts < maxAttempts) {
-            const creature = CreatureFactory.createInstance(def.type, position);
-            entities.push(creature);
-        }
-        }
-    });
-    return entities;
+                if (attempts < maxAttempts) {
+                    const creature = CreatureFactory.createInstance(def.type, position);
+                    creatures.push(creature);
+                }
+            }
+        });
+        return creatures;
     }
+    /**
+     * Decide which creature will keep the item by randomly selecting one from the list
+     * if we decide specific item to be kept, pass specificCreatureIndex or leave null for random,
+     * Probably Modify later for Warden to keep the key item
+     * @param {[Creature]} creatures list of all creature 
+     * @param {ItemType} itemType type of item to be kept
+     * @param {number|null} specificCreatureIndex 
+     */
+    assignWhichCreatureKeepItem(creatures, itemType, specificCreatureIndex = null) {
+        const randomIndex = specificCreatureIndex !== null ? specificCreatureIndex : getRandomPositiveInteger(0, creatures.length - 1);
 
+        creatures[randomIndex].keepItem(itemType);
+        console.log(`Creature at index ${randomIndex} will keep item of type ${itemType}`);
+    }
     isPositionOnCollision(position) {
     const collisionObjects = this.map.getCollisionObjects();
     const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
@@ -321,6 +341,14 @@ export default class Region {
             if (entity instanceof Player) {
                 return true; // Always keep player
             }
+            
+            // If creature is dead and has an item, spawn it into the world
+            if (entity.isDead && entity instanceof Creature && entity.itemKept) {
+                console.log(`Creature died and dropped item at position:`, entity.itemKept.position);
+                this.objects.push(entity.itemKept);
+                entity.itemKept = null; // Clear the reference so it doesn't get added multiple times
+            }
+            
             return !entity.isDead; // Remove dead creatures
         });
     } 
