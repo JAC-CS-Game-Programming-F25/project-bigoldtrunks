@@ -14,6 +14,11 @@ export default class Region {
         this.creatures = this.spawnCreatures(creatureConfig);
         this.player = new Player(this); // Pass the region instance to the player
 
+        // Assign player reference to all creatures so they can chase
+        this.creatures.forEach(creature => {
+            creature.player = this.player;
+        });
+
         // All entities in the region
         this.entities = [this.player, ...this.creatures];
         // All objects in the region
@@ -201,7 +206,8 @@ export default class Region {
      * Source: Game Programming Assignment - Zelda
      */
     buildRenderQueue() {
-        return [...this.entities, this.player].sort((a, b) => {
+        // this.entities already contains the player, don't add it twice
+        return [...this.entities].sort((a, b) => {
             let order = 0;
             const bottomA= a.hitbox.position.y + a.hitbox.dimensions.y;
             const bottomB= b.hitbox.position.y + b.hitbox.dimensions.y;
