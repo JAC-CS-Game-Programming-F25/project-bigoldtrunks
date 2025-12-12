@@ -76,6 +76,8 @@ export default class Region {
                 const oldY = entity.position.y;
 
                 this.checkCreatureCollisions(entity, oldX, oldY);
+
+                // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
                 this.checkCollisionWithObjects(entity);
 
                 // check entity hurt
@@ -100,7 +102,7 @@ export default class Region {
             entity.update(dt);
         })
         // Check game over
-        if ((this.player.isDead || this.player.health <= 0) && !this.isGameOver) {
+        if ((this.player.isDead || this.player.health <= 0) && !this.player.lives < 0) {
             this.isGameOver = true;
             stateMachine.change(GameStateName.Transition, {
                 fromState: stateMachine.currentState,
@@ -108,6 +110,9 @@ export default class Region {
                 toStateEnterParameters: { score: this.score },
             });
         }
+    }
+    isGameOver() {
+        return this.player.isDead && this.player.lives < 0;
     }
     
 	/**
@@ -144,6 +149,10 @@ export default class Region {
 		       bottomLeftTile === null && 
 		       bottomRightTile === null;
 	}
+    /**
+     * Check for collisions between an entity and all objects in the region such as FireFlame, etc.
+     * @param {*} entity 
+     */
     checkCollisionWithObjects(entity) {
         this.objects.forEach((object) => {
             if (entity.didCollideWithEntity(object.hitbox)) {
