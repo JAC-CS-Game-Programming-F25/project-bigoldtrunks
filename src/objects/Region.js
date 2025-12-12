@@ -26,7 +26,7 @@ export default class Region {
          * Items present in the region (e.g., crystals, fire torch, etc.)
          */
         this.items = [];
-        this.items.push(new Crystal(new Vector(300, 100)));
+        this.items.push(new Crystal(new Vector(150, 100)));
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;
@@ -88,7 +88,7 @@ export default class Region {
     addObject(object){
         this.objects.push(object);
     }
-    
+
     updateItems(dt){
         this.items.forEach((item) => {
             if(item)
