@@ -189,8 +189,11 @@ export default class Region {
 
     render() {
         this.map.render(); // ← render map
-        
-        this.renderQueue.forEach((entity) => entity.render()); // ← render all entities in the render queue
+
+        this.renderQueue.forEach((entity) => {
+            if(entity)
+                entity.render();
+        }); // ← render all entities in the render queue
         this.objects.forEach((object) => {
             object.render();
         });  
@@ -228,11 +231,20 @@ export default class Region {
             return order;
         })
     }
-
-    cleanUpEntities(){  
-        this.entities = this.entities.filter(entity => !entity.isDead);
+    /**
+     * Cleans up dead entities from the region, except the player
+     */
+    cleanUpEntities(){
+        // Only remove dead creatures, NOT the player
+        // We need to keep the player in the entities array to show death animation
+        this.entities = this.entities.filter(entity => {
+            if (entity instanceof Player) {
+                return true; // Always keep player
+            }
+            return !entity.isDead; // Remove dead creatures
+        });
     } 
-    
+    /*  * Cleans up objects that are marked for cleanup from the region */
     cleanUpObjects(){  
         this.objects = this.objects.filter(object => !object.cleanUp);  
    }

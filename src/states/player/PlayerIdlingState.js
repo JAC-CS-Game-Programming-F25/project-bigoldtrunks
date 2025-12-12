@@ -31,6 +31,7 @@ export default class PlayerIdlingState extends State {
         this.handleSwordSwing();
         this.handlePerformingFireFlame();
         this.handlePerformingFrozenBlast();
+        this.handleDead();
     }
 
     checkForMovement(){
@@ -66,6 +67,11 @@ export default class PlayerIdlingState extends State {
         if (input.isKeyHeld(Input.KEYS.K) && 
             (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
             this.player.changeState(PlayerStateName.PerformingFrozenBlast);
+        }
+    }
+    handleDead() {
+        if (this.player.isDead) {
+            this.player.changeState(PlayerStateName.Dead);
         }
     }
 }
