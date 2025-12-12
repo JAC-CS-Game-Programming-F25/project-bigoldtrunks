@@ -52,8 +52,8 @@
     {
       "name": "fire-explosion",
       "path": "./assets/images/ability/fire-explosion.png",
-      "width": 384,
-      "height": 32
+      "width": 336,
+      "height": 28
     },
 
     {
