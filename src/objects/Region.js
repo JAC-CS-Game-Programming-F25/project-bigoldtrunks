@@ -7,11 +7,11 @@ import Creature from "../entities/Creature/Creature.js";
 import Hitbox from "../../lib/Hitbox.js";
 import AbilityType from "../enums/AbilityType.js";
 import FireFlame from "./FireFlame.js";
-import { stateMachine } from "../globals.js";
+import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
+import UserInterface from "./UserInterface.js";
 export default class Region {
-    constructor(mapDefinition, creatureConfig = []) {
-        
+    constructor(mapDefinition, creatureConfig = []) {        
         this.map = new Map(mapDefinition);
         this.creatures = this.spawnCreatures(creatureConfig);
         this.player = new Player(this); // Pass the region instance to the player
@@ -26,15 +26,17 @@ export default class Region {
         // All objects in the region
         this.objects = []; // contain objects like FireFlame added by the player, etc. more later
         this.renderQueue = this.buildRenderQueue();
+        this.isGameOver = false;
+        this.ui = new UserInterface(this.player, this);
     }
 
     update(dt) {
+       if (this.isGameOver) return;
         // Rebuild render queue each frame to account for movement
         this.renderQueue = this.buildRenderQueue();
         this.cleanUpEntities();
         this.cleanUpObjects();  
         this.updateEntities(dt);
-
         this.updateObjects(dt);
 
     }
@@ -60,38 +62,54 @@ export default class Region {
      * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
      * @param {*} dt
      */
+   
     updateEntities(dt) {
-
-
         this.entities.forEach((entity) => {
             if (entity.health <= 0) {
-                    entity.isDead = true;
+                entity.isDead = true;
             }
-            if(entity instanceof Creature){
+            if (entity instanceof Creature) {
                 const oldX = entity.position.x;
                 const oldY = entity.position.y;
-                
-                // update all entities (player, creatures, etc.)
-                
+
                 this.checkCreatureCollisions(entity, oldX, oldY);
-                // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
                 this.checkCollisionWithObjects(entity);
 
-                // check if creature is collided with player's sword -> creature takes the damae
-                if(entity.didCollideWithEntity(this.player.swordHitbox)){
+                // check entity hurt
+                if (
+                    !entity.isHurt &&
+                    entity.didCollideWithEntity(this.player.swordHitbox)
+                ) {
                     entity.onTakingHit(this.player.damage);
-                    
+                }
+
+                // contact damage
+                if (
+                    !entity.isDead &&
+                    !this.player.isInVulnerable &&
+                    entity.isContactDamage &&
+                    this.player.hitbox &&
+                    entity.hitbox.didCollide(this.player.hitbox)
+                ) {
+                    this.player.onTakingDamage(entity.damage);
                 }
             }
             entity.update(dt);
-        });
+        })
+        // Check game over
+        if ((this.player.isDead || this.player.health <= 0) && !this.isGameOver) {
+            this.isGameOver = true;
+            stateMachine.change(GameStateName.Transition, {
+                fromState: stateMachine.currentState,
+                toState: stateMachine.states[GameStateName.GameOver],
+                toStateEnterParameters: { score: this.score },
+            });
+        }
     }
-    isGameOver(){
-        return this.player.isDead || this.player.health < 0;
-    }
-    checkCollisionWithObjects(entity){
+  
+    checkCollisionWithObjects(entity) {
         this.objects.forEach((object) => {
-            if(entity.didCollideWithEntity(object.hitbox)){
+            if (entity.didCollideWithEntity(object.hitbox)) {
                 entity.onTakingHit(object.damage);
             }
         });
@@ -162,30 +180,33 @@ export default class Region {
      * @returns
      */
     checkCreatureCollisions(creature, oldX, oldY) {
-    let collided = false;
-
+    // use hitbox as boundary checking
+    const hitboxX = creature.position.x + creature.hitboxOffsets.position.x;
+    const hitboxY = creature.position.y + creature.hitboxOffsets.position.y;
+    const hitboxW = creature.dimensions.x + creature.hitboxOffsets.dimensions.x;
+    const hitboxH = creature.dimensions.y + creature.hitboxOffsets.dimensions.y;
+    if (
+      hitboxX < 0 ||
+      hitboxX + hitboxW > CANVAS_WIDTH ||
+      hitboxY < 0 ||
+      hitboxY + hitboxH > CANVAS_HEIGHT
+    ) {
+      creature.position.x = Math.round(oldX);
+      creature.position.y = Math.round(oldY);
+      creature.handleWallCollision();
+      return;
+    }
+    // check object collision
     const collisionObjects = this.map.getCollisionObjects();
-    for (const hitbox of collisionObjects) {
-        if (creature.didCollideWithEntity(hitbox)) {
-        creature.position.x = oldX;
-        creature.position.y = oldY;
+    for (const object of collisionObjects) {
+      if (creature.didCollideWithEntity(object)) {
+        creature.position.x = Math.round(oldX);
+        creature.position.y = Math.round(oldY);
         creature.handleWallCollision();
-        collided = true;
         break;
-        }
+      }
     }
-
-    if (collided) return;
-
-    for (const other of this.creatures) {
-        if (other !== creature && creature.didCollideWithEntity(other.hitbox)) {
-        creature.position.x = oldX;
-        creature.position.y = oldY;
-        creature.handleCreatureCollision(other);
-        break;
-        }
-    }
-    }
+  }
 
     render() {
         this.map.render(); // ← render map
@@ -197,6 +218,8 @@ export default class Region {
         this.objects.forEach((object) => {
             object.render();
         });  
+       this.map.renderTop();
+       this.ui.render();
     }
     /**
      * Order the entities by their renderPriority fields. If the renderPriority
