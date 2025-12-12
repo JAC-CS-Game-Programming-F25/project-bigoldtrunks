@@ -19,8 +19,8 @@ export default class FrozenBlast extends GameObject {
         const startPosition = FrozenBlast.calculateStartPosition(position, direction, playerDimensions);
         
         super(
-            startPosition,
-            {x: FrozenBlast.WIDTH, y: FrozenBlast.HEIGHT}
+            {x: FrozenBlast.WIDTH, y: FrozenBlast.HEIGHT},
+            startPosition
         );
         this.direction = direction;
         this.frozenRightSprites = Sprite.generateSpritesFromSpriteSheet(
@@ -62,7 +62,7 @@ export default class FrozenBlast extends GameObject {
      */
     static calculateStartPosition(playerPosition, direction, playerDimensions) {
         const startPos = new Vector(playerPosition.x, playerPosition.y);
-        const offsetDistance = 1; // Distance in front of the player to spawn the blast
+        const offsetDistance = 8; // Distance in front of the player to spawn the blast
         
         switch(direction) {
             case Direction.Up:

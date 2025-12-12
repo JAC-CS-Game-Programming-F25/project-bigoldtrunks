@@ -18,8 +18,8 @@ export default class FireFlame extends GameObject {
         const startPosition = FireFlame.calculateStartPosition(position, direction, playerDimensions);
         
         super(
+            {x: FireFlame.WIDTH, y: FireFlame.HEIGHT},
             startPosition,
-            {x: FireFlame.WIDTH, y: FireFlame.HEIGHT}
         );
         this.direction = direction;
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
@@ -38,6 +38,13 @@ export default class FireFlame extends GameObject {
         this.tweenDuration = FireFlame.TRAVEL_DURATION;
 
         this.damage = 2; // Damage dealt by the flame
+        
+        // Reduce hitbox size to make it more accurate (smaller than the visual sprite)
+    
+        this.hitboxOffsets.position.x = 6; 
+        this.hitboxOffsets.position.y = 6; 
+        this.hitboxOffsets.dimensions.x = -15;
+        this.hitboxOffsets.dimensions.y = -15; 
     }
 
     /**
