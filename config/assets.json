@@ -34,7 +34,7 @@
       "name": "player",
       "path": "./assets/images/player/player.png",
       "width": 64,
-      "height": 196
+      "height": 496
     },
     {
       "name": "player-sword-swing",
