@@ -1,4 +1,3 @@
-import State from "../../lib/State.js";
 import Player from "../entities/Player.js";
 import Map from "../objects/Map.js";
 import Vector from "../../lib/Vector.js";
@@ -106,9 +105,8 @@ export default class Region {
             position = new Vector(x, y);
             attempts++;
         } while (
-            (this.isPositionOccupied(position, entities) ||
-            this.isPositionOnCollision(position)) &&
-            attempts < maxAttempts
+          this.isPositionOccupied(position, entities) &&
+          attempts < maxAttempts
         );
 
         if (attempts < maxAttempts) {
