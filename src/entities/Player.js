@@ -13,6 +13,7 @@ import Hitbox from "../../lib/Hitbox.js";
 import PlayerPerformingFireFlameState from "../states/player/PlayerPerformingFireFlameState.js";
 import AbilityType from "../enums/AbilityType.js";
 import PlayerPerformingFrozenBlastState from "../states/player/PlayerPerformingFrozenBlast.js";
+import PlayerDeadState from "../states/player/PlayerDeadState.js";
 
 export default class Player extends GameEntity {
   // the player frame has width and height of 16 pixels, apply to all movements idle/walk
@@ -34,7 +35,7 @@ export default class Player extends GameEntity {
     constructor(region){
         super({
             speed: Player.PLAYER_SPEED,
-            health: 2
+            health: 1
         })
         this.region = region;   
         console.log("Player entity created in region:", region);
@@ -43,6 +44,11 @@ export default class Player extends GameEntity {
             Player.PLAYER_SPRITE_WIDTH,
             Player.PLAYER_SPRITE_HEIGHT,
         )
+        this.deadSprites = Sprite.generateSpritesFromSpriteSheet(
+            images.get(ImageName.Player),
+            Player.PLAYER_SPRITE_WIDTH,
+            Player.PLAYER_SPRITE_HEIGHT,
+        ); // use same sprites sheet.
         this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.PlayerSwordSwing),
             Player.PLAYER_SWORD_SPRITE_WIDTH,
@@ -113,6 +119,7 @@ export default class Player extends GameEntity {
         stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
         stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
         stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
+        stateMachine.add(PlayerStateName.Dead, new PlayerDeadState(this));
         stateMachine.change(PlayerStateName.Idle);
 
     return stateMachine;
@@ -129,9 +136,9 @@ export default class Player extends GameEntity {
     }
     this.health -= damage;
 
-    if (this.health < 0) {
-      this.isDead = true;
-      this.cleanUp = true;
+    if (this.health <= 0) {
+      // this.isDead = true;
+      this.changeState(PlayerStateName.Dead);
       return;
     }
     // Handle taking damage logic here (e.g., reduce health)

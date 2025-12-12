@@ -72,7 +72,7 @@ export default class Creature extends GameEntity {
     this.health -= damage;
 
     if (this.health <= 0) {
-      this.isDead = true;
+      // this.isDead = true;
       sounds.play(SoundName.EnemyDead);
       console.log("Creature is dead");
       return;
