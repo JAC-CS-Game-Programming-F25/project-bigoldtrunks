@@ -1,3 +1,5 @@
+import { CANVAS_WIDTH, context } from "../globals.js";
+import FontName from "../enums/FontName.js";
 export default class UserInterface {
   constructor(player, region) {
     this.player = player;
