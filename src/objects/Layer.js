@@ -15,8 +15,8 @@ export default class Layer {
    * @param {object} layerDefinition
    * @param {array} sprites
    */
-  constructor(layerDefinition, sprites) {
-    this.tiles = Layer.generateTiles(layerDefinition.data, sprites);
+  constructor(layerDefinition, sprites, firstgid = 1) {
+    this.tiles = Layer.generateTiles(layerDefinition.data, sprites, firstgid);
     this.width = layerDefinition.width;
     this.height = layerDefinition.height;
   }
@@ -47,15 +47,17 @@ export default class Layer {
    * @param {array} sprites
    * @returns An array of Tile objects.
    */
-  static generateTiles(layerData, sprites) {
+  static generateTiles(layerData, sprites, firstgid = 1) {
     const tiles = [];
 
     layerData.forEach((tileId) => {
       // Tiled exports tile data starting from 1 and not 0, so we must adjust it.
-      tileId--;
+      // tileId--;
+      tileId -= firstgid;
 
       // -1 means there should be no tile at this location.
-      const tile = tileId === -1 ? null : new Tile(tileId, sprites);
+      // const tile = tileId === -1 ? null : new Tile(tileId, sprites);
+      const tile = tileId < 0 ? null : new Tile(tileId, sprites);
 
       tiles.push(tile);
     });
