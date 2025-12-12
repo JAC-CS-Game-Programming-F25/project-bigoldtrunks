@@ -55,7 +55,24 @@ export default class GameObject {
   onConsume(consumer) {
     this.wasConsumed = true;
   }
+  
+  update(dt) {
+    // Update animation if it exists
+    if (this.currentAnimation) {
+      this.currentAnimation.update(dt);
+      // Update current frame from animation
+      this.currentFrame = this.currentAnimation.getCurrentFrame();
+    }
 
+    // Update hitbox position
+    this.hitbox.set(
+      this.position.x + this.hitboxOffsets.position.x,
+      this.position.y + this.hitboxOffsets.position.y,
+      this.dimensions.x + this.hitboxOffsets.dimensions.x,
+      this.dimensions.y + this.hitboxOffsets.dimensions.y
+    );
+  }
+  
   onCollision(collider) {
     /**
      * If this object is solid, then set the

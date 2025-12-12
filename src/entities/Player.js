@@ -93,12 +93,14 @@ export default class Player extends GameEntity {
 
     render(){
         context.save();
-
-    context.restore();
-    if (DEBUG) {
-      this.swordHitbox.render(context);
+        
+        super.render();
+        
+        context.restore();
+        if (DEBUG) {
+            this.swordHitbox.render(context);
+        }
     }
-  }
   /**
    * Initializes the state machine for the player.
    * @returns {StateMachine} the initialized state machine
