@@ -29,16 +29,16 @@ export default class Region {
         this.cleanUpObjects();  
         this.updateEntities(dt);
 
-        this.updateObjects();
+        this.updateObjects(dt);
 
     }
 
     /**
      * Update all objects in the region (Player's abilitys objects, etc.)
      */
-    updateObjects(){
+    updateObjects(dt){
         this.objects.forEach((object) => {
-                object.update();    
+                object.update(dt);    
         });
     }
     /**
