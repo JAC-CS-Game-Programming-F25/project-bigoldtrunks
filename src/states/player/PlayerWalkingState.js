@@ -30,6 +30,7 @@ export default class PlayerWalkingState extends State {
         this.handleMovement(dt);
         this.handleSwordSwing();
         this.handlePerformingFireFlame();
+        this.handlePerformingFrozenBlast();
     }
 
     handleMovement(dt) {
@@ -64,9 +65,21 @@ export default class PlayerWalkingState extends State {
             this.player.changeState(PlayerStateName.SwordSwinging);
         }
     }
+
     handlePerformingFireFlame() {
-        if (input.isKeyHeld(Input.KEYS.J)) {
+        // Only allow FireFlame when facing Left or Right (no sprites for Up/Down) 
+        if (input.isKeyHeld(Input.KEYS.J) && 
+            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
             this.player.changeState(PlayerStateName.PerformingFireFlame);
+        }
+    }
+  
+    handlePerformingFrozenBlast() {
+        // Only allow FrozenBlast when facing Left or Right (no sprites for Up/Down)
+        if (input.isKeyHeld(Input.KEYS.K) && 
+            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
+            console.log("K pressed - FrozenBlast allowed");
+            this.player.changeState(PlayerStateName.PerformingFrozenBlast);
         }
     }
 }
