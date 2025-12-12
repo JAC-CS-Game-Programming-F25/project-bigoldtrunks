@@ -12,6 +12,8 @@ import GameStateName from "../enums/GameStateName.js";
 import Input from "../../lib/Input.js";
 import SoundName from "../enums/SoundName.js";
 import ImageName from "../enums/ImageName.js";
+import FontName from "../enums/FontName.js";
+
 export default class TitleScreenState extends State {
   constructor() {
     super();
@@ -64,7 +66,11 @@ export default class TitleScreenState extends State {
     if (input.isKeyPressed(Input.KEYS.ENTER)) {
       sounds.play(SoundName.Select);
       if (this.selectedIndex === 0) {
-        stateMachine.change(GameStateName.Play);
+        // stateMachine.change(GameStateName.Play);
+        stateMachine.change(GameStateName.Transition, {
+          fromState: this,
+          toState: stateMachine.states[GameStateName.Play],
+        });
       } else if (this.selectedIndex === 1) {
         this.showInstructions = true;
       }
@@ -80,14 +86,14 @@ export default class TitleScreenState extends State {
 
     // title
     context.fillStyle = "#4ECDC4";
-    context.font = "28px Cinzel-Bold";
+    context.font = `50px ${FontName.Zelda}`;
     context.textAlign = "center";
-    context.fillText("MystiaJungle", CANVAS_WIDTH / 2, 50);
+    context.fillText("MystiaJungle", CANVAS_WIDTH / 2, 60);
 
     // subheading
     context.fillStyle = "#FFFFFF";
-    context.font = "12px MedievalSharp-Regular";
-    context.fillText("A Fantasy Realm Escape", CANVAS_WIDTH / 2, 72);
+    context.font = `12px ${FontName.MedievalSharp}`;
+    context.fillText("A Fantasy Real Escape", CANVAS_WIDTH / 2, 72);
 
     // Menu options
     this.menuOptions.forEach((option, index) => {
@@ -98,18 +104,18 @@ export default class TitleScreenState extends State {
         context.fillRect(CANVAS_WIDTH / 2 - 60, y - 14, 120, 24);
 
         context.fillStyle = "#FFD700";
-        context.font = "14px MedievalSharp-Regular";
+        context.font = `14px ${FontName.MedievalSharp}`;
         context.fillText("▶ " + option, CANVAS_WIDTH / 2, y);
       } else {
         context.fillStyle = "#CCCCCC";
-        context.font = "14px MedievalSharp-Regular";
+        context.font = `14px ${FontName.MedievalSharp}`;
         context.fillText(option, CANVAS_WIDTH / 2, y);
       }
     });
 
     // bottom
     context.fillStyle = "#888888";
-    context.font = "10px MedievalSharp-Regular";
+    context.font = `10px ${FontName.MedievalSharp}`;
     context.fillText(
       "Use ↑↓ to select, Enter to confirm",
       CANVAS_WIDTH / 2,

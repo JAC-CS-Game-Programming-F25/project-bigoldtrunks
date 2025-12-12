@@ -22,11 +22,12 @@ export default class Player extends GameEntity {
   static PLAYER_SWORD_SPRITE_HEIGHT = 32;
   static PLAYER_SWORD_SPRITE_WIDTH = 32;
   static PLAYER_SPEED = 60;
+  static MAX_HEALTH = 6;
 
   constructor() {
     super({
       speed: Player.PLAYER_SPEED,
-      health: 5,
+      health: Player.MAX_HEALTH,
     });
 
     this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(

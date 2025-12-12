@@ -131,9 +131,9 @@
       "path": "./assets/fonts/MedievalSharp-Regular.ttf"        
     },
     {
-      "name": "UncialAntiqua-Regular",
-      "path": "./assets/fonts/UncialAntiqua-Regular.ttf"        
-    }        
+      "name": "Zelda",
+      "path": "./assets/fonts/Zelda.otf"        
+    }          
   ],
   "sounds": [
     {

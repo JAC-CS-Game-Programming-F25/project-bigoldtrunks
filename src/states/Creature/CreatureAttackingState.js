@@ -3,6 +3,7 @@ import Direction from "../../enums/Direction.js";
 import CreatureStateName from "../../enums/CreatureStateName.js";
 import { sounds } from "../../globals.js";
 import SoundName from "../../enums/SoundName.js";
+
 export default class CreatureAttackingState extends State {
   static ATTACK_DURATION = 0.5;
 
