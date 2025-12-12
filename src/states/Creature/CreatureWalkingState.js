@@ -7,7 +7,6 @@ import { timer } from "../../globals.js";
 export default class CreatureWalkingState extends State {
   static WALK_DURATION_MIN = 3;
   static WALK_DURATION_MAX = 6;
-  static DETECTION_RADIUS = 80; // Distance to start chasing player
 
   constructor(creature, animations) {
     super();
@@ -33,11 +32,6 @@ export default class CreatureWalkingState extends State {
   }
 
   update(dt) {
-    // check player distance
-    if (this.shouldChasePlayer()) {
-      this.creature.changeState(CreatureStateName.Chasing);
-      return;
-    }
     // Move
     if (this.creature.direction === Direction.Left) {
       this.creature.position.x -= this.creature.speed * dt;
@@ -52,18 +46,6 @@ export default class CreatureWalkingState extends State {
       this.creature.dimensions.x + this.creature.hitboxOffsets.dimensions.x,
       this.creature.dimensions.y + this.creature.hitboxOffsets.dimensions.y
     );
-  }
-  shouldChasePlayer() {
-    if (!this.creature.canChase) return false;
-
-    const player = this.creature.player;
-    if (!player) return false;
-
-    const dx = player.position.x - this.creature.position.x;
-    const dy = player.position.y - this.creature.position.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    return distance < CreatureWalkingState.DETECTION_RADIUS; // start chaseing less than 80
   }
 
   async startTimer() {

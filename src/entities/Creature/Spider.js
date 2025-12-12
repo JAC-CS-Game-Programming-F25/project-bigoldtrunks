@@ -7,7 +7,6 @@ import Direction from "../../enums/Direction.js";
 import StateMachine from "../../../lib/StateMachine.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
-import ImageName from "../../enums/ImageName.js";
 
 export default class Spider extends Creature {
   static SPEED = 15;
@@ -18,7 +17,6 @@ export default class Spider extends Creature {
       position,
       speed: Spider.SPEED,
       health: Spider.HEALTH,
-      isContactDamage: true,
     });
     this.hitboxOffsets.set(0, 6, -2, -8); // shrink hitbox
     this.loadSprites();
@@ -28,7 +26,7 @@ export default class Spider extends Creature {
 
   loadSprites() {
     this.sprites = Sprite.generateSpritesFromSpriteSheet(
-      images.get(ImageName.Spider),
+      images.get("spider-spritesheet"),
       16,
       16
     );

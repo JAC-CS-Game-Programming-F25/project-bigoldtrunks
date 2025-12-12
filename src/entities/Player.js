@@ -15,15 +15,10 @@ import AbilityType from "../enums/AbilityType.js";
 import PlayerPerformingFrozenBlastState from "../states/player/PlayerPerformingFrozenBlast.js";
 
 export default class Player extends GameEntity {
-  // the player frame has width and height of 16 pixels, apply to all movements idle/walk
-  static PLAYER_SPRITE_WIDTH = 16;
-  static PLAYER_SPRITE_HEIGHT = 16;
 
-  // the player sword swinging frame has width and height of 32 pixels
-  static PLAYER_SWORD_SPRITE_HEIGHT = 32;
-  static PLAYER_SWORD_SPRITE_WIDTH = 32;
-  static PLAYER_SPEED = 60;
-  static MAX_HEALTH = 6;
+    // the player frame has width and height of 16 pixels, apply to all movements idle/walk
+    static PLAYER_SPRITE_WIDTH = 16;
+	static PLAYER_SPRITE_HEIGHT = 16;
 
     // the player sword swinging frame has width and height of 32 pixels
     static PLAYER_SWORD_SPRITE_HEIGHT = 32;
@@ -94,17 +89,19 @@ export default class Player extends GameEntity {
     render(){
         context.save();
 
-    context.restore();
-    if (DEBUG) {
-      this.swordHitbox.render(context);
+        super.render(); // need to pass offset
+
+        context.restore();
+        if(DEBUG){
+            this.swordHitbox.render(context);
+        }
     }
-  }
-  /**
-   * Initializes the state machine for the player.
-   * @returns {StateMachine} the initialized state machine
-   */
-  initializeStateMachine() {
-    const stateMachine = new StateMachine();
+    /**
+     * Initializes the state machine for the player.
+     * @returns {StateMachine} the initialized state machine
+     */
+    initializeStateMachine() {
+        const stateMachine = new StateMachine();
 
         stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
         stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this));
@@ -113,29 +110,51 @@ export default class Player extends GameEntity {
         stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
         stateMachine.change(PlayerStateName.Idle);
 
-    return stateMachine;
-  }
-  /**
-   *
-   * Handles the player taking damage, player loses a amount of health, if health < 0, player become dead.
-   * @param {*} damage damage from the creature
-   * @returns
-   */
-  onTakingDamage(damage) {
-    if (this.isInVulnerable) {
-      return;
+        return stateMachine;
     }
-    this.health -= damage;
+    /**
+     *     
+     * Handles the player taking damage, player loses a amount of health, if health < 0, player become dead.
+     * @param {*} damage damage from the creature 
+     * @returns 
+     */
+    onTakingDamage(damage) {
+        if (this.isInVulnerable) {
+            return;
+        }
+        if (this.health < 0) {
+            this.isDead = true;
+            return;
+        }
+        // Handle taking damage logic here (e.g., reduce health)
+        console.log("Player took damage!, current health:", this.health);
+        
+        this.health-= damage;
+    }
+    /**
+     *    * Handles the player unlocking a new ability, such as Fire Flame or Frozen Flame.
+     * add new state to the state machine when ability is unlocked 
+     * @param {AbilityType} type The type of ability the player has gained.
+     */
+    // unlockAbility(type){
+    //     // Mark the ability as unlocked
+    //     this.abilityUnlocked[type] = true;
+    //     if(type === AbilityType.FireFlame){
+    //         console.log("Player gained Fire Flame ability!");
+    //         this.stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region));
+    //     } else if (type === AbilityType.FrozenFlame){
+    //         // Future implementation for Frozen Flame ability
+    //         console.log("Player gained Frozen Flame ability!");
+    //     }
+    // }
+    /**
+     * Checks if the player has unlocked the Fire Flame ability.
+     * @returns {boolean} true if player has unlocked Fire Flame ability
+     */
+    isUnlockedFireFlameAbility(){
+        return this.abilityUnlocked[AbilityType.FireFlame];
+    }
 
-    if (this.health < 0) {
-      this.isDead = true;
-      return;
-    }
-    // Handle taking damage logic here (e.g., reduce health)
-    console.log("Player took damage!, current health:", this.health);
-    this.isInVulnerable = true;
-    setTimeout(() => {
-      this.isInVulnerable = false;
-    }, 1000);
-  }
+    
+    
 }
