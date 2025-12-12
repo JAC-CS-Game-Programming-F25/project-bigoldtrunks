@@ -14,9 +14,9 @@
     },
     {
       "name": "tree_size_02",
-      "path": "./assets/images/Tiles/Trees/Model_01/tree_size_02.png",
-      "width": 368,
-      "height": 256
+      "path": "./assets/images/Tiles/Trees/Model_02/Size_02.png",
+      "width": 128,
+      "height": 96
     },   
     {
       "name": "tree_size_04",
@@ -131,28 +131,31 @@
       "path": "./assets/fonts/MedievalSharp-Regular.ttf"        
     },
     {
-      "name": "UncialAntiqua-Regular",
-      "path": "./assets/fonts/UncialAntiqua-Regular.ttf"        
-    }        
+      "name": "Zelda",
+      "path": "./assets/fonts/Zelda.otf"        
+    }          
   ],
   "sounds": [
     {
         "name": "title",
         "path": "./assets/sounds/music/title.mp3",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3
     },
     {
         "name": "summer",
         "path": "./assets/sounds/music/summer.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.2,
+        "loop": true
     },
     {
         "name": "winter",
         "path": "./assets/sounds/music/winter.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3,
+        "loop": true
+
     },
     {
         "name": "victory",
@@ -224,13 +227,13 @@
         "name": "hits",
         "path": "./assets/sounds/effects/hits.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.4
     },
     {
         "name": "hurt",
         "path": "./assets/sounds/effects/hurt.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3
     },
     {
         "name": "key-pickup",
@@ -241,6 +244,12 @@
     {
         "name": "sword",
         "path": "./assets/sounds/effects/sword.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "select",
+        "path": "./assets/sounds/effects/select.wav",
         "size": 1,
         "volume": 0.2
     }
