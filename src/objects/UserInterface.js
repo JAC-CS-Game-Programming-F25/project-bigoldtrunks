@@ -10,7 +10,7 @@ export default class UserInterface {
   }
   renderHealth() {
     context.fillStyle = "#FF0000";
-    context.font = `12px ${FontName.MedievalSharp}`;
+    context.font = `6px ${FontName.MedievalSharp}`;
     context.textAlign = "left";
 
     // use heart to represent health
