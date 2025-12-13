@@ -68,8 +68,9 @@ stateMachine.add(
 stateMachine.add(GameStateName.Transition, new TransitionState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
 
-// stateMachine.change(GameStateName.TitleScreen);
-stateMachine.change(GameStateName.Play, { isWinter: true });
+stateMachine.change(GameStateName.TitleScreen);
+// stateMachine.change(GameStateName.Play, { isWinter: true });
+
 
 const game = new Game(
   stateMachine,

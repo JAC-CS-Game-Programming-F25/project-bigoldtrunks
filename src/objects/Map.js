@@ -16,6 +16,7 @@ export default class Map {
 
     // bottom
     const floorImage = images.get(ImageName.Summer);
+    console.log("Floor image:", floorImage);
     const sprites = Sprite.generateSpritesFromSpriteSheet(
       floorImage,
       Tile.SIZE,
@@ -23,6 +24,8 @@ export default class Map {
     );
 
     const decorationImage = images.get(ImageName.Tree);
+    console.log("Decoration image:", decorationImage);
+    console.log("Decoration image canvas:", decorationImage?.canvas);
     const spritesDecoration = Sprite.generateSpritesFromSpriteSheet(
       decorationImage,
       Tile.SIZE,

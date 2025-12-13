@@ -87,6 +87,7 @@ export default class TitleScreenState extends State {
         stateMachine.change(GameStateName.Transition, {
           fromState: this,
           toState: stateMachine.states[GameStateName.Play],
+          toStateEnterParameters: { isWinter: true }, // change season
         });
       } else if (this.selectedIndex === 1) {
         this.showInstructions = true;
