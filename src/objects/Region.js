@@ -24,7 +24,7 @@ export default class Region {
 
         this.player = new Player(this); // Pass the region instance to the player
         /**
-         * Items present in the region (e.g., crystals, fire torch, etc.)
+         * Items present in the region (e.g., crystals, fire torch, Key etc.)
          */
         this.items = [];
 
@@ -170,19 +170,25 @@ export default class Region {
   }
   /**
    * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key)
-   * Performs onConsume on the item, and unlockAbility on the player
+   * Performs onConsume on the item, and onCollectItem on the player
    * @param {Player} player 
    */
-  checkCollisionWithItem(player) {
-    this.items.forEach((item, index) => {
-      if (player.didCollideWithEntity(item.hitbox)) {
-        item.onConsume(player);
-        player.unlockAbility(item);
-        // Remove item from region after consumption
-        this.items.splice(index, 1);
-      }
-    });
-  }
+    checkCollisionWithItem(player) {
+        this.items.forEach((item, index) => {
+            if (player.didCollideWithEntity(item.hitbox)) {
+                if(item instanceof Crystal || item instanceof FireTorch){
+                    item.onConsume();
+                    player.onCollectItem(item);
+                    // Remove item from region after consumption
+                    this.items.splice(index, 1);
+                } else if(item instanceof Key){
+                    item.onConsume();
+                    player.onCollectItem(item);
+                    this.items.splice(index, 1);
+                }
+            }
+        });
+    }
   /**
    * Checks if the player can move to a given position without colliding with collision tiles
    * @param {number} x - Pixel X position
