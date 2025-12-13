@@ -15,11 +15,11 @@ export default class PlayState extends State {
   enter() {
     sounds.play(SoundName.Summer);
     const summerCreatures = [
-      // {
-      //   type: CreatureType.Spider,
-      //   count: getRandomPositiveInteger(3, 5),
-      // },
-      // { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
+      {
+        type: CreatureType.Spider,
+        count: getRandomPositiveInteger(3, 5),
+      },
+      { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
       { type: CreatureType.BigBoss, count: 1 },
     ];
 
