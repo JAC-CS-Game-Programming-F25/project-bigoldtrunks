@@ -47,6 +47,11 @@ const mapDefinition = await fetch("./config/summer-map.json").then((response) =>
   response.json()
 );
 
+// Fetch winter map
+const winterMapDefinition = await fetch("./config/winter-map.json").then(
+  (response) => response.json()
+);
+
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
 fonts.load(fontDefinitions);
