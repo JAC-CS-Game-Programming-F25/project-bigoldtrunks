@@ -63,7 +63,9 @@ export default class CreatureWalkingState extends State {
     const dy = player.position.y - this.creature.position.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    return distance < CreatureWalkingState.DETECTION_RADIUS; // start chaseing less than 80
+    const detectionRadius =
+      this.creature.detectionRadius || CreatureWalkingState.DETECTION_RADIUS;
+    return distance < detectionRadius; // start chaseing less than 80
   }
 
   async startTimer() {

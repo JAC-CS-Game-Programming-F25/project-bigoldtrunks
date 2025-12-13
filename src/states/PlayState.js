@@ -4,6 +4,8 @@ import { getRandomPositiveInteger } from "../../lib/Random.js";
 import { sounds, stateMachine } from "../globals.js";
 import SoundName from "../enums/SoundName.js";
 import GameStateName from "../enums/GameStateName.js";
+import Vector from "../../lib/Vector.js";
+import CreatureType from "../enums/CreatureType.js";
 
 export default class PlayState extends State {
   constructor(mapDefinition) {
@@ -14,24 +16,28 @@ export default class PlayState extends State {
     sounds.play(SoundName.Summer);
     const summerCreatures = [
       {
-        type: "spider",
+        type: CreatureType.Spider,
         count: getRandomPositiveInteger(3, 5),
       },
-      { type: "skeleton", count: getRandomPositiveInteger(2, 3) },
+      { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
+      { type: CreatureType.BigBoss, count: 1 },
     ];
 
     this.region = new Region(this.mapDefinition, summerCreatures);
   }
   update(dt) {
     this.region.update(dt);
-    
+
     // Check if player is dead and ready to transition to game over
-    if (this.region.player.isDead && this.region.player.canTransitionToGameOver && this.region.player.lives < 0) {
-      
-          stateMachine.change(GameStateName.Transition, {
-          fromState: this,
-          toState: stateMachine.states[GameStateName.GameOver],
-        });
+    if (
+      this.region.player.isDead &&
+      this.region.player.canTransitionToGameOver &&
+      this.region.player.lives < 0
+    ) {
+      stateMachine.change(GameStateName.Transition, {
+        fromState: this,
+        toState: stateMachine.states[GameStateName.GameOver],
+      });
     }
   }
   render() {

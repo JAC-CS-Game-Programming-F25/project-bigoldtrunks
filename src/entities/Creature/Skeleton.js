@@ -15,16 +15,17 @@ import Hitbox from "../../../lib/Hitbox.js";
 import ImageName from "../../enums/ImageName.js";
 
 export default class Skeleton extends Creature {
+  static WIDTH = 64;
+  static HEIGHT = 64;
   static SPEED = 20;
   static HEALTH = 180;
-
   constructor(position) {
     super({
       position,
       speed: Skeleton.SPEED,
       health: Skeleton.HEALTH,
       canChase: true, // only Skeleton can chase
-      dimensions: new Vector(64, 64),
+      dimensions: new Vector(Skeleton.WIDTH, Skeleton.HEIGHT),
     });
     this.hitboxOffsets.set(24, 48, -48, -55); // Position hitbox at feet
 

@@ -127,7 +127,20 @@
       "path": "./assets/images/item/crystal/crystal_item.png",
       "width": 96,
       "height": 16
-    }
+    },
+    {
+      "name": "big-boss-right",
+      "path": "./assets/images/creatures/bigboss/big-boss-right.png",
+      "width": 1408,
+      "height": 1152
+    },
+    {
+      "name": "big-boss-left",
+      "path": "./assets/images/creatures/bigboss/big-boss-left.png",
+      "width": 1408,
+      "height": 1152
+    }   
+
   ],
   "fonts": [
     {
