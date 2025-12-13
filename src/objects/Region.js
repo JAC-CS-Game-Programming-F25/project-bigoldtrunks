@@ -163,6 +163,11 @@ export default class Region {
   isGameOver() {
     return this.player.isDead && this.player.lives < 0;
   }
+  /**
+   * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key)
+   * Performs onConsume on the item, and unlockAbility on the player
+   * @param {Player} player 
+   */
   checkCollisionWithItem(player) {
     this.items.forEach((item, index) => {
       if (player.didCollideWithEntity(item.hitbox)) {
