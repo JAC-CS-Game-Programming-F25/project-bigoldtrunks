@@ -103,6 +103,11 @@ export default class Region {
   /**
    * Update all entities in the region,
    * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
+   * Check collisions between creatures and objects (FireFlame, etc.)
+   * Check collision between creatures and environment
+   * Check collisions between player and creatures
+   * Check collisions between player and items
+   * Check collisions between player and objects
    * @param {*} dt
    */
 
