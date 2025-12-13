@@ -16,7 +16,8 @@ export default class Crystal extends GameObject {
             {x: Crystal.WIDTH, y: Crystal.HEIGHT},
             position
         );
-       
+        this.name="Crystal"; // For identification purposes when debugging
+
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Crystal),
             Crystal.WIDTH,

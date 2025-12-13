@@ -16,7 +16,7 @@ export default class FireTorch extends GameObject {
             {x: FireTorch.WIDTH, y: FireTorch.HEIGHT},
             position
         );
-       
+        this.name="FireTorch"; // For identification purposes when debugging
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.FireTorch),
             FireTorch.WIDTH,
