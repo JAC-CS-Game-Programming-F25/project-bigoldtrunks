@@ -60,6 +60,11 @@ export default class PlayerIdlingState extends State {
         // Only allow FireFlame when facing Left or Right (no sprites for Up/Down)
         if (input.isKeyHeld(Input.KEYS.J) && 
             (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
+                if(this.player.abilityUnlocked[AbilityType.FireFlame]) {
+                console.log("J pressed - FireFlame allowed");
+            }                                                                                                                                                                                 
+            console.log("FireFlame ability is not unlocked");
+            return;
             this.player.changeState(PlayerStateName.PerformingFireFlame);
         }
     }

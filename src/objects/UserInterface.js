@@ -33,8 +33,14 @@ export default class UserInterface {
           context.textAlign = "right";
           context.font = `15px ${FontName.MedievalSharp}`;
 
-          context.fillText("❄️", CANVAS_WIDTH - 10, 15);
+          context.fillText("❄️", CANVAS_WIDTH - 10, 17);
 
+    } 
+    if (this.player.abilityUnlocked[AbilityType.FireFlame]) {
+          context.textAlign = "right";
+          context.font = `15px ${FontName.MedievalSharp}`;
+
+          context.fillText("🔥", CANVAS_WIDTH - 10, 40);
     }
   }
 }
