@@ -135,7 +135,6 @@ export default class Creature extends GameEntity {
           console.log(`FireTorch created at death position: (${deathPosition.x}, ${deathPosition.y})`);
         }
       }
-    }
   }
 
   update(dt) {

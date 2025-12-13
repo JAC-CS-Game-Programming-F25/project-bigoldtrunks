@@ -133,7 +133,8 @@
       "path": "./assets/images/item/fire-torch/fire-torch.png",
       "width": 80,
       "height": 16
-    }
+    },
+    {
       "name": "big-boss-right",
       "path": "./assets/images/creatures/bigboss/big-boss-right.png",
       "width": 1408,
