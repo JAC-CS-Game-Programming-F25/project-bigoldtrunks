@@ -370,9 +370,7 @@ export default class Region {
   }
   /**
    * Decide which creature will keep the item by randomly selecting one from the list
-   * if we decide specific item to be kept, pass specificCreatureIndex or leave null for random,
-   * Probably Modify later for Warden to keep the key item
-   * if creature is BigBoss, assign the Key to it
+   * If the creature is BigBoss, assign the Key to it, otherwise assign the provided item to a random creature
    * @param {[Creature]} creatures list of all creature
    * @param {ItemType} itemType type of item to be kept
    * @param {number|null} specificCreatureIndex
@@ -386,17 +384,21 @@ export default class Region {
     creatures.forEach((creature) => {
       if (creature instanceof BigBoss) {
         creature.keepItem(ItemType.Key);
-      }
-    });
-    const randomIndex =
-      specificCreatureIndex !== null
-        ? specificCreatureIndex
-        : getRandomPositiveInteger(0, creatures.length - 1);
+        console.log(`BigBoss will keep item of type Key ${ItemType.Key}`);
 
-    creatures[randomIndex].keepItem(itemType);
-    console.log(
-      `Creature at index ${randomIndex} will keep item of type ${itemType}`
-    );
+      } else{
+            // Randomly select a creature to keep the item
+          const randomIndex =
+          specificCreatureIndex !== null
+          ? specificCreatureIndex
+          : getRandomPositiveInteger(0, creatures.length - 1);
+
+        creatures[randomIndex].keepItem(itemType);
+        console.log(
+          `Creature at index ${randomIndex} will keep item of type ${itemType}`
+        );
+      }
+    }); 
   }
 
   isPositionOccupied(position, existingCreatures) {

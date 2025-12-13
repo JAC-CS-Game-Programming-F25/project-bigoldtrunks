@@ -27,7 +27,7 @@ export default class BigBoss extends Creature {
   static WIDTH = 128;
   static HEIGHT = 128;
   static SPEED = 25;
-  static HEALTH = 500;
+  static HEALTH = 200;
   /**
    * Creates a new BigBoss at the specified position.
    * @param {Vector} position - Initial spawn position.
