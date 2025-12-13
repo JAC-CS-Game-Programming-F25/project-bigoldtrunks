@@ -198,7 +198,7 @@ export default class BigBoss extends Creature {
     if (this.health <= 0) {
       sounds.play(SoundName.BigBossDead);
       this.spawnItemIfKeep();
-      this.playDeathEffect();
+      // this.playDeathEffect();
       console.log("BigBoss is dead!");
       return;
     }
@@ -217,43 +217,43 @@ export default class BigBoss extends Creature {
    * 
    * Plays epic death effect: screen flash + shake, then transitions to Victory.
    */
-  playDeathEffect() {
-    const canvas = document.querySelector("canvas");
-    const playState = stateMachine.states[GameStateName.Play];
+  // playDeathEffect() {
+  //   const canvas = document.querySelector("canvas");
+  //   const playState = stateMachine.states[GameStateName.Play];
 
-    if (this.player?.region) {
-      this.player.region.isGameOver = true;
-    }
+  //   if (this.player?.region) {
+  //     this.player.region.isGameOver = true;
+  //   }
 
-    // First flash white
-    canvas.style.filter = "brightness(2.5)";
+  //   // First flash white
+  //   canvas.style.filter = "brightness(2.5)";
 
-    setTimeout(() => {
-      // then flash dark
-      canvas.style.filter = "brightness(0.3)";
+  //   setTimeout(() => {
+  //     // then flash dark
+  //     canvas.style.filter = "brightness(0.3)";
 
-      // Screen shake
-      let shakes = 0;
-      const interval = setInterval(() => {
-        canvas.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${
-          (Math.random() - 0.5) * 6
-        }px)`;
-        shakes++;
+  //     // Screen shake
+  //     let shakes = 0;
+  //     const interval = setInterval(() => {
+  //       canvas.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${
+  //         (Math.random() - 0.5) * 6
+  //       }px)`;
+  //       shakes++;
 
-        if (shakes >= 12) {
-          clearInterval(interval);
-          canvas.style.transform = "";
-          canvas.style.filter = ""; // reset filter
-          this.isDead = true;
+  //       if (shakes >= 12) {
+  //         clearInterval(interval);
+  //         canvas.style.transform = "";
+  //         canvas.style.filter = ""; // reset filter
+  //         this.isDead = true;
 
-          setTimeout(() => {
-            stateMachine.change(GameStateName.Transition, {
-              fromState: playState,
-              toState: stateMachine.states[GameStateName.Victory],
-            });
-          }, 300);
-        }
-      }, 50);
-    }, 200);
-  }
+  //         setTimeout(() => {
+  //           stateMachine.change(GameStateName.Transition, {
+  //             fromState: playState,
+  //             toState: stateMachine.states[GameStateName.Victory],
+  //           });
+  //         }, 300);
+  //       }
+  //     }, 50);
+  //   }, 200);
+  // }
 }
