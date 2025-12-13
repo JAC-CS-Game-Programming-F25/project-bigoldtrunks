@@ -13,14 +13,15 @@ import ItemType from "../enums/ItemType.js";
 import FireTorch from "./FireTorch.js";
 import CreatureType from "../enums/CreatureType.js";
 import Key from "./Key.js";
+import BigBoss from "../entities/Creature/BigBoss.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
     this.creatures = this.spawnCreatures(creatureConfig);
 
         // Once we have the creature now we decide which one will keep the item
-        this.assignWhichCreatureKeepItem(this.creatures, ItemType.Crystal);
-        this.assignWhichCreatureKeepItem(this.creatures, ItemType.FireTorch);
+        this.assignItemToCreature(this.creatures, ItemType.Crystal);
+        this.assignItemToCreature(this.creatures, ItemType.FireTorch);
 
         this.player = new Player(this); // Pass the region instance to the player
         /**
@@ -371,15 +372,22 @@ export default class Region {
    * Decide which creature will keep the item by randomly selecting one from the list
    * if we decide specific item to be kept, pass specificCreatureIndex or leave null for random,
    * Probably Modify later for Warden to keep the key item
+   * if creature is BigBoss, assign the Key to it
    * @param {[Creature]} creatures list of all creature
    * @param {ItemType} itemType type of item to be kept
    * @param {number|null} specificCreatureIndex
    */
-  assignWhichCreatureKeepItem(
+  assignItemToCreature(
     creatures,
     itemType,
     specificCreatureIndex = null
   ) {
+
+    creatures.forEach((creature) => {
+      if (creature instanceof BigBoss) {
+        creature.keepItem(ItemType.Key);
+      }
+    });
     const randomIndex =
       specificCreatureIndex !== null
         ? specificCreatureIndex
