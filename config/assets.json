@@ -127,7 +127,14 @@
       "path": "./assets/images/item/crystal/crystal_item.png",
       "width": 96,
       "height": 16
+    },
+    {
+      "name": "fire-torch-item",
+      "path": "./assets/images/item/fire-torch/fire-torch.png",
+      "width": 80,
+      "height": 16
     }
+
   ],
   "fonts": [
     {

@@ -13,6 +13,7 @@ import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
 import Crystal from "./Crystal.js";
 import ItemType from "../enums/ItemType.js";
+import FireTorch from "./FireTorch.js";
 export default class Region {
     constructor(mapDefinition, creatureConfig = []) {        
         this.map = new Map(mapDefinition);
@@ -27,6 +28,7 @@ export default class Region {
          */
         this.items = [];
         this.items.push(new Crystal(new Vector(150, 100)));
+        this.items.push(new FireTorch(new Vector(150, 150)));
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;
