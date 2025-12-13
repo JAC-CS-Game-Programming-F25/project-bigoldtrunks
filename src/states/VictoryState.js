@@ -2,6 +2,7 @@ import State from "../../lib/State.js";
 import { input } from "../globals.js";
 import Input from "../../lib/Input.js";
 
+
 export default class VictoryState extends State {
   constructor() {
     super();
@@ -16,5 +17,5 @@ export default class VictoryState extends State {
         toState: stateMachine.states[GameStateName.TitleScreen],
       });
     }
-  }  
+  }
 }
