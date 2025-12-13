@@ -167,7 +167,7 @@ export default class Region {
   /**
    * Update all entities in the region,
    * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
-   * Check collisions between creatures and objects (FireFlame, etc.)
+   * Check collisions between creatures and objects (FireFlame, FrozenBlast, SwordHitbox etc.)
    * Check collision between creatures and environment
    * Check collisions between player and creatures
    * Check collisions between player and items
@@ -190,7 +190,7 @@ export default class Region {
         // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
         this.checkCollisionWithObjects(entity);
 
-        // sword hit detection on the creature
+        // Creature deal with player's sword hit or ability hit
         if (
           !entity.isHurt &&
           entity.didCollideWithEntity(this.player.swordHitbox)
@@ -199,16 +199,12 @@ export default class Region {
           entity.onTakingHit(this.player.damage);
         }
 
-        // contact damage
-        if (
-          !entity.isDead &&
-          !this.player.isInVulnerable &&
-          entity.isContactDamage &&
-          this.player.hitbox &&
-          entity.hitbox.didCollide(this.player.hitbox)
-        ) {
+        // Player deal with creatures' attack (hitbox, sword, attack)
+        if ( this.isEntityReadyToTakeDamage(entity)){
           this.player.onTakingDamage(entity.damage);
         }
+        
+        // Specific logic for Player entity
       } else if (entity instanceof Player) {
         // Player specific update logic can go here
         this.checkCollisionWithItem(entity);
@@ -228,7 +224,26 @@ export default class Region {
       });
     }
   }
-
+  /**
+   * Check if the entity is ready to take damage from the player.
+   * - Not dead
+   * - Player is not invulnerable
+   * - Entity has contact damage
+   * - Player's hitbox collides with entity's hitbox
+   * @param {*} entity 
+   * @returns {boolean} true if entity can take damage
+   */
+  isEntityReadyToTakeDamage(entity) {
+    return !entity.isDead &&
+          !this.player.isInVulnerable &&
+          entity.isContactDamage &&
+          this.player.hitbox &&
+          entity.hitbox.didCollide(this.player.hitbox)
+  }
+  /**
+   * Check if the game is over.
+   * @returns {boolean} true if game over conditions met
+   */
   isGameOver() {
     return this.player.isDead && this.player.lives < 0;
   }
