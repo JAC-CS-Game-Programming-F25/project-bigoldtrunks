@@ -13,8 +13,22 @@ import Input from "../../lib/Input.js";
 import SoundName from "../enums/SoundName.js";
 import ImageName from "../enums/ImageName.js";
 import FontName from "../enums/FontName.js";
-
+/**
+ * TitleScreenState - Main menu screen for MystiaJungle.
+ *
+ * Displays the game title, menu options (Start Game / Instructions),
+ * and an optional instructions overlay. Plays title music while active.
+ *
+ * Controls:
+ *   - W/↑, S/↓ - Navigate menu
+ *   - Enter - Confirm selection
+ *   - Enter/Escape - Close instructions panel
+ */
 export default class TitleScreenState extends State {
+  /**
+   * Creates a new TitleScreenState instance.
+   * Initializes menu options and selection state.
+   */
   constructor() {
     super();
     this.menuOptions = ["Start Game", "Instructions"];
@@ -29,7 +43,10 @@ export default class TitleScreenState extends State {
   exit() {
     sounds.stop(SoundName.Title);
   }
-
+  /**
+   * Handles menu navigation and selection.
+   * @param {number} dt - Delta time since last frame.
+   */
   update(dt) {
     // if Instructions，any key close
     if (this.showInstructions) {
@@ -76,7 +93,9 @@ export default class TitleScreenState extends State {
       }
     }
   }
-
+  /**
+   * Renders the title screen with background, title, and menu.
+   */
   render() {
     // background
     images.render(ImageName.Title, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -126,7 +145,9 @@ export default class TitleScreenState extends State {
       this.renderInstructions();
     }
   }
-
+  /**
+   * Renders the instructions overlay panel.
+   */
   renderInstructions() {
     // Translucent background
     context.fillStyle = "rgba(0, 0, 0, 0.85)";
@@ -134,7 +155,7 @@ export default class TitleScreenState extends State {
 
     // Title
     context.fillStyle = "#FFD700";
-    context.font = "18px Cinzel-Bold";
+    context.font = `18px ${FontName.CinzelBold}`;
     context.textAlign = "center";
     context.fillText("Instructions", CANVAS_WIDTH / 2, 35);
 
@@ -153,14 +174,14 @@ export default class TitleScreenState extends State {
     ];
 
     context.fillStyle = "#FFFFFF";
-    context.font = "11px MedievalSharp-Regular";
+    context.font = `11px ${FontName.MedievalSharp}`;
     instructions.forEach((line, index) => {
       context.fillText(line, CANVAS_WIDTH / 2, 60 + index * 14);
     });
 
-    // close
+    // Close hint
     context.fillStyle = "#888888";
-    context.font = "10px MedievalSharp-Regular";
+    context.font = `10px ${FontName.MedievalSharp}`;
     context.fillText(
       "Press Enter or Escape to close",
       CANVAS_WIDTH / 2,

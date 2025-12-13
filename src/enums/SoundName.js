@@ -15,6 +15,7 @@ const SoundName = {
   EnemyDead: "enemy-dead",
   EnemyHurt: "hurt",
   Hit: "hits",
+  BigBossDead: "boss-dead",
 };
 
 export default SoundName;

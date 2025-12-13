@@ -3,18 +3,33 @@ import CreatureStateName from "../../enums/CreatureStateName.js";
 import { getRandomPositiveInteger } from "../../../lib/Random.js";
 import Direction from "../../enums/Direction.js";
 import { timer } from "../../globals.js";
-
+/**
+ * CreatureWalkingState - Creature patrols horizontally for a random duration.
+ *
+ * Moves left or right at base speed. If a player enters detection range,
+ * transitions to Chasing. Otherwise, returns to Idle after walk duration.
+ *
+ * Flow: Enter → Walk (detect player?) → Chasing or Idle
+ */
 export default class CreatureWalkingState extends State {
   static WALK_DURATION_MIN = 3;
   static WALK_DURATION_MAX = 6;
   static DETECTION_RADIUS = 80; // Distance to start chasing player
-
+  /**
+   * Creates a new CreatureWalkingState.
+   * @param {Creature} creature - The creature that is walking.
+   * @param {Object} animations - Direction-keyed animation map.
+   */
   constructor(creature, animations) {
     super();
     this.creature = creature;
     this.animations = animations;
   }
-
+  /**
+   * Sets walk direction (from params or random) and starts walk timer.
+   * @param {Object} [params] - Optional parameters.
+   * @param {Direction} [params.direction] - Forced walk direction.
+   */
   enter(params) {
     if (params && params.direction !== undefined) {
       this.creature.direction = params.direction;
@@ -32,6 +47,10 @@ export default class CreatureWalkingState extends State {
     this.startTimer();
   }
 
+  /**
+   * Moves creature horizontally, checks for player detection.
+   * @param {number} dt - Delta time since last frame.
+   */
   update(dt) {
     // check player distance
     if (this.shouldChasePlayer()) {
@@ -53,6 +72,11 @@ export default class CreatureWalkingState extends State {
       this.creature.dimensions.y + this.creature.hitboxOffsets.dimensions.y
     );
   }
+
+  /**
+   * Checks if player is within detection range and creature can chase.
+   * @returns {boolean} True if creature should start chasing.
+   */
   shouldChasePlayer() {
     if (!this.creature.canChase) return false;
 
@@ -63,9 +87,14 @@ export default class CreatureWalkingState extends State {
     const dy = player.position.y - this.creature.position.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
-    return distance < CreatureWalkingState.DETECTION_RADIUS; // start chaseing less than 80
+    const detectionRadius =
+      this.creature.detectionRadius || CreatureWalkingState.DETECTION_RADIUS;
+    return distance < detectionRadius; // start chaseing less than 80
   }
 
+  /**
+   * Waits for walk duration then transitions to Idle state.
+   */
   async startTimer() {
     await timer.wait(this.walkDuration);
     this.creature.changeState(CreatureStateName.Idle);

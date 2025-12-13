@@ -58,6 +58,7 @@ stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
 stateMachine.add(GameStateName.Play, new PlayState(mapDefinition));
 stateMachine.add(GameStateName.Transition, new TransitionState());
+stateMachine.add(GameStateName.Victory, new VictoryState());
 
 // stateMachine.change(GameStateName.TitleScreen);
 stateMachine.change(GameStateName.Play);

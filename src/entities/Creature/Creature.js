@@ -36,8 +36,8 @@ export default class Creature extends GameEntity {
   }
 
   /**
-   * Keep an item when the creature is dead, this is decided by the region through function assignItemToCreature 
-   * @param {ItemType} itemType 
+   * Keep an item when the creature is dead, this is decided by the region through function assignItemToCreature
+   * @param {ItemType} itemType
    */
   keepItem(itemType) {
     // Store which type of item to drop, create later upon death
@@ -45,7 +45,7 @@ export default class Creature extends GameEntity {
     this.itemTypeToKeep = itemType;
   }
 
-  receiveDamage(damage) { 
+  receiveDamage(damage) {
     this.health -= damage;
     // play sound
     sounds.play(SoundName.EnemyHurt);
@@ -121,7 +121,7 @@ export default class Creature extends GameEntity {
   /**
    * Spawn the item that the creature is keeping at its death position
    */
-  spawnItemIfKeep(){
+  spawnItemIfKeep() {
     // Create the item at the creature's current death position
       if (this.itemTypeToKeep) {
         // Create a NEW Vector with current position values (not a reference)
@@ -135,6 +135,7 @@ export default class Creature extends GameEntity {
           console.log(`FireTorch created at death position: (${deathPosition.x}, ${deathPosition.y})`);
         }
       }
+    }
   }
 
   update(dt) {
@@ -143,7 +144,7 @@ export default class Creature extends GameEntity {
       this.stateMachine.update(dt);
     }
   }
-  
+
   render(offset = { x: 0, y: 0 }) {
     super.render(offset);
   }

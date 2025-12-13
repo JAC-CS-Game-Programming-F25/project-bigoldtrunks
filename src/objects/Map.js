@@ -2,10 +2,13 @@ import Layer from "./Layer.js";
 import Sprite from "../../lib/Sprite.js";
 import Tile from "./Tile.js";
 import Hitbox from "../../lib/Hitbox.js";
-
-import { CANVAS_HEIGHT, CANVAS_WIDTH, context, images } from "../globals.js";
+import { images } from "../globals.js";
 import ImageName from "../enums/ImageName.js";
 export default class Map {
+  /**
+   * Creates a new Map from a definition object.
+   * @param {Object} mapDefinition - Map data (width, height, layers).
+   */
   constructor(mapDefinition) {
     // Generate sprites from tileset
     this.width = mapDefinition.width;
@@ -47,7 +50,10 @@ export default class Map {
   renderTop() {
     this.topLayer.render();
   }
-  // Generate hitboxes from collision tiles
+  /**
+   * Generates hitboxes for all tiles in the collision layer.
+   * @returns {Hitbox[]} Array of collision hitboxes.
+   */
   generateCollisionObjects() {
     const collisionObjects = [];
 
@@ -65,6 +71,11 @@ export default class Map {
 
     return collisionObjects;
   }
+
+  /**
+   * Returns all collision hitboxes for physics checks.
+   * @returns {Hitbox[]} Array of collision hitboxes.
+   */
   getCollisionObjects() {
     return this.collisionObjects;
   }
