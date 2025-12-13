@@ -175,7 +175,7 @@ export default class BigBoss extends Creature {
     }
   }
 
-  /**
+  /** (Remove this, already in the parent class)
    * Returns the center point of the boss's hitbox.
    * @returns {{x: number, y: number}} Center coordinates.
    */
