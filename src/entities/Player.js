@@ -101,6 +101,8 @@ export default class Player extends GameEntity {
             [AbilityType.FireFlame]: false,
             [AbilityType.FrozenFlame]: false
         }
+
+        this.itemCollected = []
         this.fireFlame = null;
         this.stateMachine = this.initializeStateMachine();
     }
@@ -108,9 +110,11 @@ export default class Player extends GameEntity {
      * Process the item collected 
      * - Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
      * - something else with the Key...
+     * - Adds the item to the player's collected items list
      * @param {Crystal || FireTorch || Key} item 
      */
-    onCollectItem(item){
+    onCollectItem(item) {
+
       if(item.itemType == ItemType.Crystal)
       {
         this.abilityUnlocked[AbilityType.FrozenFlame] = true;
@@ -118,9 +122,13 @@ export default class Player extends GameEntity {
       } else if (item.itemType == ItemType.FireTorch){
         this.abilityUnlocked[AbilityType.FireFlame] = true;
         console.log("Player unlocked ability FireTorch:", AbilityType.FireFlame);
+      } else if (item.itemType == ItemType.Key){ 
+       
+        console.log("Player collected Key:", ItemType.Key);
       }
-      // fire other abilities can be added here
 
+      // Add item to the player's collected items list
+      this.itemCollected.push(item);
     }
     render(){
         context.save();
