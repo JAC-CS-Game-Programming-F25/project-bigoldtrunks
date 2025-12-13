@@ -1,7 +1,16 @@
 import State from "../../lib/State.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
+import {
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  context,
+  images,
+  input,
+  sounds,
+  stateMachine,
+} from "../globals.js";
 import Input from "../../lib/Input.js";
 import FontName from "../enums/FontName.js";
+import ImageName from "../enums/ImageName.js";
 
 export default class VictoryState extends State {
   constructor() {

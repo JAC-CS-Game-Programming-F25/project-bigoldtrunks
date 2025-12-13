@@ -151,6 +151,17 @@ export default class Region {
         toStateEnterParameters: { score: this.score },
       });
     }
+    const bigBossDead = this.entities.some(
+      (entity) => entity.creatureType === CreatureType.BigBoss && entity.isDead
+    );
+
+    if (bigBossDead && !this.isGameOver) {
+      this.isGameOver = true;
+      stateMachine.change(GameStateName.Transition, {
+        fromState: stateMachine.currentState,
+        toState: stateMachine.states[GameStateName.Victory],
+      });
+    }
   }
 
   isGameOver() {
@@ -216,9 +227,12 @@ export default class Region {
   }
 
   /**
-   * Create initial creatures: Spiders with a random amount, at random positions
-   * More creatures can be added later
-   * @returns {void}
+   * Spawns creatures based on the provided configuration.
+   * Each creature type can have different spawn position ranges.
+   * Uses collision checking to avoid overlapping creatures.
+   *
+   * @param {Array} config - Array of creature definitions with type and count
+   * @returns {Array} Array of spawned creature instances
    */
   spawnCreatures(config) {
     // array to hold all spawned creatures
@@ -230,22 +244,25 @@ export default class Region {
         let position;
         let attempts = 0;
         const maxAttempts = 50;
+        // Try to find a valid spawn position
         do {
+          // BigBoss spawns in upper area (smaller range due to large size)
           if (def.type === CreatureType.BigBoss) {
             const x = getRandomPositiveInteger(50, 200);
             const y = getRandomPositiveInteger(10, 50);
             position = new Vector(x, y);
           } else {
+            // Other creatures spawn in wider area
             const x = getRandomPositiveInteger(50, 330);
             const y = getRandomPositiveInteger(50, 150);
             position = new Vector(x, y);
-            attempts++;
           }
+          attempts++;
         } while (
           this.isPositionOccupied(position, creatures) &&
           attempts < maxAttempts
         );
-
+        // Only spawn if valid position found within max attempts
         if (attempts < maxAttempts) {
           const creature = CreatureFactory.createInstance(def.type, position);
           creatures.push(creature);

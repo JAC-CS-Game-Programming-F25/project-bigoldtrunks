@@ -26,7 +26,6 @@ import GameOverState from "./states/GameOverState.js";
 import VictoryState from "./states/VictoryState.js";
 import TitleScreenState from "./states/TitleScreenState.js";
 import TransitionState from "./states/TransitionState.js";
-import VictoryState from "./states/VictoryState.js";
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;

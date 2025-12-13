@@ -8,6 +8,7 @@ import StateMachine from "../../../lib/StateMachine.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import ImageName from "../../enums/ImageName.js";
+import CreatureType from "../../enums/CreatureType.js";
 
 export default class Spider extends Creature {
   static WIDTH = 16;
@@ -26,6 +27,7 @@ export default class Spider extends Creature {
     this.loadSprites();
     this.setupAnimations();
     this.stateMachine = this.initializeStateMachine();
+    this.creatureType = CreatureType.Spider;
   }
 
   loadSprites() {

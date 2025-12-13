@@ -11,9 +11,8 @@ import { DEBUG, context } from "../../globals.js";
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import Vector from "../../../lib/Vector.js";
 import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
-import Hitbox from "../../../lib/Hitbox.js";
 import ImageName from "../../enums/ImageName.js";
-
+import CreatureType from "../../enums/CreatureType.js";
 export default class Skeleton extends Creature {
   static WIDTH = 64;
   static HEIGHT = 64;
@@ -34,6 +33,7 @@ export default class Skeleton extends Creature {
 
     this.loadSprites();
     this.stateMachine = this.initializeStateMachine();
+    this.creatureType = CreatureType.Skeleton;
   }
 
   loadSprites() {

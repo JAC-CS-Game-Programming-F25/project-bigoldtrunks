@@ -134,7 +134,7 @@ export default class TitleScreenState extends State {
 
     // Title
     context.fillStyle = "#FFD700";
-    context.font = "18px Cinzel-Bold";
+    context.font = `18px ${FontName.CinzelBold}`;
     context.textAlign = "center";
     context.fillText("Instructions", CANVAS_WIDTH / 2, 35);
 
@@ -153,14 +153,14 @@ export default class TitleScreenState extends State {
     ];
 
     context.fillStyle = "#FFFFFF";
-    context.font = "11px MedievalSharp-Regular";
+    context.font = `11px ${FontName.MedievalSharp}`;
     instructions.forEach((line, index) => {
       context.fillText(line, CANVAS_WIDTH / 2, 60 + index * 14);
     });
 
     // close
     context.fillStyle = "#888888";
-    context.font = "10px MedievalSharp-Regular";
+    context.font = `10px ${FontName.MedievalSharp}`;
     context.fillText(
       "Press Enter or Escape to close",
       CANVAS_WIDTH / 2,

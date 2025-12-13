@@ -13,6 +13,7 @@ import Animation from "../../../lib/Animation.js";
 import Sprite from "../../../lib/Sprite.js";
 import Creature from "./Creature.js";
 import CreatureStateName from "../../enums/CreatureStateName.js";
+import CreatureType from "../../enums/CreatureType.js";
 import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
@@ -37,7 +38,7 @@ export default class BigBoss extends Creature {
     this.loadSprites();
     const animations = this.createAnimations();
     this.stateMachine = this.initializeStateMachine(animations);
-
+    this.creatureType = CreatureType.BigBoss;
     this.detectionRadius = 200;
     this.loseInterestRadius = 300;
     this.attackRange = 40;
