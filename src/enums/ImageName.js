@@ -1,7 +1,17 @@
 const ImageName = {
+  // screen
   Title: "title",
+
+  // map
   Summer: "Floors_Tiles",
   Winter: "Floors_Tiles",
+  Tree: "tree-tiles",
+  Tree_winter: "tree-tiles-winter",
+  Rock: "rocks-winter",
+  Vegetation: "Vegetation",
+  Wall_Tiles: "Wall_Tiles",
+
+  // player
   Player: "player",
   PlayerSwordSwing: "player-sword-swing",
   PlayerFireFlamePoster: "player-fire-poster",
@@ -9,14 +19,15 @@ const ImageName = {
   FireExplosion: "fire-explosion",
   FrozenBlastRight: "frozen-blast-right",
   FrozenBlastLeft: "frozen-blast-left",
+  Crystal: "crystal-item",
+  FireTorch: "fire-torch-item",
+
+  // creature
+  BigBoss_Left: "big-boss-left",
+  BigBoss_Right: "big-boss-right",
   Spider: "spider-spritesheet",
   Skeleton_Left: "skeleton-left",
   Skeleton_Right: "skeleton-right",
-  Tree: "tree_size_02",
-  Crystal: "crystal-item",
-  FireTorch: "fire-torch-item",
-  BigBoss_Left: "big-boss-left",
-  BigBoss_Right: "big-boss-right",
 };
 
 export default ImageName;

@@ -3,11 +3,11 @@
  <editorsettings>
   <export target="../../../../../Desktop/project-bigoldtrunks/config/winter-map.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" source="ground-tile-winter.tsx"/>
+ <tileset firstgid="1" source="ground-tiles.tsx"/>
  <tileset firstgid="651" source="tree-tiles-winter.tsx"/>
  <tileset firstgid="819" source="Wall_Tiles.tsx"/>
  <tileset firstgid="1444" source="rocks-winter.tsx"/>
- <tileset firstgid="1691" source="tree-tiles-winter-small.tsx"/>
+ <tileset firstgid="1691" source="tree-tiles.tsx"/>
  <tileset firstgid="1739" source="Vegetation.tsx"/>
  <layer id="1" name="bottom" width="24" height="13">
   <data encoding="csv">

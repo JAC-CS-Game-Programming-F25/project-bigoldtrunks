@@ -13,20 +13,32 @@
       "height": 416
     },
     {
-      "name": "tree_size_02",
+      "name": "tree-tiles",
       "path": "./assets/images/Tiles/Trees/Model_02/Size_02.png",
       "width": 128,
       "height": 96
     },   
     {
-      "name": "tree_size_04",
-      "path": "./assets/images/Tiles/Trees/Model_01/tree_size_04.png",
-      "width": 368,
-      "height": 256
+      "name": "Stree-tiles-winter",
+      "path": "./assets/images/images/Tiles/Trees/Model_02/Size_03.png",
+      "width": 144,
+      "height": 160
     },
     {
-      "name": "Rocks",
+      "name": "rocks-winter",
       "path": "./assets/images/Tiles/Rocks.png",
+      "width": 368,
+      "height": 256
+    }, 
+    {
+      "name": "Vegetation",
+      "path": "./assets/images/Tiles/Vegetation.png",
+      "width": 368,
+      "height": 256
+    }, 
+    {
+      "name": "Wall_Tiles",
+      "path": "./assets/images/Tiles/Wall_Tiles.png",
       "width": 368,
       "height": 256
     }, 
