@@ -15,7 +15,8 @@ export default class Key extends GameObject {
             {x: Key.WIDTH, y: Key.HEIGHT},
             position
         );
-       
+        this.name = "Key"; // For identification purposes when debugging
+
         this.sprites = Sprite.generateSpritesFromSpriteSheet(
             images.get(ImageName.Key),
             Key.WIDTH,
