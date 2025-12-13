@@ -25,6 +25,7 @@ export default class Region {
         this.player = new Player(this); // Pass the region instance to the player
         /**
          * Items present in the region (e.g., crystals, fire torch, Key etc.)
+         * @type {Array[Crystal|FireTorch|Key]}
          */
         this.items = [];
 
@@ -40,6 +41,10 @@ export default class Region {
     // All entities in the region
     this.entities = [this.player, ...this.creatures];
     // All objects in the region
+    /**
+     * Objects present in the region (e.g., FireFlame added by the player during ability usage, etc.)
+     * @type {Array[FireTorch|Crystal|Key|FireFlame]}
+     */
     this.objects = []; // contain objects like FireFlame added by the player, etc. more later
 
     this.collisionLayer = this.map.collisionLayer;
@@ -187,7 +192,7 @@ export default class Region {
 
         this.checkCreatureCollisions(entity, oldX, oldY);
 
-        // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
+        // check collision with all objects (ability's hitbox specifically) in the region (FireFlame, FrozenFlame, etc.)
         this.checkCollisionWithObjects(entity);
 
         // Creature deal with player's sword hit or ability hit
@@ -307,7 +312,7 @@ export default class Region {
   /**
    * Check for collisions between an Creature and all objects in the region such as FireFlame, etc.
    * Call Creature's onTakingHit method to process if collision detected
-   * @param {*} entity
+   * @param {Creature} entity
    */
   checkCollisionWithObjects(entity) {
     this.objects.forEach((object) => {
