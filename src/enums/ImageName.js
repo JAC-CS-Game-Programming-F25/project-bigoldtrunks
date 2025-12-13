@@ -1,3 +1,4 @@
+
 const ImageName = {
   // screen
   Title: "title",
@@ -25,9 +26,7 @@ const ImageName = {
   // creature
   BigBoss_Left: "big-boss-left",
   BigBoss_Right: "big-boss-right",
-  Spider: "spider-spritesheet",
-  Skeleton_Left: "skeleton-left",
-  Skeleton_Right: "skeleton-right",
+  Key: "key-item"
 };
 
 export default ImageName;

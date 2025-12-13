@@ -4,9 +4,6 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import Hitbox from "../../lib/Hitbox.js";
-import AbilityType from "../enums/AbilityType.js";
-import FireFlame from "./FireFlame.js";
 import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
@@ -15,23 +12,27 @@ import Crystal from "./Crystal.js";
 import ItemType from "../enums/ItemType.js";
 import FireTorch from "./FireTorch.js";
 import CreatureType from "../enums/CreatureType.js";
+import Key from "./Key.js";
+import BigBoss from "../entities/Creature/BigBoss.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
     this.map = new Map(mapDefinition, isWinter);
     this.creatures = this.spawnCreatures(creatureConfig);
 
-    // Once we have the creature now we decide which one will keep the item
-    this.assignWhichCreatureKeepItem(this.creatures, ItemType.Crystal);
-    this.assignWhichCreatureKeepItem(this.creatures, ItemType.FireTorch);
+        // Once we have the creature now we decide which one will keep the item
+        this.assignItemToCreature(this.creatures, ItemType.Crystal);
+        this.assignItemToCreature(this.creatures, ItemType.FireTorch);
 
-    this.player = new Player(this); // Pass the region instance to the player
-    /**
-     * Items present in the region (e.g., crystals, fire torch, etc.)
-     */
-    this.items = [];
+        this.player = new Player(this); // Pass the region instance to the player
+        /**
+         * Items present in the region (e.g., crystals, fire torch, Key etc.)
+         * @type {Array[Crystal|FireTorch|Key]}
+         */
+        this.items = [];
 
-    this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
-    this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
+        this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
+        this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
+        this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
 
     // Assign player reference to all creatures so they can chase
     this.creatures.forEach((creature) => {
@@ -41,11 +42,16 @@ export default class Region {
     // All entities in the region
     this.entities = [this.player, ...this.creatures];
     // All objects in the region
+    /**
+     * Objects present in the region (e.g., FireFlame added by the player during ability usage, etc.)
+     * @type {Array[FireTorch|Crystal|Key|FireFlame]}
+     */
     this.objects = []; // contain objects like FireFlame added by the player, etc. more later
 
     this.collisionLayer = this.map.collisionLayer;
     this.renderQueue = this.buildRenderQueue();
     this.isGameOver = false;
+    this.isVictory = false;
     this.ui = new UserInterface(this.player, this);
   }
 
@@ -58,8 +64,74 @@ export default class Region {
     this.updateEntities(dt);
     this.updateObjects(dt);
     this.updateItems(dt);
+    this.checkVictory();
+    // check Victory: check if player reached goal (final boss defeated, key collected,)
+    
+    // check RegionConquered (if all creatures defeated, etc.) 
+    // Thoughts: later maybe add a time before transition to next region, player need to collect the item to gain ability otherwise it would be hard for next region
   }
+  /**
+   * Check if player reached victory conditions (e.g., final boss defeated, key collected,)
+   * Update isVictory, then start processing Victory by calling processVictory()
+   */
+  checkVictory() {
+    // check if player reached goal (final boss defeated, key collected,)
+    const hasKey = this.player.itemCollected.some(item => item.itemType === ItemType.Key);
+    if (hasKey) {
+      console.log("Player had the key to escape the world!");
+      this.isVictory = true;
+      // process victory (transition to next region or game win state)
+      // start the transition to next region or game win state
+      this.processVictory();
+    }
+  }
+  /**
+   * Called when victory conditions are met 
+   * Handle transition, UI, juicy, sound effects
+   */
+  processVictory() {
+    this.playWinningEffect();
+    // Implement the logic for processing victory
+  }
+  /**
+   * Plays winning effect: screen flash + shake, then transitions to Victory Screen
+   * Written by Lin, update by Cuong
+   */
+  playWinningEffect(){
+    const canvas = document.querySelector("canvas");
+    const playState = stateMachine.states[GameStateName.Play];
 
+    // First flash white
+    canvas.style.filter = "brightness(2.5)";
+
+    setTimeout(() => {
+      // then flash dark
+      canvas.style.filter = "brightness(0.3)";
+
+      // Screen shake
+      let shakes = 0;
+      const interval = setInterval(() => {
+        canvas.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${
+          (Math.random() - 0.5) * 6
+        }px)`;
+        shakes++;
+
+        if (shakes >= 12) {
+          clearInterval(interval);
+          canvas.style.transform = "";
+          canvas.style.filter = ""; // reset filter
+          this.isDead = true;
+
+          setTimeout(() => {
+            stateMachine.change(GameStateName.Transition, {
+              fromState: playState,
+              toState: stateMachine.states[GameStateName.Victory],
+            });
+          }, 300);
+        }
+      }, 50);
+    }, 200);
+  }
   render() {
     this.map.render(); // ← render map
 
@@ -101,6 +173,11 @@ export default class Region {
   /**
    * Update all entities in the region,
    * If any logic needs to be applied for specific entity types, handle them here (colision, AI, dead, onHit, onConsume, etc)
+   * Check collisions between creatures and objects (FireFlame, FrozenBlast, SwordHitbox etc.)
+   * Check collision between creatures and environment
+   * Check collisions between player and creatures
+   * Check collisions between player and items
+   * Check collisions between player and objects
    * @param {*} dt
    */
 
@@ -116,10 +193,10 @@ export default class Region {
 
         this.checkCreatureCollisions(entity, oldX, oldY);
 
-        // check collision with all objects in the region (FireFlame, FrozenFlame, etc.)
+        // check collision with all objects (ability's hitbox specifically) in the region (FireFlame, FrozenFlame, etc.)
         this.checkCollisionWithObjects(entity);
 
-        // sword hit detection on the creature
+        // Creature deal with player's sword hit or ability hit
         if (
           !entity.isHurt &&
           entity.didCollideWithEntity(this.player.swordHitbox)
@@ -128,16 +205,12 @@ export default class Region {
           entity.onTakingHit(this.player.damage);
         }
 
-        // contact damage
-        if (
-          !entity.isDead &&
-          !this.player.isInVulnerable &&
-          entity.isContactDamage &&
-          this.player.hitbox &&
-          entity.hitbox.didCollide(this.player.hitbox)
-        ) {
+        // Player deal with creatures' attack (hitbox, sword, attack)
+        if ( this.isEntityReadyToTakeDamage(entity)){
           this.player.onTakingDamage(entity.damage);
         }
+        
+        // Specific logic for Player entity
       } else if (entity instanceof Player) {
         // Player specific update logic can go here
         this.checkCollisionWithItem(entity);
@@ -157,20 +230,50 @@ export default class Region {
       });
     }
   }
-
+  /**
+   * Check if the entity is ready to take damage from the player.
+   * - Not dead
+   * - Player is not invulnerable
+   * - Entity has contact damage
+   * - Player's hitbox collides with entity's hitbox
+   * @param {*} entity 
+   * @returns {boolean} true if entity can take damage
+   */
+  isEntityReadyToTakeDamage(entity) {
+    return !entity.isDead &&
+          !this.player.isInVulnerable &&
+          entity.isContactDamage &&
+          this.player.hitbox &&
+          entity.hitbox.didCollide(this.player.hitbox)
+  }
+  /**
+   * Check if the game is over.
+   * @returns {boolean} true if game over conditions met
+   */
   isGameOver() {
     return this.player.isDead && this.player.lives < 0;
   }
-  checkCollisionWithItem(player) {
-    this.items.forEach((item, index) => {
-      if (player.didCollideWithEntity(item.hitbox)) {
-        item.onConsume(player);
-        player.unlockAbility(item);
-        // Remove item from region after consumption
-        this.items.splice(index, 1);
-      }
-    });
-  }
+  /**
+   * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key)
+   * Performs onConsume on the item, and onCollectItem on the player
+   * @param {Player} player 
+   */
+    checkCollisionWithItem(player) {
+        this.items.forEach((item, index) => {
+            if (player.didCollideWithEntity(item.hitbox)) {
+                if(item instanceof Crystal || item instanceof FireTorch){
+                    item.onConsume();
+                    player.onCollectItem(item);
+                    // Remove item from region after consumption
+                    this.items.splice(index, 1);
+                } else if(item instanceof Key){
+                    item.onConsume();
+                    player.onCollectItem(item);
+                    this.items.splice(index, 1);
+                }
+            }
+        });
+    }
   /**
    * Checks if the player can move to a given position without colliding with collision tiles
    * @param {number} x - Pixel X position
@@ -210,7 +313,7 @@ export default class Region {
   /**
    * Check for collisions between an Creature and all objects in the region such as FireFlame, etc.
    * Call Creature's onTakingHit method to process if collision detected
-   * @param {*} entity
+   * @param {Creature} entity
    */
   checkCollisionWithObjects(entity) {
     this.objects.forEach((object) => {
@@ -269,15 +372,22 @@ export default class Region {
    * Decide which creature will keep the item by randomly selecting one from the list
    * if we decide specific item to be kept, pass specificCreatureIndex or leave null for random,
    * Probably Modify later for Warden to keep the key item
+   * if creature is BigBoss, assign the Key to it
    * @param {[Creature]} creatures list of all creature
    * @param {ItemType} itemType type of item to be kept
    * @param {number|null} specificCreatureIndex
    */
-  assignWhichCreatureKeepItem(
+  assignItemToCreature(
     creatures,
     itemType,
     specificCreatureIndex = null
   ) {
+
+    creatures.forEach((creature) => {
+      if (creature instanceof BigBoss) {
+        creature.keepItem(ItemType.Key);
+      }
+    });
     const randomIndex =
       specificCreatureIndex !== null
         ? specificCreatureIndex

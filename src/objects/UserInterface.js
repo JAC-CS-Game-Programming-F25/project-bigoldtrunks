@@ -1,6 +1,7 @@
 import { CANVAS_WIDTH, context } from "../globals.js";
 import FontName from "../enums/FontName.js";
 import AbilityType from "../enums/AbilityType.js";
+import ItemType from "../enums/ItemType.js";
 
 
 export default class UserInterface {
@@ -41,6 +42,15 @@ export default class UserInterface {
           context.font = `15px ${FontName.MedievalSharp}`;
 
           context.fillText("🔥", CANVAS_WIDTH - 10, 40);
+    }
+    
+    // Check if player has collected a Key
+    const hasKey = this.player.itemCollected.some(item => item.itemType === ItemType.Key);
+    if(hasKey) {
+          context.textAlign = "right";
+          context.font = `15px ${FontName.MedievalSharp}`;
+          
+          context.fillText("🔑", CANVAS_WIDTH - 10, 63);
     }
   }
 }

@@ -8,6 +8,7 @@ import SoundName from "../../enums/SoundName.js";
 import ItemType from "../../enums/ItemType.js";
 import Crystal from "../../objects/Crystal.js";
 import FireTorch from "../../objects/FireTorch.js";
+import Key from "../../objects/Key.js";
 export default class Creature extends GameEntity {
   static CREATURE_WIDTH = 16;
   static CREATURE_HEIGHT = 16;
@@ -23,7 +24,9 @@ export default class Creature extends GameEntity {
     this.isContactDamage = creatureDefinition.isContactDamage ?? false;
     this.isHurt = false;
     /**
-     * Type of item this creature should drop when dead
+     * Type of item this creature should drop when dead, 
+     * Spider, Skeleton may drop Crystal, and FireTorch
+     * BigBoss drops Key
      * @type {string|null}
      */
     this.itemTypeToKeep = null;
@@ -119,7 +122,7 @@ export default class Creature extends GameEntity {
   }
 
   /**
-   * Spawn the item that the creature is keeping at its death position
+   * Spawn the item that the creature is keeping at its death position, upon death.
    */
   spawnItemIfKeep() {
     // Create the item at the creature's current death position
@@ -133,6 +136,9 @@ export default class Creature extends GameEntity {
         } else if (this.itemTypeToKeep === ItemType.FireTorch) {
           this.itemKept = new FireTorch(deathPosition);
           console.log(`FireTorch created at death position: (${deathPosition.x}, ${deathPosition.y})`);
+        } else if (this.itemTypeToKeep === ItemType.Key) {
+          this.itemKept = new Key(deathPosition);
+          console.log(`Key created at death position: (${deathPosition.x}, ${deathPosition.y})`);
         }
       }
   }
