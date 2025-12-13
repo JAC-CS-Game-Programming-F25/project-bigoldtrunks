@@ -105,10 +105,12 @@ export default class Player extends GameEntity {
         this.stateMachine = this.initializeStateMachine();
     }
     /**
-     * Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
-     * @param {Crystal || FireTorch} item 
+     * Process the item collected 
+     * - Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
+     * - something else with the Key...
+     * @param {Crystal || FireTorch || Key} item 
      */
-    unlockAbility(item){
+    onCollectItem(item){
       if(item.itemType == ItemType.Crystal)
       {
         this.abilityUnlocked[AbilityType.FrozenFlame] = true;
