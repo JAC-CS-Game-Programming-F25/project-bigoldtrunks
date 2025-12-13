@@ -7,6 +7,7 @@ import { sounds } from "../../globals.js";
 import SoundName from "../../enums/SoundName.js";
 import ItemType from "../../enums/ItemType.js";
 import Crystal from "../../objects/Crystal.js";
+import FireTorch from "../../objects/FireTorch.js";
 export default class Creature extends GameEntity {
   static CREATURE_WIDTH = 16;
   static CREATURE_HEIGHT = 16;
@@ -130,8 +131,8 @@ export default class Creature extends GameEntity {
           this.itemKept = new Crystal(deathPosition);
           console.log(`Crystal created at death position: (${deathPosition.x}, ${deathPosition.y})`);
         } else if (this.itemTypeToKeep === ItemType.FireTorch) {
-          // Fire torch initialize here when implemented
-          // this.itemKept = new FireTorch(deathPosition);
+          this.itemKept = new FireTorch(deathPosition);
+          console.log(`FireTorch created at death position: (${deathPosition.x}, ${deathPosition.y})`);
         }
       }
   }
