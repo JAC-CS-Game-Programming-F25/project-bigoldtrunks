@@ -151,18 +151,6 @@ export default class Region {
         toStateEnterParameters: { score: this.score },
       });
     }
-    const bigBossDead = this.entities.some(
-      (entity) => entity.creatureType === CreatureType.BigBoss && entity.isDead
-    );
-
-    // check big boss dead
-    if (bigBossDead && !this.isGameOver) {
-      this.isGameOver = true;
-      stateMachine.change(GameStateName.Transition, {
-        fromState: stateMachine.currentState,
-        toState: stateMachine.states[GameStateName.Victory],
-      });
-    }
   }
 
   isGameOver() {
