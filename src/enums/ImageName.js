@@ -5,7 +5,7 @@ const ImageName = {
   // map
   Summer: "Floors_Tiles",
   Winter: "Floors_Tiles",
-  Tree: "tree-tiles",
+  Tree: "tree_size_02",
   Tree_winter: "tree-tiles-winter",
   Rock: "rocks-winter",
   Vegetation: "Vegetation",

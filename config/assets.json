@@ -13,14 +13,14 @@
       "height": 416
     },
     {
-      "name": "tree-tiles",
+      "name": "tree_size_02",
       "path": "./assets/images/Tiles/Trees/Model_02/Size_02.png",
       "width": 128,
       "height": 96
-    },   
+    },    
     {
       "name": "Stree-tiles-winter",
-      "path": "./assets/images/images/Tiles/Trees/Model_02/Size_03.png",
+      "path": "./assets/images/images/Tiles/Trees/Model_02/Size_04.png",
       "width": 144,
       "height": 160
     },
