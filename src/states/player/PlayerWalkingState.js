@@ -88,23 +88,49 @@ export default class PlayerWalkingState extends State {
     }
 
     handlePerformingFireFlame() {
-        // Only allow FireFlame when facing Left or Right (no sprites for Up/Down) 
-        if (input.isKeyHeld(Input.KEYS.J) && 
-            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
-            this.player.changeState(PlayerStateName.PerformingFireFlame);
-        }
-    }
-
-    handlePerformingFrozenBlast() {
-        // Only allow FrozenFlame when facing Left or Right (no sprites for Up/Down)
-        if (input.isKeyHeld(Input.KEYS.K) && 
-        (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
-            if(this.player.abilityUnlocked[AbilityType.FrozenFlame]) {
-                console.log("K pressed - FrozenFlame allowed");
-                this.player.changeState(PlayerStateName.PerformingFrozenBlast);
+        // Only allow FireFlame when facing Left or Right (no sprites for Up/Down)
+        if (input.isKeyHeld(Input.KEYS.J)) {
+            if (this.isCouldPerformFireFlame()) {
+                console.log("J pressed - FireFlame allowed");
+                this.player.changeState(PlayerStateName.PerformingFireFlame);
             }
-            console.log("FrozenFlame ability is not unlocked");
+            console.log("FireFlame ability is not unlocked");
             return;
         }
     }
+
+     /**
+     * Checks if the player can perform the FireFlame ability:
+     * - The ability must be unlocked
+     * - The player must be facing Left or Right
+     * 
+     * @returns {boolean} whether the player can perform FireFlame
+     */
+    isCouldPerformFireFlame() {
+        return this.player.abilityUnlocked[AbilityType.FireFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+    }
+    
+    handlePerformingFrozenBlast() {
+        // Only allow FrozenBlast when facing Left or Right (no sprites for Up/Down)
+         if (input.isKeyHeld(Input.KEYS.K)) {
+            if (this.isCouldPerformFrozenBlast()) {
+                console.log("K pressed - FrozenBlast allowed");
+                this.player.changeState(PlayerStateName.PerformingFrozenBlast);
+            }
+            console.log("FrozenBlast ability is not unlocked");
+            return;
+        }
+    }
+     /**
+     * Checks if the player can perform the FrozenBlast ability:
+     * - The ability must be unlocked
+     * - The player must be facing Left or Right
+     * 
+     * @returns {boolean} whether the player can perform FrozenBlast
+     */
+    isCouldPerformFrozenBlast() {
+        return this.player.abilityUnlocked[AbilityType.FrozenFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+    }
+
+    
 }

@@ -28,8 +28,10 @@ export default class Region {
          * Items present in the region (e.g., crystals, fire torch, etc.)
          */
         this.items = [];
-        // this.items.push(new Crystal(new Vector(150, 100)));
-        // this.items.push(new FireTorch(new Vector(150, 150)));
+
+        this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage 
+        this.items.push(new FireTorch(new Vector(150, 150)));// turn on to test ability usage 
+
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {
             creature.player = this.player;

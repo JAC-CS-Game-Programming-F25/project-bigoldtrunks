@@ -51,28 +51,39 @@ export default class PlayerIdlingState extends State {
                 this.player.changeState(PlayerStateName.Walking);
             } 
     }
+
     handleSwordSwing() {
         if (input.isKeyHeld(Input.KEYS.SPACE)) {
             this.player.changeState(PlayerStateName.SwordSwinging);
         }
     }
+    
     handlePerformingFireFlame() {
         // Only allow FireFlame when facing Left or Right (no sprites for Up/Down)
-        if (input.isKeyHeld(Input.KEYS.J) && 
-            (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
-                if(this.player.abilityUnlocked[AbilityType.FireFlame]) {
+        if (input.isKeyHeld(Input.KEYS.J)) {
+            if (this.isCouldPerformFireFlame()) {
                 console.log("J pressed - FireFlame allowed");
-            }                                                                                                                                                                                 
+                this.player.changeState(PlayerStateName.PerformingFireFlame);
+            }
             console.log("FireFlame ability is not unlocked");
             return;
-            this.player.changeState(PlayerStateName.PerformingFireFlame);
         }
     }
+
+     /**
+     * Checks if the player can perform the FireFlame ability:
+     * - The ability must be unlocked
+     * - The player must be facing Left or Right
+     * 
+     * @returns {boolean} whether the player can perform FireFlame
+     */
+    isCouldPerformFireFlame() {
+        return this.player.abilityUnlocked[AbilityType.FireFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+    }
+    
     handlePerformingFrozenBlast() {
-        // Only allow FrozenFlame when facing Left or Right (no sprites for Up/Down)
-        if (input.isKeyHeld(Input.KEYS.K) && 
-        (this.player.direction === Direction.Left || this.player.direction === Direction.Right)) {
-            if(this.player.abilityUnlocked[AbilityType.FrozenFlame]) {
+        if (input.isKeyHeld(Input.KEYS.K)) {
+            if (this.isCouldPerformFrozenBlast()) {
                 console.log("K pressed - FrozenFlame allowed");
                 this.player.changeState(PlayerStateName.PerformingFrozenBlast);
             }
@@ -80,6 +91,19 @@ export default class PlayerIdlingState extends State {
             return;
         }
     }
+    /**
+     * Checks if the player can perform the FrozenBlast ability:
+     * - The ability must be unlocked
+     * - The player must be facing Left or Right
+     * 
+     * @returns {boolean} whether the player can perform FrozenBlast
+     */
+    isCouldPerformFrozenBlast() {
+        return this.player.abilityUnlocked[AbilityType.FrozenFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+    }
+    /**
+     * Handles transition to Dead state if the player is dead
+     */
     handleDead() {
         if (this.player.isDead) {
             this.player.changeState(PlayerStateName.Dead);
