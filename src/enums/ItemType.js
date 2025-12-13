@@ -5,7 +5,8 @@ import AbilityType from "./AbilityType.js";
  */
 const ItemType = {
   Crystal: 1,
-  FireTorch: 2
+  FireTorch: 2,
+  Key: 3
 };
 
 export default ItemType;

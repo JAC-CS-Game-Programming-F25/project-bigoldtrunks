@@ -13,6 +13,10 @@ export default class PlayState extends State {
   }
   enter() {
     sounds.play(SoundName.Summer);
+    /**
+     * Creature spawn definitions for summer-themed region
+     * 
+     */
     const summerCreatures = [
       {
         type: CreatureType.Spider,

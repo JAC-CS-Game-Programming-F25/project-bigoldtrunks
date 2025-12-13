@@ -4,9 +4,6 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import Hitbox from "../../lib/Hitbox.js";
-import AbilityType from "../enums/AbilityType.js";
-import FireFlame from "./FireFlame.js";
 import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
@@ -15,6 +12,7 @@ import Crystal from "./Crystal.js";
 import ItemType from "../enums/ItemType.js";
 import FireTorch from "./FireTorch.js";
 import CreatureType from "../enums/CreatureType.js";
+import Key from "./Key.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
@@ -30,8 +28,9 @@ export default class Region {
          */
         this.items = [];
 
-        this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage 
-        this.items.push(new FireTorch(new Vector(150, 150)));// turn on to test ability usage 
+        this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
+        this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
+        this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
 
         // Assign player reference to all creatures so they can chase
         this.creatures.forEach(creature => {

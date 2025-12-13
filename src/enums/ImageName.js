@@ -1,3 +1,4 @@
+
 const ImageName = {
   Title: "title",
   Summer: "Floors_Tiles",
@@ -17,6 +18,7 @@ const ImageName = {
   FireTorch: "fire-torch-item",
   BigBoss_Left: "big-boss-left",
   BigBoss_Right: "big-boss-right",
+  Key: "key-item"
 };
 
 export default ImageName;
