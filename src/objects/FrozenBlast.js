@@ -46,7 +46,7 @@ export default class FrozenBlast extends GameObject {
         this.startPosition = new Vector(startPosition.x, startPosition.y);
         
 
-        this.damage = 2; // Damage dealt by the flame
+        this.damage = 5; // Damage dealt by the flame
     }
     updateSpritesAndAnimation() {
         this.sprites = (this.direction === Direction.Right) ? this.frozenRightSprites : this.frozenLeftSprites;

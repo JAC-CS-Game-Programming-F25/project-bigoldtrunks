@@ -13,25 +13,30 @@ import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
 import Crystal from "./Crystal.js";
 import ItemType from "../enums/ItemType.js";
+import FireTorch from "./FireTorch.js";
 import CreatureType from "../enums/CreatureType.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = []) {
     this.map = new Map(mapDefinition);
     this.creatures = this.spawnCreatures(creatureConfig);
 
-    // Once we have the creature now we decide which one will keep the item
-    this.assignWhichCreatureKeepItem(this.creatures, ItemType.Crystal);
+        // Once we have the creature now we decide which one will keep the item
+        this.assignWhichCreatureKeepItem(this.creatures, ItemType.Crystal);
+        this.assignWhichCreatureKeepItem(this.creatures, ItemType.FireTorch);
 
-    this.player = new Player(this); // Pass the region instance to the player
-    /**
-     * Items present in the region (e.g., crystals, fire torch, etc.)
-     */
-    this.items = [];
-    this.items.push(new Crystal(new Vector(150, 100)));
-    // Assign player reference to all creatures so they can chase
-    this.creatures.forEach((creature) => {
-      creature.player = this.player;
-    });
+        this.player = new Player(this); // Pass the region instance to the player
+        /**
+         * Items present in the region (e.g., crystals, fire torch, etc.)
+         */
+        this.items = [];
+
+        this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage 
+        this.items.push(new FireTorch(new Vector(150, 150)));// turn on to test ability usage 
+
+        // Assign player reference to all creatures so they can chase
+        this.creatures.forEach(creature => {
+            creature.player = this.player;
+        });
 
     // All entities in the region
     this.entities = [this.player, ...this.creatures];

@@ -14,6 +14,7 @@ const ImageName = {
   Skeleton_Right: "skeleton-right",
   Tree: "tree_size_02",
   Crystal: "crystal-item",
+  FireTorch: "fire-torch-item",
   BigBoss_Left: "big-boss-left",
   BigBoss_Right: "big-boss-right",
 };
