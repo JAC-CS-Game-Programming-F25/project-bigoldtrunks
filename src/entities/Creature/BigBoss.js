@@ -213,6 +213,8 @@ export default class BigBoss extends Creature {
   }
 
   /**
+   * Note: This will be processed else where, in the region, not here (Cuong) in terms of design
+   * 
    * Plays epic death effect: screen flash + shake, then transitions to Victory.
    */
   playDeathEffect() {
