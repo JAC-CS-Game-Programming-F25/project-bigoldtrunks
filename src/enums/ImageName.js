@@ -14,6 +14,8 @@ const ImageName = {
   Skeleton_Right: "skeleton-right",
   Tree: "tree_size_02",
   Crystal: "crystal-item",
+  BigBoss_Left: "bigboss-right",
+  BigBoss_right: "bigboss-left",
 };
 
 export default ImageName;

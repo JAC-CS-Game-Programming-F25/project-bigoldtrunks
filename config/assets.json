@@ -127,7 +127,19 @@
       "path": "./assets/images/item/crystal/crystal_item.png",
       "width": 96,
       "height": 16
-    }
+    },
+    {
+      "name": "bigboss-right",
+      "path": "./assets/images/creatures/spider/warden-bear-right.png",
+      "width": 112,
+      "height": 112
+    },
+    {
+      "name": "bigboss-left",
+      "path": "./assets/images/creatures/spider/warden-bear-left.png",
+      "width": 112,
+      "height": 112
+    }   
 
   ],
   "fonts": [

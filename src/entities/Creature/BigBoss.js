@@ -1,5 +1,7 @@
 import Direction from "../../enums/Direction.js";
 import Vector from "../../../lib/Vector.js";
+import ImageName from "../../enums/ImageName";
+import { images } from "../../globals.js";
 export default class BigBoss extends Creature {
   static WIDTH = 128;
   static HEIGHT = 128;
@@ -20,7 +22,18 @@ export default class BigBoss extends Creature {
     this.stateMachine = this.initializeStateMachine();
   }
 
-  loadSprites() {}
+  loadSprites() {
+    this.spritesLeft = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.BigBoss_Left),
+      BigBoss.WIDTH,
+      BigBoss.HEIGHT
+    );
+    this.spritesRight = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.BigBoss_right),
+      BigBoss.WIDTH,
+      BigBoss.HEIGHT
+    );
+  }
   update() {}
   setupAnimations() {}
   initializeStateMachine() {}
