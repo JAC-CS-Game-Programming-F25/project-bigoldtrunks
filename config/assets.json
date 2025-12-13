@@ -225,6 +225,12 @@
         "volume": 0.2
     },
     {
+        "name": "boss-dead",
+        "path": "./assets/sounds/effects/boss-dead.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
         "name": "fire",
         "path": "./assets/sounds/effects/fire.wav",
         "size": 1,

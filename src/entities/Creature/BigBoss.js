@@ -7,6 +7,7 @@ import {
   context,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
+  sounds,
 } from "../../globals.js";
 import StateMachine from "../../../lib/StateMachine.js";
 import Animation from "../../../lib/Animation.js";
@@ -18,6 +19,7 @@ import CreatureAttackingState from "../../states/Creature/CreatureAttackingState
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
+import SoundName from "../../enums/SoundName.js";
 
 export default class BigBoss extends Creature {
   static WIDTH = 128;
@@ -49,7 +51,7 @@ export default class BigBoss extends Creature {
     this.attackRange = 40;
   }
 
-    /**
+  /**
    * Creates a new BigBoss at the specified position.
    * @param {Vector} position - Initial spawn position.
    */
@@ -180,5 +182,31 @@ export default class BigBoss extends Creature {
       x: this.hitbox.position.x + this.hitbox.dimensions.x / 2,
       y: this.hitbox.position.y + this.hitbox.dimensions.y / 2,
     };
+  }
+
+  /**
+   * Handles damage and plays boss-specific death sound.
+   * @param {number} damage - Damage received.
+   */
+  onTakingHit(damage) {
+    if (this.isDead) return;
+
+    this.health -= damage;
+
+    if (this.health <= 0) {
+      this.isDead = true;
+      this.spawnItemIfKeep();
+      sounds.play(SoundName.BigBossDead);
+      console.log("BigBoss is dead!");
+      return;
+    }
+
+    // add glimmering after injured (Juice)
+    this.isHurt = true;
+    setTimeout(() => {
+      this.isHurt = false;
+    }, 300);
+
+    sounds.play(SoundName.EnemyHurt);
   }
 }

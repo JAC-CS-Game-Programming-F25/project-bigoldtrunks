@@ -155,6 +155,7 @@ export default class Region {
       (entity) => entity.creatureType === CreatureType.BigBoss && entity.isDead
     );
 
+    // check big boss dead
     if (bigBossDead && !this.isGameOver) {
       this.isGameOver = true;
       stateMachine.change(GameStateName.Transition, {
