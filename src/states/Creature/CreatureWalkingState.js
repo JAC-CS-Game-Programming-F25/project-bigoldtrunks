@@ -81,7 +81,7 @@ export default class CreatureWalkingState extends State {
     if (!this.creature.canChase) return false;
 
     const player = this.creature.player;
-    if (!player) return false;
+    if (!player || player.isDead) return false;
 
     const dx = player.position.x - this.creature.position.x;
     const dy = player.position.y - this.creature.position.y;
