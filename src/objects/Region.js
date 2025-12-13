@@ -19,20 +19,20 @@ export default class Region {
     this.map = new Map(mapDefinition, isWinter);
     this.creatures = this.spawnCreatures(creatureConfig);
 
-        // Once we have the creature now we decide which one will keep the item
-        this.assignItemToCreature(this.creatures, ItemType.Crystal);
-        this.assignItemToCreature(this.creatures, ItemType.FireTorch);
+    // Once we have the creature now we decide which one will keep the item
+    this.assignItemToCreature(this.creatures, ItemType.Crystal);
+    this.assignItemToCreature(this.creatures, ItemType.FireTorch);
 
-        this.player = new Player(this); // Pass the region instance to the player
-        /**
-         * Items present in the region (e.g., crystals, fire torch, Key etc.)
-         * @type {Array[Crystal|FireTorch|Key]}
-         */
-        this.items = [];
+    this.player = new Player(this); // Pass the region instance to the player
+    /**
+     * Items present in the region (e.g., crystals, fire torch, Key etc.)
+     * @type {Array[Crystal|FireTorch|Key]}
+     */
+    this.items = [];
 
-        this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
-        this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
-        this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
+    this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
+    this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
+    this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
 
     // Assign player reference to all creatures so they can chase
     this.creatures.forEach((creature) => {
@@ -66,8 +66,8 @@ export default class Region {
     this.updateItems(dt);
     this.checkVictory();
     // check Victory: check if player reached goal (final boss defeated, key collected,)
-    
-    // check RegionConquered (if all creatures defeated, etc.) 
+
+    // check RegionConquered (if all creatures defeated, etc.)
     // Thoughts: later maybe add a time before transition to next region, player need to collect the item to gain ability otherwise it would be hard for next region
   }
   /**
@@ -76,7 +76,9 @@ export default class Region {
    */
   checkVictory() {
     // check if player reached goal (final boss defeated, key collected,)
-    const hasKey = this.player.itemCollected.some(item => item.itemType === ItemType.Key);
+    const hasKey = this.player.itemCollected.some(
+      (item) => item.itemType === ItemType.Key
+    );
     if (hasKey) {
       console.log("Player had the key to escape the world!");
       this.isVictory = true;
@@ -86,7 +88,7 @@ export default class Region {
     }
   }
   /**
-   * Called when victory conditions are met 
+   * Called when victory conditions are met
    * Handle transition, UI, juicy, sound effects
    */
   processVictory() {
@@ -97,7 +99,7 @@ export default class Region {
    * Plays winning effect: screen flash + shake, then transitions to Victory Screen
    * Written by Lin, update by Cuong
    */
-  playWinningEffect(){
+  playWinningEffect() {
     const canvas = document.querySelector("canvas");
     const playState = stateMachine.states[GameStateName.Play];
 
@@ -206,10 +208,10 @@ export default class Region {
         }
 
         // Player deal with creatures' attack (hitbox, sword, attack)
-        if ( this.isEntityReadyToTakeDamage(entity)){
+        if (this.isEntityReadyToTakeDamage(entity)) {
           this.player.onTakingDamage(entity.damage);
         }
-        
+
         // Specific logic for Player entity
       } else if (entity instanceof Player) {
         // Player specific update logic can go here
@@ -229,6 +231,27 @@ export default class Region {
         toStateEnterParameters: { score: this.score },
       });
     }
+    // Check all creatures isDead
+    this.checkRegionTransition();
+  }
+  /**
+   * Checks if conditions are met to transition from summer to winter region.
+   * Triggers transition when all enemies are defeated in summer.
+   */
+  checkRegionTransition() {
+    if (this.isWinter || this.isGameOver) return;
+
+    const allEnemiesDead =
+      this.creatures.length > 0 && this.creatures.every((c) => c.isDead);
+
+    if (allEnemiesDead) {
+      this.isGameOver = true;
+      stateMachine.change(GameStateName.Transition, {
+        fromState: stateMachine.states[GameStateName.Play],
+        toState: stateMachine.states[GameStateName.Play],
+        toStateEnterParameters: { isWinter: true },
+      });
+    }
   }
   /**
    * Check if the entity is ready to take damage from the player.
@@ -236,15 +259,17 @@ export default class Region {
    * - Player is not invulnerable
    * - Entity has contact damage
    * - Player's hitbox collides with entity's hitbox
-   * @param {*} entity 
+   * @param {*} entity
    * @returns {boolean} true if entity can take damage
    */
   isEntityReadyToTakeDamage(entity) {
-    return !entity.isDead &&
-          !this.player.isInVulnerable &&
-          entity.isContactDamage &&
-          this.player.hitbox &&
-          entity.hitbox.didCollide(this.player.hitbox)
+    return (
+      !entity.isDead &&
+      !this.player.isInVulnerable &&
+      entity.isContactDamage &&
+      this.player.hitbox &&
+      entity.hitbox.didCollide(this.player.hitbox)
+    );
   }
   /**
    * Check if the game is over.
@@ -256,24 +281,24 @@ export default class Region {
   /**
    * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key)
    * Performs onConsume on the item, and onCollectItem on the player
-   * @param {Player} player 
+   * @param {Player} player
    */
-    checkCollisionWithItem(player) {
-        this.items.forEach((item, index) => {
-            if (player.didCollideWithEntity(item.hitbox)) {
-                if(item instanceof Crystal || item instanceof FireTorch){
-                    item.onConsume();
-                    player.onCollectItem(item);
-                    // Remove item from region after consumption
-                    this.items.splice(index, 1);
-                } else if(item instanceof Key){
-                    item.onConsume();
-                    player.onCollectItem(item);
-                    this.items.splice(index, 1);
-                }
-            }
-        });
-    }
+  checkCollisionWithItem(player) {
+    this.items.forEach((item, index) => {
+      if (player.didCollideWithEntity(item.hitbox)) {
+        if (item instanceof Crystal || item instanceof FireTorch) {
+          item.onConsume();
+          player.onCollectItem(item);
+          // Remove item from region after consumption
+          this.items.splice(index, 1);
+        } else if (item instanceof Key) {
+          item.onConsume();
+          player.onCollectItem(item);
+          this.items.splice(index, 1);
+        }
+      }
+    });
+  }
   /**
    * Checks if the player can move to a given position without colliding with collision tiles
    * @param {number} x - Pixel X position
@@ -377,12 +402,7 @@ export default class Region {
    * @param {ItemType} itemType type of item to be kept
    * @param {number|null} specificCreatureIndex
    */
-  assignItemToCreature(
-    creatures,
-    itemType,
-    specificCreatureIndex = null
-  ) {
-
+  assignItemToCreature(creatures, itemType, specificCreatureIndex = null) {
     creatures.forEach((creature) => {
       if (creature instanceof BigBoss) {
         creature.keepItem(ItemType.Key);
