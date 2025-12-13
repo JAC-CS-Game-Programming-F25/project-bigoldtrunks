@@ -262,18 +262,6 @@ export default class Region {
         console.log(`Creature at index ${randomIndex} will keep item of type ${itemType}`);
     }
 
-    isPositionOnCollision(position) {
-    const collisionObjects = this.map.getCollisionObjects();
-    const tempHitbox = new Hitbox(position.x, position.y, 64, 64);
-
-    for (const hitbox of collisionObjects) {
-        if (tempHitbox.didCollide(hitbox)) {
-        return true;
-        }
-    }
-    return false;
-    }
-
     isPositionOccupied(position, existingCreatures) {
     const minDistance = 32; // Minimum spacing 2 tile
     for (const creature of existingCreatures) {
