@@ -2,24 +2,43 @@ import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
 import CreatureStateName from "../../enums/CreatureStateName.js";
-
+/**
+ * CreatureChasingState - Pursues the player when in range.
+ *
+ * The creature moves toward the player at increased speed. Transitions to
+ * Attacking when close enough, or returns to Idle if the player escapes.
+ *
+ * Flow: Idle (player detected) → Chasing → Attacking (in range) or Idle (too far)
+ */
 export default class CreatureChasingState extends State {
   static CHASE_SPEED_MULTIPLIER = 1.2; // It is 20% faster when chasing.
   static LOSE_INTEREST_RADIUS = 120; // Stop chasing beyond this distance.
   static ATTACK_RANGE = 10; // Distance to start chasing player (in pixels)
 
+  /**
+   * Creates a new CreatureChasingState.
+   * @param {Creature} creature - The creature that is chasing.
+   * @param {Object} animations - Direction-keyed animation map.
+   */
   constructor(creature, animations) {
     super();
     this.creature = creature;
     this.animations = animations;
   }
 
+  /**
+   * Sets the chase animation based on current direction.
+   */
   enter() {
     this.creature.currentAnimation = this.animations[this.creature.direction];
   }
 
+  /**
+   * Moves creature toward player, handles state transitions and bounds.
+   * @param {number} dt - Delta time since last frame.
+   */
   update(dt) {
-    // get player
+    // No valid player target
     const player = this.creature.player;
     if (!player || !player.position) {
       this.creature.changeState(CreatureStateName.Idle);
@@ -41,12 +60,14 @@ export default class CreatureChasingState extends State {
       this.creature.changeState(CreatureStateName.Idle);
       return;
     }
+
     // change to attack
     if (distance <= CreatureChasingState.ATTACK_RANGE) {
       this.creature.changeState(CreatureStateName.Attacking);
       return;
     }
 
+    // Calculate velocity toward player
     const velocityX =
       (dx / distance) *
       this.creature.speed *
@@ -56,7 +77,7 @@ export default class CreatureChasingState extends State {
       this.creature.speed *
       CreatureChasingState.CHASE_SPEED_MULTIPLIER;
 
-    // move
+    // Apply movement
     this.creature.position.x += velocityX * dt;
     this.creature.position.y += velocityY * dt;
 

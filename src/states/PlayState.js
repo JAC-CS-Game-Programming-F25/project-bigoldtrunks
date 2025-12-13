@@ -4,7 +4,6 @@ import { getRandomPositiveInteger } from "../../lib/Random.js";
 import { sounds, stateMachine } from "../globals.js";
 import SoundName from "../enums/SoundName.js";
 import GameStateName from "../enums/GameStateName.js";
-import Vector from "../../lib/Vector.js";
 import CreatureType from "../enums/CreatureType.js";
 
 export default class PlayState extends State {

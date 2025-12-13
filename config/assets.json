@@ -180,13 +180,13 @@
         "size": 1,
         "volume": 0.3,
         "loop": true
-
     },
     {
         "name": "victory",
         "path": "./assets/sounds/music/victory.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.2,
+        "loop": true
     },
     {
         "name": "gameover",
@@ -221,6 +221,12 @@
     {
         "name": "enemy-dead",
         "path": "./assets/sounds/effects/enemy-dead.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "boss-dead",
+        "path": "./assets/sounds/effects/boss-dead.wav",
         "size": 1,
         "volume": 0.2
     },

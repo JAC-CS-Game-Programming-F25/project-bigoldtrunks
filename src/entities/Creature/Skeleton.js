@@ -11,14 +11,18 @@ import { DEBUG, context } from "../../globals.js";
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import Vector from "../../../lib/Vector.js";
 import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
-import Hitbox from "../../../lib/Hitbox.js";
 import ImageName from "../../enums/ImageName.js";
+import CreatureType from "../../enums/CreatureType.js";
 
 export default class Skeleton extends Creature {
   static WIDTH = 64;
   static HEIGHT = 64;
   static SPEED = 20;
   static HEALTH = 180;
+  /**
+   * Creates a new Skeleton at the specified position.
+   * @param {Vector} position - Initial spawn position.
+   */
   constructor(position) {
     super({
       position,
@@ -33,66 +37,57 @@ export default class Skeleton extends Creature {
     this.direction = Direction.Left;
 
     this.loadSprites();
-    this.stateMachine = this.initializeStateMachine();
+    const animations = this.createAnimations();
+    this.stateMachine = this.initializeStateMachine(animations);
+    this.creatureType = CreatureType.Skeleton;
   }
 
+  /**
+   * Loads left and right sprite sheets for the skeleton.
+   */
   loadSprites() {
-    const leftImage = images.get(ImageName.Skeleton_Left);
-    const rightImage = images.get(ImageName.Skeleton_Right);
-
-    this.spritesLeft = [];
-    this.spritesRight = [];
-
-    const idleFrames = [{ x: 0, y: 0 }];
-
-    const walkFrames = [
-      { x: 0, y: 64 },
-      { x: 64, y: 64 },
-      { x: 128, y: 64 },
-      { x: 192, y: 64 },
-      { x: 256, y: 64 },
-      { x: 320, y: 64 },
-    ];
-
-    const attackFrames = [
-      { x: 64, y: 128 },
-      { x: 128, y: 128 },
-      { x: 192, y: 128 },
-      { x: 256, y: 128 },
-    ];
-
-    const allFrames = [...idleFrames, ...walkFrames, ...attackFrames];
-
-    allFrames.forEach((frame) => {
-      this.spritesLeft.push(new Sprite(leftImage, frame.x, frame.y, 64, 64));
-      this.spritesRight.push(new Sprite(rightImage, frame.x, frame.y, 64, 64));
-    });
+    this.spritesLeft = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.Skeleton_Left),
+      Skeleton.WIDTH,
+      Skeleton.HEIGHT
+    );
+    this.spritesRight = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.Skeleton_Right),
+      Skeleton.WIDTH,
+      Skeleton.HEIGHT
+    );
   }
-  setupAnimations() {
-    const animations = {
+  /**
+   * Creates animation sets for each state and direction.
+   * @returns {Object} State-keyed animation map.
+   */
+  createAnimations() {
+    return {
       [CreatureStateName.Idle]: {
         [Direction.Left]: new Animation([0], 0.15),
         [Direction.Right]: new Animation([0], 0.15),
       },
       [CreatureStateName.Walking]: {
-        [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
-        [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.1),
+        [Direction.Left]: new Animation([6, 7, 8, 9, 10, 11], 0.1),
+        [Direction.Right]: new Animation([6, 7, 8, 9, 10, 11], 0.1),
       },
       [CreatureStateName.Chasing]: {
-        [Direction.Left]: new Animation([1, 2, 3, 4, 5, 6], 0.08), // <- add Chasing animation
-        [Direction.Right]: new Animation([1, 2, 3, 4, 5, 6], 0.08),
+        [Direction.Left]: new Animation([6, 7, 8, 9, 10, 11], 0.08),
+        [Direction.Right]: new Animation([6, 7, 8, 9, 10, 11], 0.08),
       },
       [CreatureStateName.Attacking]: {
-        [Direction.Left]: new Animation([7, 8, 9, 10], 0.12), // <- add Attacking animation
-        [Direction.Right]: new Animation([7, 8, 9, 10], 0.12),
+        [Direction.Left]: new Animation([13, 14, 15, 16], 0.12),
+        [Direction.Right]: new Animation([13, 14, 15, 16], 0.12),
       },
     };
-
-    return animations;
   }
 
-  initializeStateMachine() {
-    const animations = this.setupAnimations();
+  /**
+   * Initializes state machine with all creature states.
+   * @param {Object} animations - Animation sets for each state.
+   * @returns {StateMachine} Configured state machine.
+   */
+  initializeStateMachine(animations) {
     const stateMachine = new StateMachine();
 
     stateMachine.add(
@@ -119,6 +114,11 @@ export default class Skeleton extends Creature {
 
     return stateMachine;
   }
+
+  /**
+   * Renders the skeleton sprite with hurt flash effect.
+   * @param {Object} [offset={x: 0, y: 0}] - Camera offset for rendering.
+   */
   render(offset = { x: 0, y: 0 }) {
     // glimmering after injured
     if (this.isHurt && Math.floor(Date.now() / 50) % 2 === 0) {
@@ -138,6 +138,7 @@ export default class Skeleton extends Creature {
 
       spriteSet[frameIndex].render(Math.floor(x), Math.floor(y));
     }
+
     // Debug render hitbox
     if (DEBUG) {
       this.hitbox.render(context);

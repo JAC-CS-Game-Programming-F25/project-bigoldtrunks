@@ -7,21 +7,31 @@ import {
   context,
   CANVAS_WIDTH,
   CANVAS_HEIGHT,
+  sounds,
 } from "../../globals.js";
 import StateMachine from "../../../lib/StateMachine.js";
 import Animation from "../../../lib/Animation.js";
 import Sprite from "../../../lib/Sprite.js";
 import Creature from "./Creature.js";
 import CreatureStateName from "../../enums/CreatureStateName.js";
+import CreatureType from "../../enums/CreatureType.js";
 import CreatureAttackingState from "../../states/Creature/CreatureAttackingState.js";
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
+import SoundName from "../../enums/SoundName.js";
+import { stateMachine } from "../../globals.js";
+import GameStateName from "../../enums/GameStateName.js";
+
 export default class BigBoss extends Creature {
   static WIDTH = 128;
   static HEIGHT = 128;
   static SPEED = 25;
   static HEALTH = 500;
+  /**
+   * Creates a new BigBoss at the specified position.
+   * @param {Vector} position - Initial spawn position.
+   */
   constructor(position) {
     super({
       position,
@@ -37,12 +47,16 @@ export default class BigBoss extends Creature {
     this.loadSprites();
     const animations = this.createAnimations();
     this.stateMachine = this.initializeStateMachine(animations);
-
+    this.creatureType = CreatureType.BigBoss;
     this.detectionRadius = 200;
     this.loseInterestRadius = 300;
     this.attackRange = 40;
   }
 
+  /**
+   * Creates a new BigBoss at the specified position.
+   * @param {Vector} position - Initial spawn position.
+   */
   loadSprites() {
     this.spritesLeft = Sprite.generateSpritesFromSpriteSheet(
       images.get(ImageName.BigBoss_Left),
@@ -55,6 +69,11 @@ export default class BigBoss extends Creature {
       BigBoss.HEIGHT
     );
   }
+
+  /**
+   * Creates animation sets for each state and direction.
+   * @returns {Object} State-keyed animation map.
+   */
   createAnimations() {
     return {
       [CreatureStateName.Idle]: {
@@ -75,6 +94,12 @@ export default class BigBoss extends Creature {
       },
     };
   }
+
+  /**
+   * Initializes state machine with all creature states.
+   * @param {Object} animations - Animation sets for each state.
+   * @returns {StateMachine} Configured state machine.
+   */
   initializeStateMachine(animations) {
     const stateMachine = new StateMachine();
 
@@ -98,6 +123,11 @@ export default class BigBoss extends Creature {
 
     return stateMachine;
   }
+
+  /**
+   * Updates boss state, hitbox, and clamps position to canvas bounds.
+   * @param {number} dt - Delta time since last frame.
+   */
   update(dt) {
     console.log(
       "BigBoss state:",
@@ -118,6 +148,10 @@ export default class BigBoss extends Creature {
     }
   }
 
+  /**
+   * Renders the boss sprite with hurt flash effect.
+   * @param {Object} [offset={x: 0, y: 0}] - Camera offset for rendering.
+   */
   render(offset = { x: 0, y: 0 }) {
     if (this.isHurt && Math.floor(Date.now() / 50) % 2 === 0) {
       return;
@@ -141,10 +175,83 @@ export default class BigBoss extends Creature {
     }
   }
 
+  /**
+   * Returns the center point of the boss's hitbox.
+   * @returns {{x: number, y: number}} Center coordinates.
+   */
   getCenter() {
     return {
       x: this.hitbox.position.x + this.hitbox.dimensions.x / 2,
       y: this.hitbox.position.y + this.hitbox.dimensions.y / 2,
     };
+  }
+
+  /**
+   * Handles damage and plays boss-specific death sound.
+   * @param {number} damage - Damage received.
+   */
+  onTakingHit(damage) {
+    if (this.isDead) return;
+
+    this.health -= damage;
+
+    if (this.health <= 0) {
+      sounds.play(SoundName.BigBossDead);
+      this.spawnItemIfKeep();
+      this.playDeathEffect();
+      console.log("BigBoss is dead!");
+      return;
+    }
+
+    // add glimmering after injured (Juice)
+    this.isHurt = true;
+    setTimeout(() => {
+      this.isHurt = false;
+    }, 300);
+
+    sounds.play(SoundName.EnemyHurt);
+  }
+
+  /**
+   * Plays epic death effect: screen flash + shake, then transitions to Victory.
+   */
+  playDeathEffect() {
+    const canvas = document.querySelector("canvas");
+    const playState = stateMachine.states[GameStateName.Play];
+
+    if (this.player?.region) {
+      this.player.region.isGameOver = true;
+    }
+
+    // First flash white
+    canvas.style.filter = "brightness(2.5)";
+
+    setTimeout(() => {
+      // then flash dark
+      canvas.style.filter = "brightness(0.3)";
+
+      // Screen shake
+      let shakes = 0;
+      const interval = setInterval(() => {
+        canvas.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${
+          (Math.random() - 0.5) * 6
+        }px)`;
+        shakes++;
+
+        if (shakes >= 12) {
+          clearInterval(interval);
+          canvas.style.transform = "";
+          canvas.style.filter = ""; // reset filter
+          this.isDead = true;
+
+          setTimeout(() => {
+            stateMachine.change(GameStateName.Transition, {
+              fromState: playState,
+              toState: stateMachine.states[GameStateName.Victory],
+            });
+          }, 300);
+        }
+      }, 50);
+    }, 200);
   }
 }
