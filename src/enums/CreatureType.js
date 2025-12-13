@@ -4,5 +4,6 @@ const CreatureType = {
   PinkBat: "pinkbat",
   Skeleton: "skeleton",
   Phantom: "phantom",
+  BigBoss: "bigboss",
 };
 export default CreatureType;
