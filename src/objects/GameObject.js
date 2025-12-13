@@ -51,8 +51,10 @@ export default class GameObject {
       this.hitbox.render(context);
     }
   }
-
-  onConsume(consumer) {
+  /**
+   * Called when the object is consumed by a player.
+   */
+  onConsume() {
     this.wasConsumed = true;
     this.cleanUp = true;
   }
