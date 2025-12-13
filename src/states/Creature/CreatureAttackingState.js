@@ -51,15 +51,33 @@ export default class CreatureAttackingState extends State {
 
   dealDamage() {
     const player = this.creature.player;
-    console.log("⚔️ dealDamage called, player:", player);
+    console.log(
+      "⚔️ dealDamage called, creature:",
+      this.creature.constructor.name
+    );
 
     // stop attack if player health is less than zero
     // if (!player || player.health <= 0) return;
     if (!player) return;
+    console.log(
+      "Creature hitbox:",
+      this.creature.hitbox.position,
+      this.creature.hitbox.dimensions
+    );
+    console.log(
+      "Player hitbox:",
+      player.hitbox.position,
+      player.hitbox.dimensions
+    );
 
     if (this.creature.hitbox.didCollide(player.hitbox)) {
       player.onTakingDamage(this.creature.damage);
-      console.log("📌 Skeleton hit player! Player health:", player.health);
+      console.log(
+        "📌 " + this.creature.constructor.name + " hit player! Player health:",
+        player.health
+      );
+    } else {
+      console.log("❌ " + this.creature.constructor.name + " missed player");
     }
   }
 }

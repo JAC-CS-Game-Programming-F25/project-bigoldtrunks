@@ -1,7 +1,13 @@
 import Direction from "../../enums/Direction.js";
 import Vector from "../../../lib/Vector.js";
 import ImageName from "../../enums/ImageName.js";
-import { images, DEBUG, context } from "../../globals.js";
+import {
+  images,
+  DEBUG,
+  context,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+} from "../../globals.js";
 import StateMachine from "../../../lib/StateMachine.js";
 import Animation from "../../../lib/Animation.js";
 import Sprite from "../../../lib/Sprite.js";
@@ -26,11 +32,15 @@ export default class BigBoss extends Creature {
       dimensions: new Vector(BigBoss.WIDTH, BigBoss.HEIGHT),
     });
 
-    this.hitboxOffsets.set(90, 100, -110, -100);
+    // this.hitboxOffsets.set(90, 100, -110, -100);
     this.direction = Direction.Left;
     this.loadSprites();
     const animations = this.createAnimations();
     this.stateMachine = this.initializeStateMachine(animations);
+
+    this.detectionRadius = 200;
+    this.loseInterestRadius = 300;
+    this.attackRange = 40;
   }
 
   loadSprites() {
@@ -88,6 +98,25 @@ export default class BigBoss extends Creature {
 
     return stateMachine;
   }
+  update(dt) {
+    console.log(
+      "BigBoss state:",
+      this.stateMachine.currentState.constructor.name
+    );
+
+    super.update(dt);
+
+    this.hitbox.set(this.position.x + 50, this.position.y + 80, 30, 30);
+
+    if (this.position.x < 0) this.position.x = 0;
+    if (this.position.y < 0) this.position.y = 0;
+    if (this.position.x > CANVAS_WIDTH - this.dimensions.x) {
+      this.position.x = CANVAS_WIDTH - this.dimensions.x;
+    }
+    if (this.position.y > CANVAS_HEIGHT - this.dimensions.y) {
+      this.position.y = CANVAS_HEIGHT - this.dimensions.y;
+    }
+  }
 
   render(offset = { x: 0, y: 0 }) {
     if (this.isHurt && Math.floor(Date.now() / 50) % 2 === 0) {
@@ -110,5 +139,12 @@ export default class BigBoss extends Creature {
     if (DEBUG) {
       this.hitbox.render(context);
     }
+  }
+
+  getCenter() {
+    return {
+      x: this.hitbox.position.x + this.hitbox.dimensions.x / 2,
+      y: this.hitbox.position.y + this.hitbox.dimensions.y / 2,
+    };
   }
 }
