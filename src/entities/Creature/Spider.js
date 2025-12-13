@@ -10,6 +10,8 @@ import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js"
 import ImageName from "../../enums/ImageName.js";
 
 export default class Spider extends Creature {
+  static WIDTH = 16;
+  static HEIGHT = 16;
   static SPEED = 15;
   static HEALTH = 100;
 
@@ -29,8 +31,8 @@ export default class Spider extends Creature {
   loadSprites() {
     this.sprites = Sprite.generateSpritesFromSpriteSheet(
       images.get(ImageName.Spider),
-      16,
-      16
+      Spider.WIDTH,
+      Spider.HEIGHT
     );
   }
 
