@@ -129,16 +129,16 @@
       "height": 16
     },
     {
-      "name": "bigboss-right",
-      "path": "./assets/images/creatures/spider/warden-bear-right.png",
-      "width": 112,
-      "height": 112
+      "name": "big-boss-right",
+      "path": "./assets/images/creatures/bigboss/big-boss-right.png",
+      "width": 1408,
+      "height": 1152
     },
     {
-      "name": "bigboss-left",
-      "path": "./assets/images/creatures/spider/warden-bear-left.png",
-      "width": 112,
-      "height": 112
+      "name": "big-boss-left",
+      "path": "./assets/images/creatures/bigboss/big-boss-left.png",
+      "width": 1408,
+      "height": 1152
     }   
 
   ],
