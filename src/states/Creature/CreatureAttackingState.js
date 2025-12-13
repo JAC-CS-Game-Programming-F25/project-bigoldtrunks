@@ -74,6 +74,7 @@ export default class CreatureAttackingState extends State {
    */
   dealDamage() {
     const player = this.creature.player;
+
     console.log(
       "⚔️ dealDamage called, creature:",
       this.creature.constructor.name
@@ -81,7 +82,7 @@ export default class CreatureAttackingState extends State {
 
     // stop attack if player health is less than zero
     // if (!player || player.health <= 0) return;
-    if (!player) return;
+    if (!player || player.isDead) return;
     console.log(
       "Creature hitbox:",
       this.creature.hitbox.position,
