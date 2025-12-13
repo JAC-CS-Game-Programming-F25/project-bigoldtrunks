@@ -15,8 +15,8 @@ import CreatureType from "../enums/CreatureType.js";
 import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
 export default class Region {
-  constructor(mapDefinition, creatureConfig = []) {
-    this.map = new Map(mapDefinition);
+  constructor(mapDefinition, creatureConfig = [], isWinter = false) {
+    this.map = new Map(mapDefinition, isWinter);
     this.creatures = this.spawnCreatures(creatureConfig);
 
         // Once we have the creature now we decide which one will keep the item
@@ -34,10 +34,10 @@ export default class Region {
         this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
         this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
 
-        // Assign player reference to all creatures so they can chase
-        this.creatures.forEach(creature => {
-            creature.player = this.player;
-        });
+    // Assign player reference to all creatures so they can chase
+    this.creatures.forEach((creature) => {
+      creature.player = this.player;
+    });
 
     // All entities in the region
     this.entities = [this.player, ...this.creatures];

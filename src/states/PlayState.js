@@ -7,26 +7,29 @@ import GameStateName from "../enums/GameStateName.js";
 import CreatureType from "../enums/CreatureType.js";
 
 export default class PlayState extends State {
-  constructor(mapDefinition) {
+  constructor(summerMapDefinition, winterMapDefinition) {
     super();
-    this.mapDefinition = mapDefinition;
+    // this.mapDefinition = mapDefinition;
+    this.summerMapDefinition = summerMapDefinition;
+    this.winterMapDefinition = winterMapDefinition;
+    this.currentSeason = "summer";
   }
-  enter() {
-    sounds.play(SoundName.Summer);
-    /**
-     * Creature spawn definitions for summer-themed region
-     * 
-     */
-    const summerCreatures = [
-      {
-        type: CreatureType.Spider,
-        count: getRandomPositiveInteger(3, 5),
-      },
-      { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
-      { type: CreatureType.BigBoss, count: 1 },
-    ];
+  enter(params = {}) {
+    const isWinter = params.isWinter || false;
+    this.currentSeason = isWinter ? "winter" : "summer";
 
-    this.region = new Region(this.mapDefinition, summerCreatures);
+    if (isWinter) {
+      sounds.play(SoundName.Winter);
+      const winterCreatures = [{ type: CreatureType.BigBoss, count: 1 }];
+      this.region = new Region(this.winterMapDefinition, winterCreatures);
+    } else {
+      sounds.play(SoundName.Summer);
+      const summerCreatures = [
+        { type: CreatureType.Spider, count: getRandomPositiveInteger(3, 5) },
+        { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
+      ];
+      this.region = new Region(this.summerMapDefinition, summerCreatures);
+    }
   }
   update(dt) {
     this.region.update(dt);
@@ -47,6 +50,8 @@ export default class PlayState extends State {
     this.region.render();
   }
   exit() {
-    sounds.stop(SoundName.Summer);
+    sounds.stop(
+      this.currentSeason === "winter" ? SoundName.Winter : SoundName.Summer
+    );
   }
 }
