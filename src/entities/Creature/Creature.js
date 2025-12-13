@@ -23,7 +23,9 @@ export default class Creature extends GameEntity {
     this.isContactDamage = creatureDefinition.isContactDamage ?? false;
     this.isHurt = false;
     /**
-     * Type of item this creature should drop when dead
+     * Type of item this creature should drop when dead, 
+     * Spider, Skeleton may drop Crystal, and FireTorch
+     * BigBoss drops Key
      * @type {string|null}
      */
     this.itemTypeToKeep = null;
