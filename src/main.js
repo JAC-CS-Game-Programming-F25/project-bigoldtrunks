@@ -43,8 +43,8 @@ const {
 } = await fetch("./config/assets.json").then((response) => response.json());
 
 // Fetch summer map
-const mapDefinition = await fetch("./config/summer-map.json").then((response) =>
-  response.json()
+const summerMapDefinition = await fetch("./config/summer-map.json").then(
+  (response) => response.json()
 );
 
 // Fetch winter map
@@ -61,12 +61,15 @@ sounds.load(soundDefinitions);
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
 stateMachine.add(GameStateName.GameOver, new GameOverState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
-stateMachine.add(GameStateName.Play, new PlayState(mapDefinition));
+stateMachine.add(
+  GameStateName.Play,
+  new PlayState(summerMapDefinition, winterMapDefinition)
+);
 stateMachine.add(GameStateName.Transition, new TransitionState());
 stateMachine.add(GameStateName.Victory, new VictoryState());
 
 // stateMachine.change(GameStateName.TitleScreen);
-stateMachine.change(GameStateName.Play);
+stateMachine.change(GameStateName.Play, { isWinter: true });
 
 const game = new Game(
   stateMachine,

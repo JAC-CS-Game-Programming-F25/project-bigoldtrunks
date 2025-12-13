@@ -9,17 +9,22 @@ export default class Map {
    * Creates a new Map from a definition object.
    * @param {Object} mapDefinition - Map data (width, height, layers).
    */
-  constructor(mapDefinition) {
+  constructor(mapDefinition, isWinter = false) {
     // Generate sprites from tileset
     this.width = mapDefinition.width;
     this.height = mapDefinition.height;
+
+    // bottom
+    const floorImage = images.get(ImageName.Summer);
     const sprites = Sprite.generateSpritesFromSpriteSheet(
-      images.get(ImageName.Summer),
+      floorImage,
       Tile.SIZE,
       Tile.SIZE
     );
+
+    const decorationImage = images.get(ImageName.Tree);
     const spritesDecoration = Sprite.generateSpritesFromSpriteSheet(
-      images.get(ImageName.Tree),
+      decorationImage,
       Tile.SIZE,
       Tile.SIZE
     );

@@ -6,7 +6,7 @@ const ImageName = {
   Summer: "Floors_Tiles",
   Winter: "Floors_Tiles",
   Tree: "tree_size_02",
-  Tree_winter: "tree-tiles-winter",
+  Tree_winter: "Size_04",
   Rock: "rocks-winter",
   Vegetation: "Vegetation",
   Wall_Tiles: "Wall_Tiles",
