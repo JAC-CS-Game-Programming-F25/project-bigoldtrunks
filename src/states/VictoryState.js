@@ -1,7 +1,7 @@
 import State from "../../lib/State.js";
-import { input } from "../globals.js";
+import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
 import Input from "../../lib/Input.js";
-
+import FontName from "../enums/FontName.js";
 
 export default class VictoryState extends State {
   constructor() {
@@ -17,5 +17,27 @@ export default class VictoryState extends State {
         toState: stateMachine.states[GameStateName.TitleScreen],
       });
     }
+  }
+  render() {
+    // Background
+    images.get(ImageName.Title).render(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    // Dark overlay
+    context.fillStyle = "rgba(0, 0, 0, 0.7)";
+    context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    // Victory text
+    context.font = `32px ${FontName.CinzelBold}`;
+    context.fillStyle = "#FFD700"; // Gold color
+    context.textAlign = "center";
+    context.fillText("VICTORY!", CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 - 20);
+
+    // Continue prompt
+    context.font = `12px ${FontName.MedievalSharp}`;
+    context.fillText(
+      "Press Enter to continue",
+      CANVAS_WIDTH / 2,
+      CANVAS_HEIGHT / 2 + 50
+    );
   }
 }
