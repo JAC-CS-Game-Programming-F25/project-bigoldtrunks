@@ -57,6 +57,9 @@ export default class Region {
     this.updateEntities(dt);
     this.updateObjects(dt);
     this.updateItems(dt);
+    // check Victory: check if player reached goal (final boss defeated, key collected,)
+    // check RegionConquered (if all creatures defeated, etc.) 
+    // Thoughts: later maybe add a time before transition to next region, player need to collect the item to gain ability otherwise it would be hard for next region
   }
 
   render() {
