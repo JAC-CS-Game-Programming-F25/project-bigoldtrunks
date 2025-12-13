@@ -15,7 +15,10 @@ export default class Spider extends Creature {
   static HEIGHT = 16;
   static SPEED = 15;
   static HEALTH = 100;
-
+  /**
+   * Creates a new Spider at the specified position.
+   * @param {Vector} position - Initial spawn position.
+   */
   constructor(position) {
     super({
       position,
@@ -25,11 +28,14 @@ export default class Spider extends Creature {
     });
     this.hitboxOffsets.set(0, 6, -2, -8); // shrink hitbox
     this.loadSprites();
-    this.setupAnimations();
-    this.stateMachine = this.initializeStateMachine();
+    const animations = this.createAnimations();
+    this.stateMachine = this.initializeStateMachine(animations);
     this.creatureType = CreatureType.Spider;
   }
 
+  /**
+   * Loads sprite sheet for the spider.
+   */
   loadSprites() {
     this.sprites = Sprite.generateSpritesFromSpriteSheet(
       images.get(ImageName.Spider),
@@ -38,7 +44,11 @@ export default class Spider extends Creature {
     );
   }
 
-  setupAnimations() {
+  /**
+   * Creates animation sets for each state and direction.
+   * @returns {Object} State-keyed animation map.
+   */
+  createAnimations() {
     const animations = {
       [CreatureStateName.Idle]: {
         [Direction.Down]: new Animation([0], 1),
@@ -55,8 +65,7 @@ export default class Spider extends Creature {
     return animations;
   }
 
-  initializeStateMachine() {
-    const animations = this.setupAnimations();
+  initializeStateMachine(animations) {
     const stateMachine = new StateMachine();
 
     stateMachine.add(

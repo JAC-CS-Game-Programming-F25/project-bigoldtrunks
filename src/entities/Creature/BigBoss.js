@@ -18,11 +18,16 @@ import CreatureAttackingState from "../../states/Creature/CreatureAttackingState
 import CreatureChasingState from "../../states/Creature/CreatureChasingState.js";
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
+
 export default class BigBoss extends Creature {
   static WIDTH = 128;
   static HEIGHT = 128;
   static SPEED = 25;
   static HEALTH = 500;
+  /**
+   * Creates a new BigBoss at the specified position.
+   * @param {Vector} position - Initial spawn position.
+   */
   constructor(position) {
     super({
       position,
@@ -44,6 +49,10 @@ export default class BigBoss extends Creature {
     this.attackRange = 40;
   }
 
+    /**
+   * Creates a new BigBoss at the specified position.
+   * @param {Vector} position - Initial spawn position.
+   */
   loadSprites() {
     this.spritesLeft = Sprite.generateSpritesFromSpriteSheet(
       images.get(ImageName.BigBoss_Left),
@@ -56,6 +65,11 @@ export default class BigBoss extends Creature {
       BigBoss.HEIGHT
     );
   }
+
+  /**
+   * Creates animation sets for each state and direction.
+   * @returns {Object} State-keyed animation map.
+   */
   createAnimations() {
     return {
       [CreatureStateName.Idle]: {
@@ -76,6 +90,12 @@ export default class BigBoss extends Creature {
       },
     };
   }
+
+  /**
+   * Initializes state machine with all creature states.
+   * @param {Object} animations - Animation sets for each state.
+   * @returns {StateMachine} Configured state machine.
+   */
   initializeStateMachine(animations) {
     const stateMachine = new StateMachine();
 
@@ -99,6 +119,11 @@ export default class BigBoss extends Creature {
 
     return stateMachine;
   }
+
+  /**
+   * Updates boss state, hitbox, and clamps position to canvas bounds.
+   * @param {number} dt - Delta time since last frame.
+   */
   update(dt) {
     console.log(
       "BigBoss state:",
@@ -119,6 +144,10 @@ export default class BigBoss extends Creature {
     }
   }
 
+  /**
+   * Renders the boss sprite with hurt flash effect.
+   * @param {Object} [offset={x: 0, y: 0}] - Camera offset for rendering.
+   */
   render(offset = { x: 0, y: 0 }) {
     if (this.isHurt && Math.floor(Date.now() / 50) % 2 === 0) {
       return;
@@ -142,6 +171,10 @@ export default class BigBoss extends Creature {
     }
   }
 
+  /**
+   * Returns the center point of the boss's hitbox.
+   * @returns {{x: number, y: number}} Center coordinates.
+   */
   getCenter() {
     return {
       x: this.hitbox.position.x + this.hitbox.dimensions.x / 2,

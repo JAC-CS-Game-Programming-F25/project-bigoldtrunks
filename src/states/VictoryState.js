@@ -11,16 +11,30 @@ import {
 import Input from "../../lib/Input.js";
 import FontName from "../enums/FontName.js";
 import ImageName from "../enums/ImageName.js";
-
+import GameStateName from "../enums/GameStateName.js";
+import SoundName from "../enums/SoundName.js";
+/**
+ * VictoryState - Displayed when the player wins the game.
+ *
+ * Shows a victory screen with gold "VICTORY!" text over a darkened
+ * title background. Plays victory music until the player continues.
+ *
+ * Controls: Enter - Return to title screen
+ */
 export default class VictoryState extends State {
   constructor() {
     super();
+  }
+  enter() {
+    sounds.play(SoundName.Victory);
+  }
+  exit() {
+    sounds.stop(SoundName.Victory);
   }
 
   update(dt) {
     // Press Enter to go back to title
     if (input.isKeyPressed(Input.KEYS.ENTER)) {
-      keys.Enter = false;
       stateMachine.change(GameStateName.Transition, {
         fromState: this,
         toState: stateMachine.states[GameStateName.TitleScreen],

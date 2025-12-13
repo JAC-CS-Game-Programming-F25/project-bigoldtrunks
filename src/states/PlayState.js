@@ -6,6 +6,7 @@ import SoundName from "../enums/SoundName.js";
 import GameStateName from "../enums/GameStateName.js";
 import Vector from "../../lib/Vector.js";
 import CreatureType from "../enums/CreatureType.js";
+import Animation from "../../lib/Animation.js";
 
 export default class PlayState extends State {
   constructor(mapDefinition) {
@@ -20,7 +21,7 @@ export default class PlayState extends State {
         count: getRandomPositiveInteger(3, 5),
       },
       { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
-      { type: CreatureType.BigBoss, count: 1 },
+      // { type: CreatureType.BigBoss, count: 1 },
     ];
 
     this.region = new Region(this.mapDefinition, summerCreatures);
