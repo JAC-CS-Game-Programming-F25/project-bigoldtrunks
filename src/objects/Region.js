@@ -45,6 +45,7 @@ export default class Region {
     this.collisionLayer = this.map.collisionLayer;
     this.renderQueue = this.buildRenderQueue();
     this.isGameOver = false;
+    this.isVictory = false;
     this.ui = new UserInterface(this.player, this);
   }
 
@@ -57,11 +58,74 @@ export default class Region {
     this.updateEntities(dt);
     this.updateObjects(dt);
     this.updateItems(dt);
+    this.checkVictory();
     // check Victory: check if player reached goal (final boss defeated, key collected,)
+    
     // check RegionConquered (if all creatures defeated, etc.) 
     // Thoughts: later maybe add a time before transition to next region, player need to collect the item to gain ability otherwise it would be hard for next region
   }
+  /**
+   * Check if player reached victory conditions (e.g., final boss defeated, key collected,)
+   * Update isVictory, then start processing Victory by calling processVictory()
+   */
+  checkVictory() {
+    // check if player reached goal (final boss defeated, key collected,)
+    const hasKey = this.player.itemCollected.some(item => item.itemType === ItemType.Key);
+    if (hasKey) {
+      console.log("Player had the key to escape the world!");
+      this.isVictory = true;
+      // process victory (transition to next region or game win state)
+      // start the transition to next region or game win state
+      this.processVictory();
+    }
+  }
+  /**
+   * Called when victory conditions are met 
+   * Handle transition, UI, juicy, sound effects
+   */
+  processVictory() {
+    this.playWinningEffect();
+    // Implement the logic for processing victory
+  }
+  /**
+   * Plays winning effect: screen flash + shake, then transitions to Victory Screen
+   * Written by Lin, update by Cuong
+   */
+  playWinningEffect(){
+    const canvas = document.querySelector("canvas");
+    const playState = stateMachine.states[GameStateName.Play];
 
+    // First flash white
+    canvas.style.filter = "brightness(2.5)";
+
+    setTimeout(() => {
+      // then flash dark
+      canvas.style.filter = "brightness(0.3)";
+
+      // Screen shake
+      let shakes = 0;
+      const interval = setInterval(() => {
+        canvas.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${
+          (Math.random() - 0.5) * 6
+        }px)`;
+        shakes++;
+
+        if (shakes >= 12) {
+          clearInterval(interval);
+          canvas.style.transform = "";
+          canvas.style.filter = ""; // reset filter
+          this.isDead = true;
+
+          setTimeout(() => {
+            stateMachine.change(GameStateName.Transition, {
+              fromState: playState,
+              toState: stateMachine.states[GameStateName.Victory],
+            });
+          }, 300);
+        }
+      }, 50);
+    }, 200);
+  }
   render() {
     this.map.render(); // ← render map
 
