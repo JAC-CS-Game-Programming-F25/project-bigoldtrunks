@@ -43,7 +43,7 @@ export default class CreatureAttackingState extends State {
       const dx = playerCenterX - creatureCenter.x;
       this.creature.direction = dx < 0 ? Direction.Left : Direction.Right;
     }
-    sounds.play(SoundName.Hit);
+    sounds[SoundName.Hit].play();
     this.creature.currentAnimation = this.animations[this.creature.direction];
     this.creature.currentAnimation.refresh();
   }

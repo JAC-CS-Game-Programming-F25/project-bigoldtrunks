@@ -4,7 +4,8 @@ import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
+import SoundName from "../../enums/SoundName.js";
+import { input, CANVAS_WIDTH, CANVAS_HEIGHT, sounds } from "../../globals.js";
 
 
 export default class PlayerSwordSwingingState extends State {
@@ -39,12 +40,14 @@ export default class PlayerSwordSwingingState extends State {
         this.player.dimensions.x = Player.PLAYER_SWORD_SPRITE_WIDTH;
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
         
+        // Play sword swing sound once when entering the state
+        sounds[SoundName.PlayerSwingSword].play();
+        
         this.player.sprites = this.player.swordSwingingSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
     }
     
     update(dt){
-
         if(this.player.currentAnimation.isDone()){
             this.player.currentAnimation.refresh();
             this.player.changeState(PlayerStateName.Idle);
