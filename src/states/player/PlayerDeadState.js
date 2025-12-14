@@ -17,6 +17,7 @@ export default class PlayerDeadState extends State {
 			[Direction.Down]: new Animation([104,105,106,107], 0.4, 1),
             [Direction.Up]: new Animation([108,109,110,111], 0.4, 1),
 		};
+        this.waitTimerStarted = false;
     }
 
     enter(){
@@ -31,8 +32,8 @@ export default class PlayerDeadState extends State {
         this.player.currentAnimation.update(dt);
         
         // Once animation is done, start the wait timer
-        if (this.player.currentAnimation.isDone()) {
-            
+        if (this.player.currentAnimation.isDone() && !this.waitTimerStarted) {
+            this.waitTimerStarted = true;
             this.startWaitTimer();
         }
     }
