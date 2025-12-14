@@ -139,7 +139,7 @@ export default class Region {
               fromState: playState,
               toState: stateMachine.states[GameStateName.Victory],
             });
-          }, 7000); // delay before transitioning to Victory Screen to play the sound effect 
+          }, 5000); // delay before transitioning to Victory Screen to play the sound effect 
         }
       }, 50);
     }, 200);
