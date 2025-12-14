@@ -14,7 +14,7 @@ export default class Spider extends Creature {
   static WIDTH = 16;
   static HEIGHT = 16;
   static SPEED = 15;
-  static HEALTH = 100;
+  static HEALTH = 1;
   /**
    * Creates a new Spider at the specified position.
    * @param {Vector} position - Initial spawn position.

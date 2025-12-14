@@ -18,7 +18,7 @@ export default class Skeleton extends Creature {
   static WIDTH = 64;
   static HEIGHT = 64;
   static SPEED = 20;
-  static HEALTH = 180;
+  static HEALTH = 3;
   /**
    * Creates a new Skeleton at the specified position.
    * @param {Vector} position - Initial spawn position.
