@@ -15,17 +15,21 @@ export default class UserInterface {
     this.renderEnemyInfo();
   }
   renderHealth() {
-    context.fillStyle = "#FF0000";
-    context.font = `15px ${FontName.MedievalSharp}`;
+    context.fillStyle = "rgba(0, 0, 0, 0.5)";
+    context.fillRect(5, 5, 70, 35);
+
+    context.font = `10px ${FontName.MedievalSharp}`;
     context.textAlign = "left";
 
     // use heart to represent health
-    let hearts = "";
-    for (let i = 0; i < this.player.health; i++) {
-      hearts += "❤️";
-    }
-    context.fillText(hearts, 10, 15);
+    context.fillStyle = "#FF0000";
+    context.fillText(`❤️ ${this.player.health}`, 10, 18);
+
+    // Lives
+    context.fillStyle = "#FFD700";
+    context.fillText(`🧍 x ${this.player.lives}`, 10, 32);
   }
+
   renderAbilities() {
     // Render Frozen Blast icon if ability is unlocked
     if (this.player.abilityUnlocked[AbilityType.FrozenFlame]) {
