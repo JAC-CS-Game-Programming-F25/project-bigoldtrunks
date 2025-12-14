@@ -32,6 +32,14 @@ export default class SaveManager {
    * @returns {Object|null} Save data or null if no save exists.
    */
   static load() {
+    const data = localStorage.getItem(this.SAVE_KEY);
+    return data ? JSON.parse(data) : null;
+  }
+
+  /**
+   * Checks if a save file exists.
+   */
+  static hasSave() {
     return localStorage.getItem(this.SAVE_KEY) !== null;
   }
 
