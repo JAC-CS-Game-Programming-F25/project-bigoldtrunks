@@ -31,7 +31,7 @@ export default class UserInterface {
     }
     context.fillText(hearts, 10, 18);
 
-    // Lives
+    // lives
     let lives = "";
     for (let i = 0; i < this.player.lives; i++) {
       lives += "🧍";
