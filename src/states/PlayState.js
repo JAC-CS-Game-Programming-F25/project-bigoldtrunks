@@ -1,7 +1,12 @@
 import State from "../../lib/State.js";
 import Region from "../objects/Region.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
-import { sounds, stateMachine } from "../globals.js";
+import {
+  sounds,
+  stateMachine,
+  CANVAS_HEIGHT,
+  CANVAS_WIDTH,
+} from "../globals.js";
 import SoundName from "../enums/SoundName.js";
 import GameStateName from "../enums/GameStateName.js";
 import CreatureType from "../enums/CreatureType.js";
@@ -75,8 +80,18 @@ export default class PlayState extends State {
     // restore player status
     this.region.player.health = saveData.health || 3;
     this.region.player.lives = saveData.lives || 3;
-    this.region.player.position.x = saveData.playerX;
-    this.region.player.position.y = saveData.playerY;
+
+    // fix player out of boundary after loding save game
+    const x = saveData.playerX;
+    const y = saveData.playerY;
+    if (x > 16 && x < CANVAS_WIDTH - 32 && y > 16 && y < CANVAS_HEIGHT - 32) {
+      this.region.player.position.x = saveData.playerX;
+      this.region.player.position.y = saveData.playerY;
+    } else {
+      this.region.player.position.x = 100;
+      this.region.player.position.y = 100;
+      console.log("Invalid position, using default:", x, y);
+    }
 
     if (saveData.abilityUnlocked) {
       this.region.player.abilityUnlocked = saveData.abilityUnlocked;
