@@ -96,7 +96,7 @@ export default class UserInterface {
     context.fillStyle = "#FF0000";
     context.fillRect(x, y, barWidth * healthPercent, barHeight);
 
-    context.fillStyle = "#FFFFFF";
+    context.fillStyle = "#333333";
     context.font = `10px ${FontName.MedievalSharp}`;
     context.textAlign = "center";
     context.fillText(
