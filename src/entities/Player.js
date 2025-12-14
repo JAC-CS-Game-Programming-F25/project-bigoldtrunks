@@ -182,8 +182,6 @@ export default class Player extends GameEntity {
     }
     
     this.health -= damage;
-    if (this.health < 0) this.health = 0;
-    console.log(`Player took damage: ${damage}, current health: ${this.health}`);
 
     // Check if player's health reached 0
     if (this.health <= 0) {
