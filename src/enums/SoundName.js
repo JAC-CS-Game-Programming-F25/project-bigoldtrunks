@@ -5,6 +5,7 @@ const SoundName = {
   Winter: "winter",
   Victory: "victory",
   Gameover: "gameover",
+  Final: "final",
 
   // Effects
   DoorEnter: "door-enter",
@@ -16,6 +17,12 @@ const SoundName = {
   EnemyHurt: "hurt",
   Hit: "hits",
   BigBossDead: "boss-dead",
+  Heal: "heal",
+
+  // Player
+  PlayerSwingSword: "sword",
+  PlayerPerformFireFlame: "player-fire-flame",
+  PlayerPerformFrozenFlame: "frozen",
 };
 
 export default SoundName;

@@ -189,7 +189,7 @@
         "name": "summer",
         "path": "./assets/sounds/music/summer.wav",
         "size": 1,
-        "volume": 0.2,
+        "volume": 0.1,
         "loop": true
     },
     {
@@ -249,10 +249,11 @@
         "volume": 0.2
     },
     {
-        "name": "fire",
-        "path": "./assets/sounds/effects/fire.wav",
-        "size": 1,
-        "volume": 0.2
+        "name": "player-fire-flame",
+        "path": "./assets/sounds/effects/fire-woosh.wav",
+        "size": 5,
+        "volume": 0.1
+        
     },
     {
         "name": "door-enter",
