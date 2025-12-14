@@ -77,6 +77,7 @@ export default class Region {
    * Update isVictory, then start processing Victory by calling processVictory()
    */
   checkVictory() {
+    if (this.isVictory) return;
     // check if player reached goal (final boss defeated, key collected,)
     const hasKey = this.player.itemCollected.some(
       (item) => item.itemType === ItemType.Key
@@ -409,6 +410,7 @@ export default class Region {
    * @param {number|null} specificCreatureIndex
    */
   assignItemToCreature(creatures, itemType, specificCreatureIndex = null) {
+    if (creatures.length === 0) return;
     creatures.forEach((creature) => {
       if (creature instanceof BigBoss) {
         creature.keepItem(ItemType.Key);

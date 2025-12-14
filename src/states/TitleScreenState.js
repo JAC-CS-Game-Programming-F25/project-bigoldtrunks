@@ -39,6 +39,7 @@ export default class TitleScreenState extends State {
   }
 
   enter() {
+    this.updateMenuOption();
     sounds.play(SoundName.Title);
   }
 
