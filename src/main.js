@@ -21,6 +21,7 @@ import {
   sounds,
   stateMachine,
 } from "./globals.js";
+import SoundPool from "../lib/SoundPool.js";
 import PlayState from "./states/PlayState.js";
 import GameOverState from "./states/GameOverState.js";
 import VictoryState from "./states/VictoryState.js";
@@ -36,7 +37,7 @@ canvas.setAttribute("tabindex", "1"); // Allows the canvas to receive user input
 document.body.appendChild(canvas);
 
 // Fetch the asset definitions from assets.json.
-const {
+export const {
   images: imageDefinitions,
   fonts: fontDefinitions,
   sounds: soundDefinitions,
@@ -55,7 +56,16 @@ const winterMapDefinition = await fetch("./config/winter-map.json").then(
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
 fonts.load(fontDefinitions);
-sounds.load(soundDefinitions);
+
+// Initialize sound pools from sound definitions
+soundDefinitions.forEach((soundDef) => {
+  sounds[soundDef.name] = new SoundPool(
+    soundDef.path,
+    soundDef.size,
+    soundDef.volume,
+    soundDef.loop
+  );
+});
 
 // Add all the states to the state machine.
 stateMachine.add(GameStateName.TitleScreen, new TitleScreenState());
