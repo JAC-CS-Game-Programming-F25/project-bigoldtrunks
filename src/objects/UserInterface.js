@@ -21,7 +21,7 @@ export default class UserInterface {
     context.fillStyle = "rgba(0, 0, 0, 0.5)";
     context.fillRect(5, 5, 70, 35);
 
-    context.font = `10px ${FontName.MedievalSharp}`;
+    context.font = `8px ${FontName.MedievalSharp}`;
     context.textAlign = "left";
 
     // use heart to represent health

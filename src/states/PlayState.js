@@ -59,17 +59,22 @@ export default class PlayState extends State {
       sounds[SoundName.Summer].play();
       creatures = [
         { type: CreatureType.Spider, count: getRandomPositiveInteger(3, 5) },
-        // { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
+        { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
       ];
       this.region = new Region(this.summerMapDefinition, creatures, isWinter);
     }
-    
+
     // Restore player abilities from previous region if transitioning
     if (previousPlayerData && previousPlayerData.abilityUnlocked) {
-      this.region.player.abilityUnlocked = { ...previousPlayerData.abilityUnlocked };
-      console.log("Restored player abilities:", this.region.player.abilityUnlocked);
+      this.region.player.abilityUnlocked = {
+        ...previousPlayerData.abilityUnlocked,
+      };
+      console.log(
+        "Restored player abilities:",
+        this.region.player.abilityUnlocked
+      );
     }
-    
+
     // 1. Save game when start new game
     SaveManager.save(this.region.player, this.region);
   }
