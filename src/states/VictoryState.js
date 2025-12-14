@@ -27,11 +27,11 @@ export default class VictoryState extends State {
     super();
   }
   enter() {
+    sounds[SoundName.Victory].play();
     SaveManager.deleteSave();
-    sounds.play(SoundName.Victory);
   }
   exit() {
-    sounds.stop(SoundName.Victory);
+    sounds[SoundName.Victory].stop();
   }
 
   update(dt) {

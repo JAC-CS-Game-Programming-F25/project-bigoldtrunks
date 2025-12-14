@@ -26,7 +26,7 @@ export default class BigBoss extends Creature {
   static WIDTH = 128;
   static HEIGHT = 128;
   static SPEED = 25;
-  static HEALTH = 500;
+  static HEALTH = 10;
   /**
    * Creates a new BigBoss at the specified position.
    * @param {Vector} position - Initial spawn position.
@@ -195,7 +195,7 @@ export default class BigBoss extends Creature {
     }
 
     if (this.health <= 0) {
-      sounds.play(SoundName.BigBossDead);
+      sounds[SoundName.BigBossDead].play();
       this.spawnItemIfKeep();
       // this.playDeathEffect();
       return;
@@ -207,6 +207,6 @@ export default class BigBoss extends Creature {
       this.isHurt = false;
     }, 300);
 
-    sounds.play(SoundName.EnemyHurt);
+    sounds[SoundName.EnemyHurt].play();
   }
 }

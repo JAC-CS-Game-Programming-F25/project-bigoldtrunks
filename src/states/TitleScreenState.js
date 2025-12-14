@@ -39,12 +39,12 @@ export default class TitleScreenState extends State {
   }
 
   enter() {
+    sounds[SoundName.Title].play();
     this.updateMenuOption();
-    sounds.play(SoundName.Title);
   }
 
   exit() {
-    sounds.stop(SoundName.Title);
+    sounds[SoundName.Title].stop();
   }
   /**
    * Handles menu navigation and selection.
@@ -70,7 +70,7 @@ export default class TitleScreenState extends State {
       this.selectedIndex =
         (this.selectedIndex - 1 + this.menuOptions.length) %
         this.menuOptions.length;
-      sounds.play(SoundName.Select);
+      sounds[SoundName.Select].play();
     }
 
     // ↓ or S
@@ -79,13 +79,14 @@ export default class TitleScreenState extends State {
       input.isKeyPressed(Input.KEYS.S)
     ) {
       this.selectedIndex = (this.selectedIndex + 1) % this.menuOptions.length;
-      sounds.play(SoundName.Select);
+      sounds[SoundName.Select].play();
     }
 
     // Enter confirm
     if (input.isKeyPressed(Input.KEYS.ENTER)) {
-      sounds.play(SoundName.Select);
-
+      sounds[SoundName.Select].play();
+      if (this.selectedIndex === 0) {
+        // stateMachine.change(GameStateName.Play);
       // add continue option in menu
       const option = this.menuOptions[this.selectedIndex];
       if (option === "Continue") {

@@ -1,7 +1,7 @@
 import Animation from "../../lib/Animation.js";
 import Sprite from "../../lib/Sprite.js";
 import ImageName from "../enums/ImageName.js";
-import { images } from "../globals.js";
+import { images, timer } from "../globals.js";
 import GameObject from "./GameObject.js";
 import Direction from "../enums/Direction.js";
 import Easing from "../../lib/Easing.js";
@@ -47,12 +47,21 @@ export default class FrozenBlast extends GameObject {
         
 
         this.damage = 5; // Damage dealt by the flame
+        this.coolDown = 2; // Cooldown for Frozen Blast
+        this.isOnCooldown = false;
+
     }
     updateSpritesAndAnimation() {
         this.sprites = (this.direction === Direction.Right) ? this.frozenRightSprites : this.frozenLeftSprites;
         this.animation = (this.direction === Direction.Right) ? this.animationRight : this.animationLeft;
     }
 
+    startCooldown() {
+        this.isOnCooldown = true;
+        timer.wait(this.coolDown).then(() => {
+            this.isOnCooldown = false;
+        });
+    }
     /**
      * Calculate the starting position for the FrozenBlast in front of the player
      * @param {Vector} playerPosition - The player's current position

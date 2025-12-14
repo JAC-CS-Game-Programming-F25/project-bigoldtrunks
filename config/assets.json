@@ -189,7 +189,7 @@
         "name": "summer",
         "path": "./assets/sounds/music/summer.wav",
         "size": 1,
-        "volume": 0.2,
+        "volume": 0.1,
         "loop": true
     },
     {
@@ -249,10 +249,11 @@
         "volume": 0.2
     },
     {
-        "name": "fire",
-        "path": "./assets/sounds/effects/fire.wav",
-        "size": 1,
-        "volume": 0.2
+        "name": "player-fire-flame",
+        "path": "./assets/sounds/effects/fire-woosh.wav",
+        "size": 5,
+        "volume": 0.1
+        
     },
     {
         "name": "door-enter",
@@ -281,12 +282,32 @@
     {
         "name": "hurt",
         "path": "./assets/sounds/effects/hurt.wav",
-        "size": 1,
+        "size": 10,
         "volume": 0.3
+      },
+      {
+        "name": "landed",
+        "path": "./assets/sounds/effects/landed-on-earth-stomp.wav",
+        "size": 1,
+        "volume": 0.5
+      },
+      
+    {
+        "name": "scream",
+        "path": "./assets/sounds/effects/battle-man-scream-2175.wav",
+        "size": 1,
+        "volume": 0.5
     },
+
     {
         "name": "key-pickup",
-        "path": "./assets/sounds/effects/key-pickup.wav",
+        "path": "./assets/sounds/effects/key-collected-game-success-alert-2039.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "on-escape-successful",
+        "path": "./assets/sounds/effects/on-escape-success-riser-helicopter.wav",
         "size": 1,
         "volume": 0.2
     },

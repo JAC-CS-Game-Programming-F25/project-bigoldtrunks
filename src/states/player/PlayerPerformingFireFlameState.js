@@ -1,11 +1,12 @@
 import Animation from "../../../lib/Animation.js";
-import Input from "../../../lib/Input.js";
 import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
+import { sounds, timer } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
+import AbilityType from "../../enums/AbilityType.js";
+import SoundName from "../../enums/SoundName.js";
 
 
 export default class PlayerPerformingFireFlameState extends State {
@@ -14,10 +15,10 @@ export default class PlayerPerformingFireFlameState extends State {
         this.player = player;
         this.region = region;
         this.animation = {
-            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
-            [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
-            [Direction.Down]: new Animation([8, 9, 10, 11], 0.2, 1),
-            [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
+            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.3 , 1),
+            [Direction.Left]: new Animation([4, 5, 6, 7], 0.3, 1),
+            [Direction.Down]: new Animation([8, 9, 10, 11], 0.3, 1),
+            [Direction.Up]: new Animation([12, 13, 14, 15], 0.3, 1),
         };
         
         
@@ -30,15 +31,16 @@ export default class PlayerPerformingFireFlameState extends State {
         
     }
     /**
-     * Adds a FireFlame object to the current region.
+     * Initialize a FireFlame and link to the current region and associates it with the player.
      */
-    addFireFlameToRegion() {
+    addFireFlameToRegionAndPlayer() {
         // Pass player position, direction, and dimensions to properly position the flame
         this.fireFlame = new FireFlame(
             this.player.position, 
             this.player.direction,
             {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT}
         );
+        this.player.fireFlame = this.fireFlame;
         this.region.addObject(this.fireFlame);
     }
     /**
@@ -57,12 +59,26 @@ export default class PlayerPerformingFireFlameState extends State {
         this.player.dimensions.x = Player.PLAYER_SWORD_SPRITE_WIDTH;
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
     }
+    /**
+     * Called when entering the FireFlame state.
+     * Adds the FireFlame object to the region and sets up the player's animation and position.
+     * Start activating cooldown for the FireFlame ability.
+     */
     enter(){
         
         // add flame object to the region
+        this.addFireFlameToRegionAndPlayer();
 
-        this.addFireFlameToRegion();
-        
+        // Play fire flame sound once when entering the state
+        sounds[SoundName.PlayerPerformFireFlame].play();
+
+        // Start cooldown on the player (not the ability object)
+        this.player.abilityCooldowns[AbilityType.FireFlame] = true;
+        timer.wait(2).then(() => {
+            this.player.abilityCooldowns[AbilityType.FireFlame] = false;
+            console.log("FireFlame cooldown finished");
+        });
+
         this.processPositionAndDimensions();
 
         this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used

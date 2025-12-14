@@ -1,9 +1,9 @@
 import Fonts from "../lib/Fonts.js";
 import Images from "../lib/Images.js";
-import Sounds from "../lib/Sounds.js";
 import StateMachine from "../lib/StateMachine.js";
 import Timer from "../lib/Timer.js";
 import Input from "../lib/Input.js";
+import SoundPool from "../lib/SoundPool.js";
 
 export const canvas = document.createElement("canvas");
 export const context =
@@ -34,7 +34,9 @@ export const fonts = new Fonts();
 export const stateMachine = new StateMachine();
 export const timer = new Timer();
 export const input = new Input(canvas);
-export const sounds = new Sounds();
+
+// Sound pools will be initialized in main.js after loading sound definitions
+export let sounds = {};
 
 // If true, render all hitboxes.
 export const DEBUG = true;

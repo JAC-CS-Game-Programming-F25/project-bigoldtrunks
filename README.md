@@ -205,6 +205,10 @@ Short SFX used for actions, combat, items, and feedback:
 - **sword.wav** — Player sword attack (slash)  
   https://opengameart.org/content/battle-sound-effects
 
+- **fire-woosh.wav**, **fire-woosh-2.wav**, **landed-on-earth-stomp.wav**, **battle-man-scream-2175.wav**, **key-collected-game-success-alert-2039.wav**, **on-escape-success-riser-helicopter.wav**, 
+  https://mixkit.co/free-sound-effects
+
+
 
 ## 📚 References
 

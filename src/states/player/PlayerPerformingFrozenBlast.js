@@ -4,9 +4,11 @@ import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
+import { input, CANVAS_WIDTH, CANVAS_HEIGHT, timer, sounds } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
 import FrozenBlast from "../../objects/FrozenBlast.js";
+import AbilityType from "../../enums/AbilityType.js";
+import SoundName from "../../enums/SoundName.js";
 
 
 export default class PlayerPerformingFrozenBlastState extends State {
@@ -29,15 +31,18 @@ export default class PlayerPerformingFrozenBlastState extends State {
         
     }
     /**
-     * Adds a FrozenBlast object to the current region.
+     * Initialize a FrozenBlast and link to the current region and associates it with the player.
      */
-    addFrozenBlastToRegion() {
+    addFrozenBlastToRegionAndPlayer() {
         // Pass player position, direction, and dimensions to properly position the flame
         this.frozenBlast = new FrozenBlast(
             this.player.position,
             this.player.direction,
             {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT}
         );
+
+        this.player.frozenBlast = this.frozenBlast;
+
         this.region.addObject(this.frozenBlast);
     }
     /**
@@ -56,11 +61,25 @@ export default class PlayerPerformingFrozenBlastState extends State {
         this.player.dimensions.x = Player.PLAYER_SWORD_SPRITE_WIDTH;
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
     }
+    /**
+     * Called when entering the FrozenBlast state.
+     * Adds the FrozenBlast object to the region and sets up the player's animation and position.
+     * Start activating cooldown for the FrozenBlast ability.
+     */
     enter(){
         console.log("Entering Frozen Blast State");
-        // add flame object to the region
-
-        this.addFrozenBlastToRegion();
+        // add blast object to the region
+        this.addFrozenBlastToRegionAndPlayer();
+        
+        // Play frozen blast sound
+        sounds[SoundName.PlayerPerformFrozenFlame].play();
+        
+        // Start cooldown on the player (not thxe ability object)
+        this.player.abilityCooldowns[AbilityType.FrozenFlame] = true;
+        timer.wait(2).then(() => {
+            this.player.abilityCooldowns[AbilityType.FrozenFlame] = false;
+            console.log("FrozenBlast cooldown finished");
+        });
         
         this.processPositionAndDimensions();
 
