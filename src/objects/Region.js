@@ -16,6 +16,7 @@ import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
+    this.isWinter = isWinter;
     this.map = new Map(mapDefinition, isWinter);
     this.creatures = this.spawnCreatures(creatureConfig);
 

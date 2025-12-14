@@ -21,14 +21,22 @@ export default class PlayState extends State {
     if (isWinter) {
       sounds.play(SoundName.Winter);
       const winterCreatures = [{ type: CreatureType.BigBoss, count: 1 }];
-      this.region = new Region(this.winterMapDefinition, winterCreatures);
+      this.region = new Region(
+        this.winterMapDefinition,
+        winterCreatures,
+        isWinter
+      );
     } else {
       sounds.play(SoundName.Summer);
       const summerCreatures = [
         { type: CreatureType.Spider, count: getRandomPositiveInteger(3, 5) },
         { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
       ];
-      this.region = new Region(this.summerMapDefinition, summerCreatures);
+      this.region = new Region(
+        this.summerMapDefinition,
+        summerCreatures,
+        isWinter
+      );
     }
   }
   update(dt) {
