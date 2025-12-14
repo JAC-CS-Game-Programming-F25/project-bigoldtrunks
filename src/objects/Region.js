@@ -4,7 +4,7 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
+import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT, sounds } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
@@ -16,6 +16,7 @@ import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
 import PlayerStateName from "../enums/PlayerStateName.js";
 import SaveManager from "../services/SaveManager.js";
+import SoundName from "../enums/SoundName.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
     this.isWinter = isWinter;
@@ -33,9 +34,9 @@ export default class Region {
      */
     this.items = [];
 
-    this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
-    this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
-    this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
+    // this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
+    // this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
+    // this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
 
     // Assign player reference to all creatures so they can chase
     this.creatures.forEach((creature) => {
@@ -108,6 +109,10 @@ export default class Region {
     const canvas = document.querySelector("canvas");
     const playState = stateMachine.states[GameStateName.Play];
 
+    // Stop background music immediately when victory is triggered
+    const soundName = this.isWinter ? SoundName.Winter : SoundName.Summer;
+    sounds[soundName].stop();
+
     // First flash white
     canvas.style.filter = "brightness(2.5)";
 
@@ -134,7 +139,7 @@ export default class Region {
               fromState: playState,
               toState: stateMachine.states[GameStateName.Victory],
             });
-          }, 7000); // delay before transitioning to Victory Screen to play the sound effect 
+          }, 5000); // delay before transitioning to Victory Screen to play the sound effect 
         }
       }, 50);
     }, 200);
@@ -251,13 +256,21 @@ export default class Region {
     if (allEnemiesDead) {
       this.isGameOver = true;
 
+      // Save current player data to preserve abilities
+      const previousPlayerData = {
+        abilityUnlocked: { ...this.player.abilityUnlocked },
+      };
+
       // 2.Save game when transit region
       SaveManager.save(this.player, this);
 
       stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
-        toStateEnterParameters: { isWinter: true },
+        toStateEnterParameters: { 
+          isWinter: true,
+          previousPlayerData: previousPlayerData
+        },
       });
     }
   }
@@ -426,19 +439,18 @@ export default class Region {
         creature.keepItem(ItemType.Key);
         console.log(`BigBoss will keep item of type Key ${ItemType.Key}`);
 
-      } else{
-            // Randomly select a creature to keep the item
-          const randomIndex =
-          specificCreatureIndex !== null
-          ? specificCreatureIndex
-          : getRandomPositiveInteger(0, creatures.length - 1);
-
-        creatures[randomIndex].keepItem(itemType);
-        console.log(
-          `Creature at index ${randomIndex} will keep item of type ${itemType}`
-        );
-      }
+      } 
     }); 
+    // Randomly select a creature to keep the item
+        const randomIndex =
+        specificCreatureIndex !== null
+        ? specificCreatureIndex
+        : getRandomPositiveInteger(0, creatures.length - 1);
+
+    creatures[randomIndex].keepItem(itemType);
+    console.log(
+        `Creature at index ${randomIndex} will keep item of type ${itemType}`
+    );
   }
 
   isPositionOccupied(position, existingCreatures) {
