@@ -12,6 +12,7 @@ export default class UserInterface {
   render() {
     this.renderHealth();
     this.renderAbilities();
+    this.renderEnemyInfo();
   }
   renderHealth() {
     context.fillStyle = "#FF0000";
@@ -62,6 +63,16 @@ export default class UserInterface {
     context.font = `12px ${FontName.MedievalSharp}`;
     context.textAlign = "center";
     context.fillText(`Enemies: ${aliveCount}`, CANVAS_WIDTH / 2, 15);
+  }
+  /**
+   * Renders enemy count (summer) or boss health bar (winter).
+   */
+  renderEnemyInfo() {
+    if (this.region.isWinter) {
+      this.renderBossHealth();
+    } else {
+      this.renderEnemyCount();
+    }
   }
 
   /**
