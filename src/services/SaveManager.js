@@ -4,11 +4,25 @@ export default class SaveManager {
      * Saves current game state to localStorage.
      */
     const saveData = {
+      // player status
       health: player.health,
       lives: player.lives,
-      isWinter: region.isWinter,
       playerX: player.position.x,
       playerY: player.position.y,
+
+      // region status
+      isWinter: region.isWinter,
+
+      // enemy status
+      aliveSpiders: region.creatures.filter(
+        (c) => c.creatureType === CreatureType.Spider && !c.isDead
+      ).length,
+      aliveSkeletons: region.creatures.filter(
+        (c) => c.creatureType === CreatureType.Skeleton && !c.isDead
+      ).length,
+      aliveBigBoss: region.creatures.filter(
+        (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
+      ).length,
     };
     localStorage.setItem(this.SAVE_KEY, JSON.stringify(saveData));
     console.log("Game saved:", saveData);
