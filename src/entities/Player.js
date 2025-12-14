@@ -133,8 +133,9 @@ export default class Player extends GameEntity {
         this.abilityUnlocked[AbilityType.FireFlame] = true;
         console.log("Player unlocked ability FireTorch:", AbilityType.FireFlame);
       } else if (item.itemType == ItemType.Key){ 
-       
-        console.log("Player collected Key:", ItemType.Key);
+          sounds[SoundName.KeyPickup].play();
+          sounds[SoundName.OnEscapeSuccessful].play();
+          console.log("Player collected Key:", ItemType.Key);
       }
 
       // Add item to the player's collected items list

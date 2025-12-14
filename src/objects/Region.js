@@ -76,6 +76,9 @@ export default class Region {
    * Update isVictory, then start processing Victory by calling processVictory()
    */
   checkVictory() {
+    // Only check if victory hasn't been triggered yet
+    if (this.isVictory) return;
+    
     // check if player reached goal (final boss defeated, key collected,)
     const hasKey = this.player.itemCollected.some(
       (item) => item.itemType === ItemType.Key
@@ -130,7 +133,7 @@ export default class Region {
               fromState: playState,
               toState: stateMachine.states[GameStateName.Victory],
             });
-          }, 300);
+          }, 7000); // delay before transitioning to Victory Screen to play the sound effect 
         }
       }, 50);
     }, 200);
@@ -186,39 +189,43 @@ export default class Region {
 
   updateEntities(dt) {
     this.entities.forEach((entity) => {
-    if (entity.health <= 0) {
-    entity.isDead = true;
-    }
-    // Specific logic for Creature entities
-    if (entity instanceof Creature) {
-        const oldX = entity.position.x;
-        const oldY = entity.position.y;
-
-        this.checkCreatureCollisions(entity, oldX, oldY);
-
-        //Creatures deal with player's ability objects in the region (FireFlame, FrozenFlame's hitbox , etc.)
-        this.checkCollisionWithObjects(entity);
-
-        // Creature deal with player's sword hit or ability hit
-        if (
-          !entity.isHurt &&
-          entity.didCollideWithEntity(this.player.swordHitbox)
-        ) {
-          entity.onTakingHit(this.player.damage);
+        if (entity.health <= 0) {
+        entity.isDead = true;
         }
-
-        // Player deal with creatures' attack (hitbox, sword, attack)
-        if (this.isEntityReadyToTakeDamage(entity)) {
-          this.player.onTakingDamage(entity.damage);
-        }
-
-            // Specific logic for Player entity
-        } else if (entity instanceof Player) {
-            // Player specific update logic can go here
-            this.checkCollisionWithItem(entity);
+        if(!this.isVictory){
+            // Specific logic for Creature entities
+            if (entity instanceof Creature) {
+                const oldX = entity.position.x;
+                const oldY = entity.position.y;
+                
+                this.checkCreatureCollisions(entity, oldX, oldY);
+                
+                //Creatures deal with player's ability objects in the region (FireFlame, FrozenFlame's hitbox , etc.)
+                this.checkCollisionWithObjects(entity);
+                
+                // Creature deal with player's sword hit or ability hit
+                if (
+                    !entity.isHurt &&
+                    entity.didCollideWithEntity(this.player.swordHitbox)
+                ) {
+                    entity.onTakingHit(this.player.damage);
+                }
+                
+                // Player deal with creatures' attack (hitbox, sword, attack)
+                if (this.isEntityReadyToTakeDamage(entity)) {
+                    this.player.onTakingDamage(entity.damage);
+                }
+                
+                // Specific logic for Player entity
+                
+            } else if (entity instanceof Player) {
+                // Player specific update logic can go here
+                this.checkCollisionWithItem(entity);
+            }
         }
         entity.update(dt);
     });
+
     // Check game over
     if (this.isGameOver()) {
         stateMachine.change(GameStateName.Transition, {
@@ -265,7 +272,8 @@ export default class Region {
         entity.isContactDamage &&
         this.player.hitbox &&
         entity.hitbox.didCollide(this.player.hitbox) &&
-        this.player.stateMachine.currentState.name != PlayerStateName.FallingDownToEarth
+        this.player.stateMachine.currentState.name != PlayerStateName.FallingDownToEarth &&
+        !this.isVictory
     );
   }
     /**
@@ -273,7 +281,7 @@ export default class Region {
      * @returns {boolean} true if game over conditions met
      */
     isGameOver() {
-        return this.player.isDead && this.player.lives < 0;
+        return this.player.isDead && this.player.lives < 0 && !this.isVictory;
     }
 
     /**
@@ -295,6 +303,7 @@ export default class Region {
                         // Remove item from region after consumption
                         this.items.splice(index, 1);
                     } else if (item instanceof Key) {
+                        // Victory condition will be checked in checkVictory() method
                         item.onConsume();
                         player.onCollectItem(item);
                         this.items.splice(index, 1);
