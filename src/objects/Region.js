@@ -14,6 +14,7 @@ import FireTorch from "./FireTorch.js";
 import CreatureType from "../enums/CreatureType.js";
 import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
+import SaveManager from "../services/SaveManager.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
     this.isWinter = isWinter;
@@ -247,6 +248,10 @@ export default class Region {
 
     if (allEnemiesDead) {
       this.isGameOver = true;
+
+      // add save player status when transit region
+      SaveManager.save(this.player, this);
+
       stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
