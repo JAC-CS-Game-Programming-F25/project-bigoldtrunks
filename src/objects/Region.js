@@ -256,13 +256,21 @@ export default class Region {
     if (allEnemiesDead) {
       this.isGameOver = true;
 
+      // Save current player data to preserve abilities
+      const previousPlayerData = {
+        abilityUnlocked: { ...this.player.abilityUnlocked },
+      };
+
       // 2.Save game when transit region
       SaveManager.save(this.player, this);
 
       stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
-        toStateEnterParameters: { isWinter: true },
+        toStateEnterParameters: { 
+          isWinter: true,
+          previousPlayerData: previousPlayerData
+        },
       });
     }
   }
