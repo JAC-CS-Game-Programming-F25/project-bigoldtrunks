@@ -21,7 +21,7 @@ export default class GameOverState extends State {
 
   enter(params) {
     this.score = params?.score ?? 0;
-    sounds.play(SoundName.Gameover);
+    sounds[SoundName.Gameover].play();
   }
   update(dt) {
     if (input.isKeyPressed(Input.KEYS.ENTER)) {
@@ -29,7 +29,7 @@ export default class GameOverState extends State {
     }
   }
   exit() {
-    sounds.stop(SoundName.Gameover);
+    sounds[SoundName.Gameover].stop();
   }
   render() {
     // background

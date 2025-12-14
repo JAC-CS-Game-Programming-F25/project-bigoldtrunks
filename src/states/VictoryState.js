@@ -26,10 +26,10 @@ export default class VictoryState extends State {
     super();
   }
   enter() {
-    sounds.play(SoundName.Victory);
+    sounds[SoundName.Victory].play();
   }
   exit() {
-    sounds.stop(SoundName.Victory);
+    sounds[SoundName.Victory].stop();
   }
 
   update(dt) {
