@@ -4,7 +4,7 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT } from "../globals.js";
+import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT, sounds } from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
@@ -16,6 +16,7 @@ import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
 import PlayerStateName from "../enums/PlayerStateName.js";
 import SaveManager from "../services/SaveManager.js";
+import SoundName from "../enums/SoundName.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
     this.isWinter = isWinter;
@@ -33,9 +34,9 @@ export default class Region {
      */
     this.items = [];
 
-    this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
-    this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
-    this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
+    // this.items.push(new Crystal(new Vector(150, 100))); // turn on to test ability usage
+    // this.items.push(new FireTorch(new Vector(150, 150))); // turn on to test ability usage
+    // this.items.push(new Key(new Vector(150, 50))); // turn on to test ability usage
 
     // Assign player reference to all creatures so they can chase
     this.creatures.forEach((creature) => {
@@ -107,6 +108,10 @@ export default class Region {
   playWinningEffect() {
     const canvas = document.querySelector("canvas");
     const playState = stateMachine.states[GameStateName.Play];
+
+    // Stop background music immediately when victory is triggered
+    const soundName = this.isWinter ? SoundName.Winter : SoundName.Summer;
+    sounds[soundName].stop();
 
     // First flash white
     canvas.style.filter = "brightness(2.5)";
