@@ -193,8 +193,9 @@ export default class Player extends GameEntity {
       
       // Transition to Dead state ( play death animation)
       // Dead state will check lives and either respawn or go to GameOver
+      sounds[SoundName.Scream].play();
       this.changeState(PlayerStateName.Dead);
-      
+
       // Estimate time for death animation + wait duration before landing sound
       if(this.lives >= 0) {
           timer.wait(2.3).then(() => {

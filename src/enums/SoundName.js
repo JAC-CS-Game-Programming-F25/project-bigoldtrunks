@@ -25,6 +25,7 @@ const SoundName = {
   PlayerPerformFrozenFlame: "frozen",
   Hurt: "hurt",
   Landed: "landed",
+  Scream: "scream",
 };
 
 export default SoundName;

@@ -69,8 +69,8 @@ export default class PlayerFallingDownToEarth extends State {
     playLandingEffect() {
         const canvas = document.querySelector("canvas");
         
-        // Flash effect - brief brightness increase
-        canvas.style.filter = "brightness(1.3)";
+        // Flash effect - blue-tinted flash for winter/snowy atmosphere
+        canvas.style.filter = "brightness(1.2) saturate(1.5)";
         
         setTimeout(() => {
             canvas.style.filter = "brightness(1)";
