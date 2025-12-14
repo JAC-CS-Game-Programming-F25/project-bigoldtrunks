@@ -51,7 +51,7 @@ export default class Creature extends GameEntity {
   receiveDamage(damage) {
     this.health -= damage;
     // play sound
-    sounds.play(SoundName.EnemyHurt);
+    sounds[SoundName.EnemyHurt].play();
   }
 
   /**
@@ -105,7 +105,7 @@ export default class Creature extends GameEntity {
       this.isDead = true; // Important: mark as dead so item can be dropped
       this.spawnItemIfKeep();
 
-      sounds.play(SoundName.EnemyDead);
+      sounds[SoundName.EnemyDead].play();
       console.log("Creature is dead, will drop item:", this.itemKept !== null);
       return;
     }
@@ -118,7 +118,7 @@ export default class Creature extends GameEntity {
     }, 300);
     console.log("Creature took damage, Creature current health:", this.health);
     // play sound when creature receives damage
-    sounds.play(SoundName.EnemyHurt);
+    sounds[SoundName.EnemyHurt].play();
   }
 
   /**
