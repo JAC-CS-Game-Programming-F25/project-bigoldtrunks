@@ -13,14 +13,15 @@ import {
   stateMachine,
 } from "../globals.js";
 import FontName from "../enums/FontName.js";
+import SaveManager from "../services/SaveManager.js";
 
 export default class GameOverState extends State {
   constructor() {
     super();
   }
 
-  enter(params) {
-    this.score = params?.score ?? 0;
+  enter() {
+    SaveManager.deleteSave();
     sounds.play(SoundName.Gameover);
   }
   update(dt) {

@@ -13,6 +13,7 @@ import Input from "../../lib/Input.js";
 import SoundName from "../enums/SoundName.js";
 import ImageName from "../enums/ImageName.js";
 import FontName from "../enums/FontName.js";
+import SaveManager from "../services/SaveManager.js";
 /**
  * TitleScreenState - Main menu screen for MystiaJungle.
  *
@@ -34,9 +35,11 @@ export default class TitleScreenState extends State {
     this.menuOptions = ["Start Game", "Instructions"];
     this.selectedIndex = 0;
     this.showInstructions = false;
+    this.updateMenuOption();
   }
 
   enter() {
+    this.updateMenuOption();
     sounds.play(SoundName.Title);
   }
 
@@ -82,14 +85,27 @@ export default class TitleScreenState extends State {
     // Enter confirm
     if (input.isKeyPressed(Input.KEYS.ENTER)) {
       sounds.play(SoundName.Select);
-      if (this.selectedIndex === 0) {
-        // stateMachine.change(GameStateName.Play);
+
+      // add continue option in menu
+      const option = this.menuOptions[this.selectedIndex];
+      if (option === "Continue") {
+        const saveData = SaveManager.load();
         stateMachine.change(GameStateName.Transition, {
           fromState: this,
           toState: stateMachine.states[GameStateName.Play],
-          toStateEnterParameters: { isWinter: false }, // change season
+          toStateEnterParameters: {
+            isWinter: saveData.isWinter,
+            loadSave: true,
+          },
         });
-      } else if (this.selectedIndex === 1) {
+      } else if (option === "New Game") {
+        SaveManager.deleteSave();
+        stateMachine.change(GameStateName.Transition, {
+          fromState: this,
+          toState: stateMachine.states[GameStateName.Play],
+          toStateEnterParameters: { isWinter: false },
+        });
+      } else if (option === "Instructions") {
         this.showInstructions = true;
       }
     }
@@ -188,5 +204,14 @@ export default class TitleScreenState extends State {
       CANVAS_WIDTH / 2,
       CANVAS_HEIGHT - 15
     );
+  }
+
+  updateMenuOption() {
+    if (SaveManager.hasSave()) {
+      this.menuOptions = ["Continue", "New Game", "Instructions"];
+    } else {
+      this.menuOptions = ["New Game", "Instructions"];
+    }
+    this.selectedIndex = 0;
   }
 }
