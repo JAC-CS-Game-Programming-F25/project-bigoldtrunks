@@ -431,19 +431,18 @@ export default class Region {
         creature.keepItem(ItemType.Key);
         console.log(`BigBoss will keep item of type Key ${ItemType.Key}`);
 
-      } else{
-            // Randomly select a creature to keep the item
-          const randomIndex =
-          specificCreatureIndex !== null
-          ? specificCreatureIndex
-          : getRandomPositiveInteger(0, creatures.length - 1);
-
-        creatures[randomIndex].keepItem(itemType);
-        console.log(
-          `Creature at index ${randomIndex} will keep item of type ${itemType}`
-        );
-      }
+      } 
     }); 
+    // Randomly select a creature to keep the item
+        const randomIndex =
+        specificCreatureIndex !== null
+        ? specificCreatureIndex
+        : getRandomPositiveInteger(0, creatures.length - 1);
+
+    creatures[randomIndex].keepItem(itemType);
+    console.log(
+        `Creature at index ${randomIndex} will keep item of type ${itemType}`
+    );
   }
 
   isPositionOccupied(position, existingCreatures) {
