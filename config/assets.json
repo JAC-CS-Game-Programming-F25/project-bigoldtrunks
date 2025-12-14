@@ -282,7 +282,7 @@
     {
         "name": "hurt",
         "path": "./assets/sounds/effects/hurt.wav",
-        "size": 1,
+        "size": 10,
         "volume": 0.3
     },
     {

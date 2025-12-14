@@ -1,7 +1,7 @@
 import Sprite from "../../lib/Sprite.js";
 import Animation from "../../lib/Animation.js";
 import ImageName from "../enums/ImageName.js";
-import { context, DEBUG, images } from "../globals.js";
+import { context, DEBUG, images, sounds } from "../globals.js";
 import GameEntity from "./GameEntity.js";
 import Direction from "../enums/Direction.js";
 import StateMachine from "../../lib/StateMachine.js";
@@ -17,6 +17,7 @@ import PlayerDeadState from "../states/player/PlayerDeadState.js";
 import PlayerFallingDownToEarth from "../states/player/PlayerFallingDownToEarth.js";
 import ItemType from "../enums/ItemType.js";
 import Crystal from "../objects/Crystal.js";
+import SoundName from "../enums/SoundName.js";
 
 export default class Player extends GameEntity {
   // the player frame has width and height of 16 pixels, apply to all movements idle/walk
@@ -28,7 +29,7 @@ export default class Player extends GameEntity {
   static PLAYER_SWORD_SPRITE_WIDTH = 32;
   static PLAYER_SPEED = 60;
   static MAX_HEALTH = 3;
-  static MAX_LIVES = 3;
+  static MAX_LIVES = 0;
 
     // the player sword swinging frame has width and height of 32 pixels
     static PLAYER_SWORD_SPRITE_HEIGHT = 32;
@@ -180,7 +181,7 @@ export default class Player extends GameEntity {
     if (this.isInVulnerable || this.isDead) {
       return;
     }
-    
+    sounds[SoundName.Hurt].play();
     this.health -= damage;
 
     // Check if player's health reached 0

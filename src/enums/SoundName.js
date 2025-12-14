@@ -23,6 +23,7 @@ const SoundName = {
   PlayerSwingSword: "sword",
   PlayerPerformFireFlame: "player-fire-flame",
   PlayerPerformFrozenFlame: "frozen",
+  Hurt: "hurt",
 };
 
 export default SoundName;
