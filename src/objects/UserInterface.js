@@ -56,10 +56,42 @@ export default class UserInterface {
    * Renders remaining enemy count for summer region.
    */
   renderEnemyCount() {
+    // creature counts
     const aliveCount = this.region.creatures.filter((c) => !c.isDead).length;
     context.fillStyle = "#FFFFFF";
     context.font = `12px ${FontName.MedievalSharp}`;
     context.textAlign = "center";
     context.fillText(`Enemies: ${aliveCount}`, CANVAS_WIDTH / 2, 15);
+  }
+
+  /**
+   * Renders boss health bar for winter region.
+   */
+  renderBossHealth() {
+    const boss = this.region.creatures.find((c) => !c.isDead);
+    if (!boss) return;
+
+    const barWidth = 80;
+    const barHeight = 6;
+    const x = CANVAS_WIDTH / 2 - barWidth / 2;
+    const y = 8;
+
+    context.fillStyle = "#333";
+    context.fillRect(x, y, barWidth, barHeight);
+
+    // bigBoss health
+    const maxHealth = 500;
+    const healthPercent = boss.health / maxHealth;
+    context.fillStyle = "#FF0000";
+    context.fillRect(x, y, barWidth * healthPercent, barHeight);
+
+    context.fillStyle = "#FFFFFF";
+    context.font = `10px ${FontName.MedievalSharp}`;
+    context.textAlign = "center";
+    context.fillText(
+      `BOSS: ${boss.health}/${maxHealth}`,
+      CANVAS_WIDTH / 2,
+      y + barHeight + 10
+    );
   }
 }
