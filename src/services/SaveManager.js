@@ -18,6 +18,7 @@ export default class SaveManager {
       lives: player.lives,
       playerX: player.position.x,
       playerY: player.position.y,
+      playerDirection: player.direction,
       abilityUnlocked: player.abilityUnlocked,
 
       // region status
