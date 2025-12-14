@@ -103,11 +103,14 @@ export default class PlayerWalkingState extends State {
      * Checks if the player can perform the FireFlame ability:
      * - The ability must be unlocked
      * - The player must be facing Left or Right
+     * - Not on cooldown
      * 
      * @returns {boolean} whether the player can perform FireFlame
      */
     isCouldPerformFireFlame() {
-        return this.player.abilityUnlocked[AbilityType.FireFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+        return this.player.abilityUnlocked[AbilityType.FireFlame] && 
+                (this.player.direction === Direction.Left || this.player.direction === Direction.Right) &&
+                !this.player.abilityCooldowns[AbilityType.FireFlame];
     }
     
     handlePerformingFrozenBlast() {
@@ -125,11 +128,14 @@ export default class PlayerWalkingState extends State {
      * Checks if the player can perform the FrozenBlast ability:
      * - The ability must be unlocked
      * - The player must be facing Left or Right
+     * - Not on cooldown
      * 
      * @returns {boolean} whether the player can perform FrozenBlast
      */
     isCouldPerformFrozenBlast() {
-        return this.player.abilityUnlocked[AbilityType.FrozenFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+        return this.player.abilityUnlocked[AbilityType.FrozenFlame] && 
+        (this.player.direction === Direction.Left || this.player.direction === Direction.Right) &&
+        !this.player.abilityCooldowns[AbilityType.FrozenFlame];
     }
 
     
