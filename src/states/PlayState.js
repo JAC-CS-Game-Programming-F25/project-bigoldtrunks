@@ -73,13 +73,22 @@ export default class PlayState extends State {
     }
 
     // restore player status
-    this.region.player.health = saveData.health;
-    this.region.player.lives = saveData.lives;
+    this.region.player.health = saveData.health || 3;
+    this.region.player.lives = saveData.lives || 3;
     this.region.player.position.x = saveData.playerX;
     this.region.player.position.y = saveData.playerY;
 
     if (saveData.abilityUnlocked) {
       this.region.player.abilityUnlocked = saveData.abilityUnlocked;
+    }
+    // restore BigBoss health
+    if (isWinter && saveData.bigBossHealth) {
+      const bigBoss = this.region.creatures.find(
+        (c) => c.creatureType === CreatureType.BigBoss
+      );
+      if (bigBoss) {
+        bigBoss.health = saveData.bigBossHealth;
+      }
     }
   }
 

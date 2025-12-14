@@ -7,6 +7,11 @@ export default class SaveManager {
     /**
      * Saves current game state to localStorage.
      */
+
+    // Bigboss health
+    const bigBoss = region.creatures.find(
+      (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
+    );
     const saveData = {
       // player status
       health: player.health,
@@ -28,6 +33,10 @@ export default class SaveManager {
       aliveBigBoss: region.creatures.filter(
         (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
       ).length,
+      bigBossHealth:
+        region.creatures.find(
+          (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
+        )?.health ?? 0,
     };
     localStorage.setItem(this.SAVE_KEY, JSON.stringify(saveData));
     console.log("Game saved:", saveData);
