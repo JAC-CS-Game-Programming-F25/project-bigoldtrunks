@@ -4,9 +4,10 @@ import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT } from "../../globals.js";
+import { input, CANVAS_WIDTH, CANVAS_HEIGHT, timer } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
 import FrozenBlast from "../../objects/FrozenBlast.js";
+import AbilityType from "../../enums/AbilityType.js";
 
 
 export default class PlayerPerformingFrozenBlastState extends State {
@@ -66,10 +67,16 @@ export default class PlayerPerformingFrozenBlastState extends State {
      */
     enter(){
         console.log("Entering Frozen Blast State");
-        // add flame object to the region
-
+        // add blast object to the region
         this.addFrozenBlastToRegionAndPlayer();
-        this.frozenBlast.startCooldown();
+        
+        // Start cooldown on the player (not the ability object)
+        this.player.abilityCooldowns[AbilityType.FrozenFlame] = true;
+        timer.wait(2).then(() => {
+            this.player.abilityCooldowns[AbilityType.FrozenFlame] = false;
+            console.log("FrozenBlast cooldown finished");
+        });
+        
         this.processPositionAndDimensions();
 
         this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used

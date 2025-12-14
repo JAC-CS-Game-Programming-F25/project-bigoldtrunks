@@ -101,9 +101,18 @@ export default class Player extends GameEntity {
             [AbilityType.FireFlame]: false,
             [AbilityType.FrozenFlame]: false
         }
+        
+        /**
+         * Tracks cooldown status for each ability
+         */
+        this.abilityCooldowns = {
+            [AbilityType.FireFlame]: false,
+            [AbilityType.FrozenFlame]: false
+        }
 
         this.itemCollected = []
         this.fireFlame = null;
+        this.frozenBlast = null;
         this.stateMachine = this.initializeStateMachine();
     }
     /**

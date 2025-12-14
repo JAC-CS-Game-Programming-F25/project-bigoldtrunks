@@ -40,7 +40,9 @@ export default class FireFlame extends GameObject {
         this.damage = 2; // Damage dealt by the flame
         
         // Reduce hitbox size to make it more accurate (smaller than the visual sprite)
-
+        this.coolDown = 2; // Cooldown for Frozen Blast
+        this.isOnCooldown = false;
+        
         this.setHitboxPosition(6, 6, -15, -15);
     }
 
