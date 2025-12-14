@@ -46,6 +46,7 @@ export default class PlayState extends State {
       ];
       this.region = new Region(this.summerMapDefinition, creatures, isWinter);
     }
+    // 1. Save game when start new game
     SaveManager.save(this.region.player, this.region);
   }
 
