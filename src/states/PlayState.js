@@ -53,7 +53,7 @@ export default class PlayState extends State {
         { type: CreatureType.Spider, count: getRandomPositiveInteger(3, 5) },
         { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
       ];
-      this.region = new Region(this.summerMapDefinition, creatures, isWinter);
+      this.region = new Region(this.summerMapDefinition, summerCreatures, isWinter);
     }
     // 1. Save game when start new game
     SaveManager.save(this.region.player, this.region);
