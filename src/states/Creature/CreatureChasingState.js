@@ -40,7 +40,7 @@ export default class CreatureChasingState extends State {
   update(dt) {
     // No valid player target
     const player = this.creature.player;
-    if (!player || !player.position) {
+    if (!player || !player.position || player.isDead) {
       this.creature.changeState(CreatureStateName.Idle);
       return;
     }
