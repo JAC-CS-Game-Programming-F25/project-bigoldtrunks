@@ -41,19 +41,15 @@ export default class PlayState extends State {
 
     if (isWinter) {
       sounds[SoundName.Winter].play();
-      const winterCreatures = [{ type: CreatureType.BigBoss, count: 1 }];
-      this.region = new Region(
-        this.winterMapDefinition,
-        winterCreatures,
-        isWinter
-      );
+      // creatures = [{ type: CreatureType.BigBoss, count: 1 }];
+      this.region = new Region(this.winterMapDefinition, creatures, isWinter);
     } else {
       sounds[SoundName.Summer].play();
-      const summerCreatures = [
+      creatures = [
         { type: CreatureType.Spider, count: getRandomPositiveInteger(3, 5) },
-        { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
+        // { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
       ];
-      this.region = new Region(this.summerMapDefinition, summerCreatures, isWinter);
+      this.region = new Region(this.summerMapDefinition, creatures, isWinter);
     }
     // 1. Save game when start new game
     SaveManager.save(this.region.player, this.region);
@@ -125,7 +121,8 @@ export default class PlayState extends State {
     this.region.render();
   }
   exit() {
-    const soundName = this.currentSeason === "winter" ? SoundName.Winter : SoundName.Summer;
+    const soundName =
+      this.currentSeason === "winter" ? SoundName.Winter : SoundName.Summer;
     sounds[soundName].stop();
   }
 }
