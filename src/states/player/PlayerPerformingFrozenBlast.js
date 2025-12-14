@@ -4,10 +4,11 @@ import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT, timer } from "../../globals.js";
+import { input, CANVAS_WIDTH, CANVAS_HEIGHT, timer, sounds } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
 import FrozenBlast from "../../objects/FrozenBlast.js";
 import AbilityType from "../../enums/AbilityType.js";
+import SoundName from "../../enums/SoundName.js";
 
 
 export default class PlayerPerformingFrozenBlastState extends State {
@@ -70,7 +71,10 @@ export default class PlayerPerformingFrozenBlastState extends State {
         // add blast object to the region
         this.addFrozenBlastToRegionAndPlayer();
         
-        // Start cooldown on the player (not the ability object)
+        // Play frozen blast sound
+        sounds[SoundName.PlayerPerformFrozenFlame].play();
+        
+        // Start cooldown on the player (not thxe ability object)
         this.player.abilityCooldowns[AbilityType.FrozenFlame] = true;
         timer.wait(2).then(() => {
             this.player.abilityCooldowns[AbilityType.FrozenFlame] = false;
