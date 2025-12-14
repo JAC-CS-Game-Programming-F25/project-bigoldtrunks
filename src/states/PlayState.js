@@ -89,7 +89,7 @@ export default class PlayState extends State {
     }
 
     if (saveData.playerDirection !== undefined) {
-      this.region.player.direction = saveData.playerDirection;
+      this.region.player.setDirection(saveData.playerDirection);
     }
     // restore BigBoss health
     if (isWinter && saveData.bigBossHealth) {

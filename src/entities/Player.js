@@ -30,116 +30,115 @@ export default class Player extends GameEntity {
   static MAX_HEALTH = 3;
   static MAX_LIVES = 3;
 
-    // the player sword swinging frame has width and height of 32 pixels
-    static PLAYER_SWORD_SPRITE_HEIGHT = 32;
-    static PLAYER_SWORD_SPRITE_WIDTH = 32;
-    static PLAYER_SPEED= 90;
-    
+  // the player sword swinging frame has width and height of 32 pixels
+  static PLAYER_SWORD_SPRITE_HEIGHT = 32;
+  static PLAYER_SWORD_SPRITE_WIDTH = 32;
+  static PLAYER_SPEED = 90;
 
-    constructor(region){
-        super({
-            speed: Player.PLAYER_SPEED,
-            health: Player.MAX_HEALTH
-        })
-        this.lives= Player.MAX_LIVES;
-        this.region = region;   
-        console.log("Player entity created in region:", region);
-        this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.Player),
-            Player.PLAYER_SPRITE_WIDTH,
-            Player.PLAYER_SPRITE_HEIGHT,
-        )
-        this.deadSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.Player),
-            Player.PLAYER_SPRITE_WIDTH,
-            Player.PLAYER_SPRITE_HEIGHT,
-        ); // use same sprites sheet.
-        this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerSwordSwing),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerFireFlamePoster),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.performFrozenPosterSprites = Sprite.generateSpritesFromSpriteSheet(
-            images.get(ImageName.PlayerFrozenFlamePoster),
-            Player.PLAYER_SWORD_SPRITE_WIDTH,
-            Player.PLAYER_SWORD_SPRITE_HEIGHT,
-        )
-        this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
-        this.sprites = this.walkingSprites;
-        // set initial player position
-        this.position = {x: 100, y: 100};
+  constructor(region) {
+    super({
+      speed: Player.PLAYER_SPEED,
+      health: Player.MAX_HEALTH,
+    });
+    this.lives = Player.MAX_LIVES;
+    this.region = region;
+    console.log("Player entity created in region:", region);
+    this.walkingSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.Player),
+      Player.PLAYER_SPRITE_WIDTH,
+      Player.PLAYER_SPRITE_HEIGHT
+    );
+    this.deadSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.Player),
+      Player.PLAYER_SPRITE_WIDTH,
+      Player.PLAYER_SPRITE_HEIGHT
+    ); // use same sprites sheet.
+    this.swordSwingingSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerSwordSwing),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.performFirePosterSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerFireFlamePoster),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.performFrozenPosterSprites = Sprite.generateSpritesFromSpriteSheet(
+      images.get(ImageName.PlayerFrozenFlamePoster),
+      Player.PLAYER_SWORD_SPRITE_WIDTH,
+      Player.PLAYER_SWORD_SPRITE_HEIGHT
+    );
+    this.isInVulnerable = false; // to track if player is invulnerable after taking damage,
+    this.sprites = this.walkingSprites;
+    // set initial player position
+    this.position = { x: 100, y: 100 };
 
-        // set player dimensions
-        this.dimensions = {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT};
+    // set player dimensions
+    this.dimensions = {
+      x: Player.PLAYER_SPRITE_WIDTH,
+      y: Player.PLAYER_SPRITE_HEIGHT,
+    };
 
-        // initialize animations for each direction, using only one frame for idling
-        this.animation = {
-                    [Direction.Right]: new Animation([0], 1),
-                    [Direction.Left]: new Animation([4], 1),
-                    [Direction.Down]: new Animation([8], 1),
-                    [Direction.Up]: new Animation([12], 1),
-                };
-        // start with player facing down
-        this.currentAnimation = this.animation[Direction.Down];
-        this.swordHitbox = new Hitbox(0, 0, 0, 0, 'blue'); // this is set in the sword swinging state
-        this.hitboxOffsets = new Hitbox(
-            4,  // x offset
-            8,  // y offset
-            -8, // width
-            -8,  // height
-            'red'
-        )
-        /**
-         * Tracks which abilities have been unlocked by the player.
-         */
-        this.abilityUnlocked = {
-            [AbilityType.FireFlame]: false,
-            [AbilityType.FrozenFlame]: false
-        }
-
-        this.itemCollected = []
-        this.fireFlame = null;
-        this.stateMachine = this.initializeStateMachine();
-    }
+    // initialize animations for each direction, using only one frame for idling
+    this.animation = {
+      [Direction.Right]: new Animation([0], 1),
+      [Direction.Left]: new Animation([4], 1),
+      [Direction.Down]: new Animation([8], 1),
+      [Direction.Up]: new Animation([12], 1),
+    };
+    // start with player facing down
+    this.currentAnimation = this.animation[Direction.Down];
+    this.swordHitbox = new Hitbox(0, 0, 0, 0, "blue"); // this is set in the sword swinging state
+    this.hitboxOffsets = new Hitbox(
+      4, // x offset
+      8, // y offset
+      -8, // width
+      -8, // height
+      "red"
+    );
     /**
-     * Process the item collected 
-     * - Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
-     * - something else with the Key...
-     * - Adds the item to the player's collected items list
-     * @param {Crystal || FireTorch || Key} item 
+     * Tracks which abilities have been unlocked by the player.
      */
-    onCollectItem(item) {
+    this.abilityUnlocked = {
+      [AbilityType.FireFlame]: false,
+      [AbilityType.FrozenFlame]: false,
+    };
 
-      if(item.itemType == ItemType.Crystal)
-      {
-        this.abilityUnlocked[AbilityType.FrozenFlame] = true;
-        console.log("Player unlocked ability Crystal:", AbilityType.FrozenFlame);
-      } else if (item.itemType == ItemType.FireTorch){
-        this.abilityUnlocked[AbilityType.FireFlame] = true;
-        console.log("Player unlocked ability FireTorch:", AbilityType.FireFlame);
-      } else if (item.itemType == ItemType.Key){ 
-       
-        console.log("Player collected Key:", ItemType.Key);
-      }
+    this.itemCollected = [];
+    this.fireFlame = null;
+    this.stateMachine = this.initializeStateMachine();
+  }
+  /**
+   * Process the item collected
+   * - Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
+   * - something else with the Key...
+   * - Adds the item to the player's collected items list
+   * @param {Crystal || FireTorch || Key} item
+   */
+  onCollectItem(item) {
+    if (item.itemType == ItemType.Crystal) {
+      this.abilityUnlocked[AbilityType.FrozenFlame] = true;
+      console.log("Player unlocked ability Crystal:", AbilityType.FrozenFlame);
+    } else if (item.itemType == ItemType.FireTorch) {
+      this.abilityUnlocked[AbilityType.FireFlame] = true;
+      console.log("Player unlocked ability FireTorch:", AbilityType.FireFlame);
+    } else if (item.itemType == ItemType.Key) {
+      console.log("Player collected Key:", ItemType.Key);
+    }
 
-      // Add item to the player's collected items list
-      this.itemCollected.push(item);
+    // Add item to the player's collected items list
+    this.itemCollected.push(item);
+  }
+  render() {
+    context.save();
+
+    super.render();
+
+    context.restore();
+    if (DEBUG) {
+      this.swordHitbox.render(context);
     }
-    render(){
-        context.save();
-        
-        super.render();
-        
-        context.restore();
-        if (DEBUG) {
-            this.swordHitbox.render(context);
-        }
-    }
+  }
   /**
    * Initializes the state machine for the player.
    * @returns {StateMachine} the initialized state machine
@@ -147,14 +146,29 @@ export default class Player extends GameEntity {
   initializeStateMachine() {
     const stateMachine = new StateMachine();
 
-        stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this, this.region));
-        stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
-        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
-        stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
-        stateMachine.add(PlayerStateName.Dead, new PlayerDeadState(this));
-        stateMachine.add(PlayerStateName.FallingDownToEarth, new PlayerFallingDownToEarth(this));
-        stateMachine.change(PlayerStateName.Idle);
+    stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
+    stateMachine.add(
+      PlayerStateName.Walking,
+      new PlayerWalkingState(this, this.region)
+    );
+    stateMachine.add(
+      PlayerStateName.SwordSwinging,
+      new PlayerSwordSwingingState(this)
+    );
+    stateMachine.add(
+      PlayerStateName.PerformingFireFlame,
+      new PlayerPerformingFireFlameState(this, this.region)
+    ); // Pass region to the state that needs it to add the fire to the
+    stateMachine.add(
+      PlayerStateName.PerformingFrozenBlast,
+      new PlayerPerformingFrozenBlastState(this, this.region)
+    ); // Pass region to the state that needs it to add the frozen blast to the
+    stateMachine.add(PlayerStateName.Dead, new PlayerDeadState(this));
+    stateMachine.add(
+      PlayerStateName.FallingDownToEarth,
+      new PlayerFallingDownToEarth(this)
+    );
+    stateMachine.change(PlayerStateName.Idle);
 
     return stateMachine;
   }
@@ -171,37 +185,47 @@ export default class Player extends GameEntity {
     if (this.isInVulnerable || this.isDead) {
       return;
     }
-    
+
     this.health -= damage;
-    console.log(`Player took damage: ${damage}, current health: ${this.health}`);
+    console.log(
+      `Player took damage: ${damage}, current health: ${this.health}`
+    );
 
     // Check if player's health reached 0
     if (this.health <= 0) {
       this.health = 0;
       this.isDead = true;
-      
+
       console.log(`Player died! Lives remaining: ${this.lives}`);
-      
+
       // Transition to Dead state ( play death animation)
       // Dead state will check lives and either respawn or go to GameOver
       this.changeState(PlayerStateName.Dead);
       return;
     }
-    
+
     // Player is hurt but not dead - set invulnerability frames
     this.isInVulnerable = true;
     setTimeout(() => {
       this.isInVulnerable = false;
     }, 1000);
   }
-  
+
   /**
    * Resets player for respawn (after death when lives remain)
    */
-  resetPlayer(){
+  resetPlayer() {
     this.health = Player.MAX_HEALTH;
     this.isDead = false;
     this.canTransitionToGameOver = false;
-    this.isInVulnerable = false;    
+    this.isInVulnerable = false;
+  }
+  /**
+   * Sets the player's facing direction and updates the animation.
+   * @param {Direction} direction - The direction to face (Left, Right, Up, Down).
+   */
+  setDirection(direction) {
+    this.direction = direction;
+    this.currentAnimation = this.animation[direction];
   }
 }
