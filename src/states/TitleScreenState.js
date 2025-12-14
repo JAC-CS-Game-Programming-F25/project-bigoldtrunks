@@ -132,7 +132,7 @@ export default class TitleScreenState extends State {
 
     // Menu options
     this.menuOptions.forEach((option, index) => {
-      const y = 120 + index * 32;
+      const y = 100 + index * 28;
 
       if (index === this.selectedIndex) {
         context.fillStyle = "rgba(255, 255, 255, 0.2)";
@@ -166,43 +166,42 @@ export default class TitleScreenState extends State {
    */
   renderInstructions() {
     // Translucent background
-    context.fillStyle = "rgba(0, 0, 0, 0.85)";
+    context.fillStyle = "#000000";
     context.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // Title
     context.fillStyle = "#FFD700";
-    context.font = `18px ${FontName.CinzelBold}`;
+    context.font = `16px ${FontName.OpenSans}`;
     context.textAlign = "center";
-    context.fillText("Instructions", CANVAS_WIDTH / 2, 35);
+    context.fillText("How to Play", CANVAS_WIDTH / 2, 30);
 
-    // operating instructions
-    const instructions = [
-      "W / ↑  -  Move Up",
-      "S / ↓  -  Move Down",
-      "A / ←  -  Move Left",
-      "D / →  -  Move Right",
-      "",
-      "Space  -  Sword Attack",
-      "J  -  Fire Flame",
-      "K  -  Frozen Flame",
-      "",
-      "Find the key and escape!",
-    ];
+    // Controls
+    context.fillStyle = "#FFFFFF";
+    context.font = `12px ${FontName.OpenSans}`;
+    context.fillText("Move:  W↑  S↓  A←  D→", CANVAS_WIDTH / 2, 50);
+    context.fillText("Space-Sword   J-Fire   K-Frozen", CANVAS_WIDTH / 2, 64);
+
+    // Description
+    context.fillStyle = "#FFD700";
+    context.font = `14px ${FontName.OpenSans}`;
+    context.fillText("Goal", CANVAS_WIDTH / 2, 86);
 
     context.fillStyle = "#FFFFFF";
-    context.font = `11px ${FontName.MedievalSharp}`;
-    instructions.forEach((line, index) => {
-      context.fillText(line, CANVAS_WIDTH / 2, 60 + index * 14);
+    context.font = `10px ${FontName.OpenSans}`;
+    const description = [
+      "Find the key to escape!",
+      "Crystal → Frozen | Torch → Fire",
+      "Abilities: 2s cooldown",
+      "5 health | 3 lives",
+      "Kill creatures for items",
+    ];
+    description.forEach((line, index) => {
+      context.fillText(line, CANVAS_WIDTH / 2, 102 + index * 13);
     });
 
-    // Close hint
     context.fillStyle = "#888888";
-    context.font = `10px ${FontName.MedievalSharp}`;
-    context.fillText(
-      "Press Enter or Escape to close",
-      CANVAS_WIDTH / 2,
-      CANVAS_HEIGHT - 15
-    );
+    context.font = `8px ${FontName.OpenSans}`;
+    context.fillText("Enter / Esc to close", CANVAS_WIDTH / 2, 195);
   }
 
   updateMenuOption() {

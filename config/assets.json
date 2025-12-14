@@ -176,7 +176,11 @@
     {
       "name": "Zelda",
       "path": "./assets/fonts/Zelda.otf"        
-    }          
+    },
+    {
+      "name": "OpenSans",
+      "path": "./assets/fonts/OpenSans-Regular.ttf"        
+    }
   ],
   "sounds": [
     {
@@ -196,7 +200,7 @@
         "name": "winter",
         "path": "./assets/sounds/music/winter.wav",
         "size": 1,
-        "volume": 0.3,
+        "volume": 0.1,
         "loop": true
     },
     {
@@ -225,18 +229,6 @@
         "volume": 0.2
     },
     {
-        "name": "door-enter",
-        "path": "./assets/sounds/effects/door-enter.wav",
-        "size": 1,
-        "volume": 0.2
-    },
-    {
-        "name": "door-exit",
-        "path": "./assets/sounds/effects/door-exit.wav",
-        "size": 1,
-        "volume": 0.2
-    },
-    {
         "name": "enemy-dead",
         "path": "./assets/sounds/effects/enemy-dead.wav",
         "size": 1,
@@ -256,16 +248,10 @@
         
     },
     {
-        "name": "door-enter",
-        "path": "./assets/sounds/effects/door-enter.wav",
-        "size": 1,
-        "volume": 0.2
-    },
-    {
         "name": "frozen",
         "path": "./assets/sounds/effects/frozen.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.3
     },
     {
         "name": "heal",
@@ -277,13 +263,13 @@
         "name": "hits",
         "path": "./assets/sounds/effects/hits.wav",
         "size": 1,
-        "volume": 0.4
+        "volume": 1
     },
     {
         "name": "hurt",
         "path": "./assets/sounds/effects/hurt.wav",
         "size": 10,
-        "volume": 0.3
+        "volume": 0.5
       },
       {
         "name": "landed",
@@ -315,7 +301,7 @@
         "name": "sword",
         "path": "./assets/sounds/effects/sword.wav",
         "size": 1,
-        "volume": 0.2
+        "volume": 0.4
     },
     {
         "name": "select",

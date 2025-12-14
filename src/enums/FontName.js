@@ -3,6 +3,7 @@ const FontName = {
   CinzelRegular: "Cinzel-Regular",
   MedievalSharp: "MedievalSharp-Regular",
   Zelda: "Zelda",
+  OpenSans: "OpenSans",
 };
 
 export default FontName;
