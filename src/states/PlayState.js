@@ -21,27 +21,35 @@ export default class PlayState extends State {
     this.currentSeason = "summer";
   }
   enter(params = {}) {
-    const isWinter = params.isWinter || false;
+    let isWinter = params.isWinter || false;
     const loadSave = params.loadSave || false;
-
+    const previousPlayerData = params.previousPlayerData || null;
+    // isWinter = true;
     this.currentSeason = isWinter ? "winter" : "summer";
 
     if (loadSave) {
       this.loadSaveGame(isWinter);
     } else {
-      this.StartNewGame(isWinter);
+      this.StartNewGame(isWinter, previousPlayerData);
     }
   }
 
   /**
    * Starts a new game with fresh creatures.
+   * If previousPlayerData is provided, abilities will be preserved.
+   * @param {boolean} isWinter - Whether to load the winter map.
+   * @param {Object|null} previousPlayerData - Data from previous region to restore player abilities.
    */
-  StartNewGame(isWinter) {
+  StartNewGame(isWinter, previousPlayerData = null) {
     let creatures;
 
     if (isWinter) {
       sounds[SoundName.Winter].play();
-      const winterCreatures = [{ type: CreatureType.BigBoss, count: 1 }];
+      const winterCreatures = [
+        { type: CreatureType.BigBoss, count: 1 },
+        { type: CreatureType.Spider, count: getRandomPositiveInteger(2, 3) },
+        { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
+      ];
       this.region = new Region(
         this.winterMapDefinition,
         winterCreatures,
@@ -55,6 +63,13 @@ export default class PlayState extends State {
       ];
       this.region = new Region(this.summerMapDefinition, summerCreatures, isWinter);
     }
+    
+    // Restore player abilities from previous region if transitioning
+    if (previousPlayerData && previousPlayerData.abilityUnlocked) {
+      this.region.player.abilityUnlocked = { ...previousPlayerData.abilityUnlocked };
+      console.log("Restored player abilities:", this.region.player.abilityUnlocked);
+    }
+    
     // 1. Save game when start new game
     SaveManager.save(this.region.player, this.region);
   }
@@ -70,6 +85,8 @@ export default class PlayState extends State {
       sounds[SoundName.Winter].play();
       creatures = [
         { type: CreatureType.BigBoss, count: saveData.aliveBigBoss || 0 },
+        { type: CreatureType.Spider, count: saveData.aliveSpiders || 0 },
+        { type: CreatureType.Skeleton, count: saveData.aliveSkeletons || 0 },
       ];
       this.region = new Region(this.winterMapDefinition, creatures, isWinter);
     } else {
