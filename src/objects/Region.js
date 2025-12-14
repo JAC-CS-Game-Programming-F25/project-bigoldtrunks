@@ -535,6 +535,10 @@ export default class Region {
         entity.itemKept = null; // Clear the reference so it doesn't get added multiple times
       }
 
+      // Save game when crature dies
+      if (entity.isDead && entity instanceof Creature) {
+        SaveManager.save(this.player, this);
+      }
       return !entity.isDead; // Remove dead creatures
     });
   }
