@@ -39,5 +39,5 @@ export const input = new Input(canvas);
 export let sounds = {};
 
 // If true, render all hitboxes.
-export const DEBUG = true;
+export const DEBUG = false;
 // testing change
