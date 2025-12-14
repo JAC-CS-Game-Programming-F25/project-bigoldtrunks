@@ -29,15 +29,18 @@ export default class PlayerPerformingFrozenBlastState extends State {
         
     }
     /**
-     * Adds a FrozenBlast object to the current region.
+     * Initialize a FrozenBlast and link to the current region and associates it with the player.
      */
-    addFrozenBlastToRegion() {
+    addFrozenBlastToRegionAndPlayer() {
         // Pass player position, direction, and dimensions to properly position the flame
         this.frozenBlast = new FrozenBlast(
             this.player.position,
             this.player.direction,
             {x: Player.PLAYER_SPRITE_WIDTH, y: Player.PLAYER_SPRITE_HEIGHT}
         );
+
+        this.player.frozenBlast = this.frozenBlast;
+
         this.region.addObject(this.frozenBlast);
     }
     /**
@@ -56,12 +59,17 @@ export default class PlayerPerformingFrozenBlastState extends State {
         this.player.dimensions.x = Player.PLAYER_SWORD_SPRITE_WIDTH;
         this.player.dimensions.y = Player.PLAYER_SWORD_SPRITE_HEIGHT;
     }
+    /**
+     * Called when entering the FrozenBlast state.
+     * Adds the FrozenBlast object to the region and sets up the player's animation and position.
+     * Start activating cooldown for the FrozenBlast ability.
+     */
     enter(){
         console.log("Entering Frozen Blast State");
         // add flame object to the region
 
-        this.addFrozenBlastToRegion();
-        
+        this.addFrozenBlastToRegionAndPlayer();
+        this.frozenBlast.startCooldown();
         this.processPositionAndDimensions();
 
         this.player.isUsingFireFlame = true; // Set the flag to indicate FireFlame is being used

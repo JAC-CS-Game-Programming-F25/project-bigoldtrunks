@@ -95,11 +95,14 @@ export default class PlayerIdlingState extends State {
      * Checks if the player can perform the FrozenBlast ability:
      * - The ability must be unlocked
      * - The player must be facing Left or Right
+     * - The FrozenBlast must not be on cooldown
      * 
      * @returns {boolean} whether the player can perform FrozenBlast
      */
     isCouldPerformFrozenBlast() {
-        return this.player.abilityUnlocked[AbilityType.FrozenFlame] && (this.player.direction === Direction.Left || this.player.direction === Direction.Right);
+        return this.player.abilityUnlocked[AbilityType.FrozenFlame] && 
+        (this.player.direction === Direction.Left || this.player.direction === Direction.Right) &&
+        this.player.frozenBlast && !this.player.frozenBlast.isOnCooldown;
     }
     /**
      * Handles transition to Dead state if the player is dead
