@@ -3,6 +3,7 @@ import PlayerStateName from "../../enums/PlayerStateName.js";
 import Animation from "../../../lib/Animation.js";
 import Direction from "../../enums/Direction.js";
 import { CANVAS_HEIGHT } from "../../globals.js";
+import Player from "../../entities/Player.js";
 
 /**
  * This state is used when player dead and still have lives remaining, this state will handle the tween from the top of the screen to the ground
@@ -30,7 +31,7 @@ export default class PlayerFallingDownToEarth extends State {
         
         // Use walking sprites for falling animation
         this.player.sprites = this.player.walkingSprites;
-        this.player.health = this.player.maxHealth; // Restore health upon landing
+        this.player.health = Player.MAX_HEALTH // Restore health upon landing
         this.player.currentAnimation = this.animation[this.player.direction];
         
         console.log("Player falling from sky...");
@@ -47,10 +48,52 @@ export default class PlayerFallingDownToEarth extends State {
             // Player has landed on the ground
             this.player.position.y = groundLevelY;
             this.player.isFalling = false;
+            
+            // Play earthquake effect when landing
+            this.playLandingEffect();
                         
-            // Transition back to Idle state
-            this.player.changeState(PlayerStateName.Idle);
+            // Transition back to Idle state (after a brief delay for effect)
+            setTimeout(() => {
+                this.player.changeState(PlayerStateName.Idle);
+            }, 200); // Small delay to let the shake complete
         }
+    }
+    
+    /**
+     * Plays a screen shake effect when the player lands
+     * Simulates an earthquake/impact effect
+     */
+    playLandingEffect() {
+        const canvas = document.querySelector("canvas");
+        
+        // Flash effect - brief brightness increase
+        canvas.style.filter = "brightness(1.3)";
+        
+        setTimeout(() => {
+            canvas.style.filter = "brightness(1)";
+        }, 100);
+        
+        // Screen shake effect
+        let shakes = 0;
+        const maxShakes = 20; // Number of shake iterations
+        const shakeIntensity = 6; // Pixels to shake
+        
+        const shakeInterval = setInterval(() => {
+            // Random shake in both X and Y directions
+            const offsetX = (Math.random() - 0.5) * shakeIntensity;
+            const offsetY = (Math.random() - 0.5) * shakeIntensity;
+            
+            canvas.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+            shakes++;
+            
+            // Stop shaking after max shakes
+            if (shakes >= maxShakes) {
+                clearInterval(shakeInterval);
+                canvas.style.transform = ""; // Reset position
+                canvas.style.filter = ""; // Reset filter
+            }
+        }, 30); // Shake every 30ms for quick, intense effect
+        
     }
     
     exit() {
