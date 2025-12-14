@@ -27,7 +27,7 @@ export default class Player extends GameEntity {
   static PLAYER_SWORD_SPRITE_HEIGHT = 32;
   static PLAYER_SWORD_SPRITE_WIDTH = 32;
   static PLAYER_SPEED = 60;
-  static MAX_HEALTH = 10;
+  static MAX_HEALTH = 3;
   static MAX_LIVES = 3;
 
     // the player sword swinging frame has width and height of 32 pixels
