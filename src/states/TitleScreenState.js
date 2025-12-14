@@ -99,23 +99,12 @@ export default class TitleScreenState extends State {
         });
       } else if (option === "New Game") {
         SaveManager.deleteSave();
-        stateMachine.change();
         stateMachine.change(GameStateName.Transition, {
           fromState: this,
           toState: stateMachine.states[GameStateName.Play],
           toStateEnterParameters: { isWinter: false },
         });
       } else if (option === "Instructions") {
-        this.showInstructions = true;
-      }
-
-      if (this.selectedIndex === 0) {
-        stateMachine.change(GameStateName.Transition, {
-          fromState: this,
-          toState: stateMachine.states[GameStateName.Play],
-          toStateEnterParameters: { isWinter: false }, // change season
-        });
-      } else if (this.selectedIndex === 1) {
         this.showInstructions = true;
       }
     }
@@ -216,7 +205,7 @@ export default class TitleScreenState extends State {
     );
   }
 
-  updateMenuOptions() {
+  updateMenuOption() {
     if (SaveManager.hasSave()) {
       this.menuOptions = ["Continue", "New Game", "Instructions"];
     } else {

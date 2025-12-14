@@ -1,3 +1,4 @@
+import CreatureType from "../enums/CreatureType.js";
 export default class SaveManager {
   static save(player, region) {
     /**
@@ -9,7 +10,8 @@ export default class SaveManager {
       lives: player.lives,
       playerX: player.position.x,
       playerY: player.position.y,
-
+      abilityUnlocked: player.abilityUnlocked,
+      
       // region status
       isWinter: region.isWinter,
 

@@ -31,7 +31,7 @@ export default class PlayState extends State {
   /**
    * Starts a new game with fresh creatures.
    */
-  StartNewGame() {
+  StartNewGame(isWinter) {
     let creatures;
 
     if (isWinter) {
@@ -53,7 +53,7 @@ export default class PlayState extends State {
   /**
    * Loads saved game and restores player/creature state.
    */
-  loadSavedGame(isWinter) {
+  loadSaveGame(isWinter) {
     const saveData = SaveManager.load();
     let creatures;
 
@@ -77,7 +77,10 @@ export default class PlayState extends State {
     this.region.player.lives = saveData.lives;
     this.region.player.position.x = saveData.playerX;
     this.region.player.position.y = saveData.playerY;
-    this.region.player.abilityUnlocked = saveData.abilityUnlocked;
+
+    if (saveData.abilityUnlocked) {
+      this.region.player.abilityUnlocked = saveData.abilityUnlocked;
+    }
   }
 
   update(dt) {
