@@ -14,6 +14,9 @@ export default class UserInterface {
     this.renderAbilities();
     this.renderEnemyInfo();
   }
+  /**
+   * Renders player health and lives in top-left corner.
+   */
   renderHealth() {
     context.fillStyle = "rgba(0, 0, 0, 0.5)";
     context.fillRect(5, 5, 70, 35);
@@ -29,7 +32,9 @@ export default class UserInterface {
     context.fillStyle = "#FFD700";
     context.fillText(`🧍 x ${this.player.lives}`, 10, 32);
   }
-
+  /**
+   * Renders unlocked abilities and collected items in top-right corner.
+   */
   renderAbilities() {
     // Render Frozen Blast icon if ability is unlocked
     if (this.player.abilityUnlocked[AbilityType.FrozenFlame]) {
@@ -86,27 +91,31 @@ export default class UserInterface {
     const boss = this.region.creatures.find((c) => !c.isDead);
     if (!boss) return;
 
-    const barWidth = 80;
-    const barHeight = 6;
+    const barWidth = 100;
+    const barHeight = 25;
     const x = CANVAS_WIDTH / 2 - barWidth / 2;
-    const y = 8;
+    const y = 5;
 
+    context.fillStyle = "rgba(0, 0, 0, 0.5)";
+    context.fillRect(x, y, barWidth + 10, barHeight);
+
+    // health background
     context.fillStyle = "#333";
-    context.fillRect(x, y, barWidth, barHeight);
+    context.fillRect(x + 5, y + 5, barWidth, 8);
 
     // bigBoss health
     const maxHealth = 500;
     const healthPercent = boss.health / maxHealth;
     context.fillStyle = "#FF0000";
-    context.fillRect(x, y, barWidth * healthPercent, barHeight);
+    context.fillRect(x + 5, y + 5, barWidth * healthPercent, 8);
 
-    context.fillStyle = "#333333";
+    context.fillStyle = "#FFFFFF";
     context.font = `10px ${FontName.MedievalSharp}`;
     context.textAlign = "center";
     context.fillText(
       `BOSS: ${boss.health}/${maxHealth}`,
       CANVAS_WIDTH / 2,
-      y + barHeight + 10
+      y + 22
     );
   }
 }
