@@ -30,6 +30,7 @@ export default class PlayerFallingDownToEarth extends State {
         
         // Use walking sprites for falling animation
         this.player.sprites = this.player.walkingSprites;
+        this.player.health = this.player.maxHealth; // Restore health upon landing
         this.player.currentAnimation = this.animation[this.player.direction];
         
         console.log("Player falling from sky...");

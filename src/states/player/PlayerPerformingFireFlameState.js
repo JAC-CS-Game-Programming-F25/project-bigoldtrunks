@@ -1,10 +1,9 @@
 import Animation from "../../../lib/Animation.js";
-import Input from "../../../lib/Input.js";
 import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { input, CANVAS_WIDTH, CANVAS_HEIGHT, timer } from "../../globals.js";
+import { timer } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
 import AbilityType from "../../enums/AbilityType.js";
 

@@ -17,22 +17,23 @@ export default class PlayerDeadState extends State {
 			[Direction.Down]: new Animation([104,105,106,107], 0.4, 1),
             [Direction.Up]: new Animation([108,109,110,111], 0.4, 1),
 		};
+        this.timerStarted = false; // Flag to prevent multiple timer starts
     }
 
     enter(){
         this.player.sprites = this.player.deadSprites;
         this.player.currentAnimation = this.animation[this.player.direction];
         this.player.canTransitionToGameOver = false; // Flag to control GameOver transition
-        
+        this.timerStarted = false; // Reset flag when entering state
     }
     
     update(dt){
         // Update the death animation so it progresses through frames
         this.player.currentAnimation.update(dt);
         
-        // Once animation is done, start the wait timer
-        if (this.player.currentAnimation.isDone()) {
-            
+        // Once animation is done, start the wait timer (only once)
+        if (this.player.currentAnimation.isDone() && !this.timerStarted) {
+            this.timerStarted = true; // Prevent multiple calls
             this.startWaitTimer();
         }
     }
@@ -48,7 +49,7 @@ export default class PlayerDeadState extends State {
         // Decrease a life after death animation
         this.player.lives -= 1;
         if(this.player.lives < 0) {
-            this.player.lives = -1; // Prevent negative lives display
+            this.player.lives = 0; // Prevent negative lives display
             console.log(`No Lives remain -> Game OVer ${this.player.lives}`);
         }
         

@@ -46,7 +46,7 @@ export default class PlayState extends State {
     if (
       this.region.player.isDead &&
       this.region.player.canTransitionToGameOver &&
-      this.region.player.lives < 0
+      this.region.player.lives <= 0
     ) {
       stateMachine.change(GameStateName.Transition, {
         fromState: this,
