@@ -117,11 +117,7 @@ export default class Player extends GameEntity {
         this.stateMachine = this.initializeStateMachine();
     }
     /**
-     * Process the item collected 
-     * - Unlocks a specific ability for the player, when player collects the item, processed in Region.js (UpdateEntities())
-     * - something else with the Key...
-     * - Adds the item to the player's collected items list
-     * @param {Crystal || FireTorch || Key} item 
+     * Tracks which abilities have been unlocked by the player.
      */
     onCollectItem(item) {
 
@@ -141,16 +137,20 @@ export default class Player extends GameEntity {
       // Add item to the player's collected items list
       this.itemCollected.push(item);
     }
-    render(){
-        context.save();
-        
-        super.render();
-        
-        context.restore();
-        if (DEBUG) {
-            this.swordHitbox.render(context);
-        }
+
+    // Add item to the player's collected items list
+    this.itemCollected.push(item);
+  }
+  render() {
+    context.save();
+
+    super.render();
+
+    context.restore();
+    if (DEBUG) {
+      this.swordHitbox.render(context);
     }
+  }
   /**
    * Initializes the state machine for the player.
    * @returns {StateMachine} the initialized state machine
@@ -158,14 +158,29 @@ export default class Player extends GameEntity {
   initializeStateMachine() {
     const stateMachine = new StateMachine();
 
-        stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
-        stateMachine.add(PlayerStateName.Walking, new PlayerWalkingState(this, this.region));
-        stateMachine.add(PlayerStateName.SwordSwinging, new PlayerSwordSwingingState(this));
-        stateMachine.add(PlayerStateName.PerformingFireFlame, new PlayerPerformingFireFlameState(this, this.region)); // Pass region to the state that needs it to add the fire to the
-        stateMachine.add(PlayerStateName.PerformingFrozenBlast, new PlayerPerformingFrozenBlastState(this, this.region)); // Pass region to the state that needs it to add the frozen blast to the
-        stateMachine.add(PlayerStateName.Dead, new PlayerDeadState(this));
-        stateMachine.add(PlayerStateName.FallingDownToEarth, new PlayerFallingDownToEarth(this));
-        stateMachine.change(PlayerStateName.Idle);
+    stateMachine.add(PlayerStateName.Idle, new PlayerIdlingState(this));
+    stateMachine.add(
+      PlayerStateName.Walking,
+      new PlayerWalkingState(this, this.region)
+    );
+    stateMachine.add(
+      PlayerStateName.SwordSwinging,
+      new PlayerSwordSwingingState(this)
+    );
+    stateMachine.add(
+      PlayerStateName.PerformingFireFlame,
+      new PlayerPerformingFireFlameState(this, this.region)
+    ); // Pass region to the state that needs it to add the fire to the
+    stateMachine.add(
+      PlayerStateName.PerformingFrozenBlast,
+      new PlayerPerformingFrozenBlastState(this, this.region)
+    ); // Pass region to the state that needs it to add the frozen blast to the
+    stateMachine.add(PlayerStateName.Dead, new PlayerDeadState(this));
+    stateMachine.add(
+      PlayerStateName.FallingDownToEarth,
+      new PlayerFallingDownToEarth(this)
+    );
+    stateMachine.change(PlayerStateName.Idle);
 
     return stateMachine;
   }
@@ -191,7 +206,7 @@ export default class Player extends GameEntity {
       this.isDead = true;
       this.lives -= 1;
       console.log(`Player died! Lives remaining: ${this.lives}`);
-      
+
       // Transition to Dead state ( play death animation)
       // Dead state will check lives and either respawn or go to GameOver
       sounds[SoundName.Scream].play();
@@ -205,7 +220,7 @@ export default class Player extends GameEntity {
         return;
       }
     }
-    
+
     // Player is hurt but not dead - set invulnerability frames
     this.isInVulnerable = true;
     setTimeout(() => {
@@ -218,10 +233,18 @@ export default class Player extends GameEntity {
   /**
    * Resets player for respawn (after death when lives remain)
    */
-  resetPlayer(){
+  resetPlayer() {
     this.health = Player.MAX_HEALTH;
     this.isDead = false;
     this.canTransitionToGameOver = false;
-    this.isInVulnerable = false;    
+    this.isInVulnerable = false;
+  }
+  /**
+   * Sets the player's facing direction and updates the animation.
+   * @param {Direction} direction - The direction to face (Left, Right, Up, Down).
+   */
+  setDirection(direction) {
+    this.direction = direction;
+    this.currentAnimation = this.animation[direction];
   }
 }

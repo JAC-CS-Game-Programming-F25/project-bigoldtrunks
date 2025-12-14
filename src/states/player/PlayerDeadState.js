@@ -3,6 +3,7 @@ import State from "../../../lib/State.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import { timer } from "../../globals.js";
+import SaveManager from "../../services/SaveManager.js";
 import PlayerPerformingFrozenBlastState from "./PlayerPerformingFrozenBlast.js";
 
 export default class PlayerDeadState extends State {
@@ -64,8 +65,24 @@ export default class PlayerDeadState extends State {
             this.player.canTransitionToGameOver = true;
         }
     }
-    
-    exit(){
-        console.log("Exiting dead state - transitioning to GameOver");
+
+    if (this.player.lives > 0) {
+      // Player has lives remaining - respawn from sky
+      console.log("Player has lives remaining - respawning from sky");
+      this.player.resetPlayer(); // Reset health and flags
+
+      // 4. Save game when player relive
+      SaveManager.save(this.player, this.player.region);
+
+      this.player.changeState(PlayerStateName.FallingDownToEarth);
+    } else {
+      // No lives remaining - transition to Game Over
+      console.log("No lives remaining - transitioning to GameOver");
+      this.player.canTransitionToGameOver = true;
     }
+  }
+
+  exit() {
+    console.log("Exiting dead state - transitioning to GameOver");
+  }
 }

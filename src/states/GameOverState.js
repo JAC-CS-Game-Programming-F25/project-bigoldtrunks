@@ -13,6 +13,7 @@ import {
   stateMachine,
 } from "../globals.js";
 import FontName from "../enums/FontName.js";
+import SaveManager from "../services/SaveManager.js";
 
 export default class GameOverState extends State {
   constructor() {
@@ -22,6 +23,7 @@ export default class GameOverState extends State {
   enter(params) {
     this.score = params?.score ?? 0;
     sounds[SoundName.Gameover].play();
+    SaveManager.deleteSave();
   }
   update(dt) {
     if (input.isKeyPressed(Input.KEYS.ENTER)) {

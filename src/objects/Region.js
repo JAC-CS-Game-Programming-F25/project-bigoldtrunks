@@ -15,6 +15,7 @@ import CreatureType from "../enums/CreatureType.js";
 import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
 import PlayerStateName from "../enums/PlayerStateName.js";
+import SaveManager from "../services/SaveManager.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
     this.isWinter = isWinter;
@@ -248,7 +249,12 @@ export default class Region {
       this.creatures.length > 0 && this.creatures.every((c) => c.isDead);
 
     if (allEnemiesDead) {
-        stateMachine.change(GameStateName.Transition, {
+      this.isGameOver = true;
+
+      // 2.Save game when transit region
+      SaveManager.save(this.player, this);
+
+      stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
         toStateEnterParameters: { isWinter: true },
@@ -414,6 +420,7 @@ export default class Region {
    * @param {number|null} specificCreatureIndex
    */
   assignItemToCreature(creatures, itemType, specificCreatureIndex = null) {
+    if (creatures.length === 0) return;
     creatures.forEach((creature) => {
       if (creature instanceof BigBoss) {
         creature.keepItem(ItemType.Key);
@@ -544,6 +551,10 @@ export default class Region {
         entity.itemKept = null; // Clear the reference so it doesn't get added multiple times
       }
 
+      // 3.Save game when crature dies
+      if (entity.isDead && entity instanceof Creature) {
+        SaveManager.save(this.player, this);
+      }
       return !entity.isDead; // Remove dead creatures
     });
   }

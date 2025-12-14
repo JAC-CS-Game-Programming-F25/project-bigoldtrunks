@@ -20,8 +20,7 @@ import CreatureChasingState from "../../states/Creature/CreatureChasingState.js"
 import CreatureWalkingState from "../../states/Creature/CreatureWalkingState.js";
 import CreatureIdlingState from "../../states/Creature/CreatureIdlingState.js";
 import SoundName from "../../enums/SoundName.js";
-import { stateMachine } from "../../globals.js";
-import GameStateName from "../../enums/GameStateName.js";
+import SaveManager from "../../services/SaveManager.js";
 
 export default class BigBoss extends Creature {
   static WIDTH = 128;
@@ -129,11 +128,6 @@ export default class BigBoss extends Creature {
    * @param {number} dt - Delta time since last frame.
    */
   update(dt) {
-    console.log(
-      "BigBoss state:",
-      this.stateMachine.currentState.constructor.name
-    );
-
     super.update(dt);
 
     this.hitbox.set(this.position.x + 50, this.position.y + 80, 30, 30);
@@ -195,11 +189,15 @@ export default class BigBoss extends Creature {
 
     this.health -= damage;
 
+    if (this.player && this.player.region) {
+      // 5. Save game when bigboss injure
+      SaveManager.save(this.player, this.player.region);
+    }
+
     if (this.health <= 0) {
       sounds[SoundName.BigBossDead].play();
       this.spawnItemIfKeep();
       // this.playDeathEffect();
-      console.log("BigBoss is dead!");
       return;
     }
 
@@ -211,49 +209,4 @@ export default class BigBoss extends Creature {
 
     sounds[SoundName.EnemyHurt].play();
   }
-
-  /**
-   * Note: This will be processed else where, in the region, not here (Cuong) in terms of design
-   * 
-   * Plays epic death effect: screen flash + shake, then transitions to Victory.
-   */
-  // playDeathEffect() {
-  //   const canvas = document.querySelector("canvas");
-  //   const playState = stateMachine.states[GameStateName.Play];
-
-  //   if (this.player?.region) {
-  //     this.player.region.isGameOver = true;
-  //   }
-
-  //   // First flash white
-  //   canvas.style.filter = "brightness(2.5)";
-
-  //   setTimeout(() => {
-  //     // then flash dark
-  //     canvas.style.filter = "brightness(0.3)";
-
-  //     // Screen shake
-  //     let shakes = 0;
-  //     const interval = setInterval(() => {
-  //       canvas.style.transform = `translate(${(Math.random() - 0.5) * 6}px, ${
-  //         (Math.random() - 0.5) * 6
-  //       }px)`;
-  //       shakes++;
-
-  //       if (shakes >= 12) {
-  //         clearInterval(interval);
-  //         canvas.style.transform = "";
-  //         canvas.style.filter = ""; // reset filter
-  //         this.isDead = true;
-
-  //         setTimeout(() => {
-  //           stateMachine.change(GameStateName.Transition, {
-  //             fromState: playState,
-  //             toState: stateMachine.states[GameStateName.Victory],
-  //           });
-  //         }, 300);
-  //       }
-  //     }, 50);
-  //   }, 200);
-  // }
 }
