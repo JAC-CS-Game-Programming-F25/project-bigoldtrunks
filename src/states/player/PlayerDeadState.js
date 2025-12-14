@@ -47,13 +47,13 @@ export default class PlayerDeadState extends State {
         await timer.wait(PlayerDeadState.WAIT_DURATION);
         this.waitTimerStarted = false;
         // Decrease a life after death animation
-        this.player.lives -= 1;
+        // this.player.lives -= 1;
         if(this.player.lives < 0) {
             this.player.lives = 0; // Prevent negative lives display
             console.log(`No Lives remain -> Game OVer ${this.player.lives}`);
         }
         
-        if (this.player.lives > 0) {
+        if (!this.player.isOutOfLives()) {
             // Player has lives remaining - respawn from sky
             console.log("Player has lives remaining - respawning from sky");
             this.player.resetPlayer(); // Reset health and flags

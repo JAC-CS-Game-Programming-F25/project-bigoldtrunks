@@ -52,13 +52,12 @@ export default class Region {
 
     this.collisionLayer = this.map.collisionLayer;
     this.renderQueue = this.buildRenderQueue();
-    this.isGameOver = false;
     this.isVictory = false;
     this.ui = new UserInterface(this.player, this);
   }
 
   update(dt) {
-    if (this.isGameOver) return;
+    if (this.isGameOver()) return;
     // Rebuild render queue each frame to account for movement
     this.renderQueue = this.buildRenderQueue();
     this.cleanUpEntities();
@@ -221,11 +220,7 @@ export default class Region {
         entity.update(dt);
     });
     // Check game over
-    if (
-        (this.player.isDead || this.player.health <= 0) &&
-        !this.player.lives < 0
-    ) {
-        this.isGameOver = true;
+    if (this.isGameOver()) {
         stateMachine.change(GameStateName.Transition, {
             fromState: stateMachine.currentState,
             toState: stateMachine.states[GameStateName.GameOver],
@@ -240,13 +235,12 @@ export default class Region {
    * Triggers transition when all enemies are defeated in summer.
    */
   checkRegionTransition() {
-    if (this.isWinter || this.isGameOver) return;
+    if (this.isWinter || this.isGameOver()) return;
 
     const allEnemiesDead =
       this.creatures.length > 0 && this.creatures.every((c) => c.isDead);
 
     if (allEnemiesDead) {
-        this.isGameOver = true;
         stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
@@ -279,8 +273,9 @@ export default class Region {
      * @returns {boolean} true if game over conditions met
      */
     isGameOver() {
-            return this.player.isDead && this.player.lives < 0;
+        return this.player.isDead && this.player.lives < 0;
     }
+
     /**
      * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key), but not during FallingDownToEarth state
      * Performs onConsume on the item, and onCollectItem on the player

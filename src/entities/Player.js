@@ -188,19 +188,21 @@ export default class Player extends GameEntity {
     if (this.health <= 0) {
       this.health = 0;
       this.isDead = true;
-      
+      this.lives -= 1;
       console.log(`Player died! Lives remaining: ${this.lives}`);
       
       // Transition to Dead state ( play death animation)
       // Dead state will check lives and either respawn or go to GameOver
       this.changeState(PlayerStateName.Dead);
-      if(this.lives > 0) {
+      
+      // Estimate time for death animation + wait duration before landing sound
+      if(this.lives >= 0) {
           timer.wait(2.3).then(() => {
           sounds[SoundName.Landed].play();
-    });
-      return;
+          });
+        return;
+      }
     }
-  }
     
     // Player is hurt but not dead - set invulnerability frames
     this.isInVulnerable = true;
@@ -208,7 +210,9 @@ export default class Player extends GameEntity {
       this.isInVulnerable = false;
     }, 1000);
   }
-  
+  isOutOfLives() {
+    return this.lives < 0;
+  }
   /**
    * Resets player for respawn (after death when lives remain)
    */
