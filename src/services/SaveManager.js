@@ -1,5 +1,8 @@
 import CreatureType from "../enums/CreatureType.js";
 export default class SaveManager {
+  // localStorage key
+  static SAVE_KEY = "mystiaJungle_save";
+
   static save(player, region) {
     /**
      * Saves current game state to localStorage.
@@ -11,7 +14,7 @@ export default class SaveManager {
       playerX: player.position.x,
       playerY: player.position.y,
       abilityUnlocked: player.abilityUnlocked,
-      
+
       // region status
       isWinter: region.isWinter,
 
