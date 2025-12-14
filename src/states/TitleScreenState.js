@@ -85,9 +85,7 @@ export default class TitleScreenState extends State {
     // Enter confirm
     if (input.isKeyPressed(Input.KEYS.ENTER)) {
       sounds[SoundName.Select].play();
-      if (this.selectedIndex === 0) {
-        // stateMachine.change(GameStateName.Play);
-      // add continue option in menu
+      // decide action based on selected menu option
       const option = this.menuOptions[this.selectedIndex];
       if (option === "Continue") {
         const saveData = SaveManager.load();

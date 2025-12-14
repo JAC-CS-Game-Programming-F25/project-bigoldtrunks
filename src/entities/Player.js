@@ -116,26 +116,22 @@ export default class Player extends GameEntity {
         this.frozenBlast = null;
         this.stateMachine = this.initializeStateMachine();
     }
-    /**
-     * Tracks which abilities have been unlocked by the player.
-     */
-    onCollectItem(item) {
+  /**
+   * Tracks which abilities have been unlocked by the player.
+   */
+  onCollectItem(item) {
 
-      if(item.itemType == ItemType.Crystal)
-      {
-        this.abilityUnlocked[AbilityType.FrozenFlame] = true;
-        console.log("Player unlocked ability Crystal:", AbilityType.FrozenFlame);
-      } else if (item.itemType == ItemType.FireTorch){
-        this.abilityUnlocked[AbilityType.FireFlame] = true;
-        console.log("Player unlocked ability FireTorch:", AbilityType.FireFlame);
-      } else if (item.itemType == ItemType.Key){ 
-          sounds[SoundName.KeyPickup].play();
-          sounds[SoundName.OnEscapeSuccessful].play();
-          console.log("Player collected Key:", ItemType.Key);
-      }
-
-      // Add item to the player's collected items list
-      this.itemCollected.push(item);
+    if(item.itemType == ItemType.Crystal)
+    {
+      this.abilityUnlocked[AbilityType.FrozenFlame] = true;
+      console.log("Player unlocked ability Crystal:", AbilityType.FrozenFlame);
+    } else if (item.itemType == ItemType.FireTorch){
+      this.abilityUnlocked[AbilityType.FireFlame] = true;
+      console.log("Player unlocked ability FireTorch:", AbilityType.FireFlame);
+    } else if (item.itemType == ItemType.Key){ 
+        sounds[SoundName.KeyPickup].play();
+        sounds[SoundName.OnEscapeSuccessful].play();
+        console.log("Player collected Key:", ItemType.Key);
     }
 
     // Add item to the player's collected items list

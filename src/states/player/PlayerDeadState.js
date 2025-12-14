@@ -66,21 +66,7 @@ export default class PlayerDeadState extends State {
         }
     }
 
-    if (this.player.lives > 0) {
-      // Player has lives remaining - respawn from sky
-      console.log("Player has lives remaining - respawning from sky");
-      this.player.resetPlayer(); // Reset health and flags
-
-      // 4. Save game when player relive
-      SaveManager.save(this.player, this.player.region);
-
-      this.player.changeState(PlayerStateName.FallingDownToEarth);
-    } else {
-      // No lives remaining - transition to Game Over
-      console.log("No lives remaining - transitioning to GameOver");
-      this.player.canTransitionToGameOver = true;
-    }
-  }
+    
 
   exit() {
     console.log("Exiting dead state - transitioning to GameOver");

@@ -67,13 +67,13 @@ export default class PlayState extends State {
     let creatures;
 
     if (isWinter) {
-      sounds.play(SoundName.Winter);
+      sounds[SoundName.Winter].play();
       creatures = [
         { type: CreatureType.BigBoss, count: saveData.aliveBigBoss || 0 },
       ];
       this.region = new Region(this.winterMapDefinition, creatures, isWinter);
     } else {
-      sounds.play(SoundName.Summer);
+      sounds[SoundName.Summer].play();
       creatures = [
         { type: CreatureType.Spider, count: saveData.aliveSpiders || 0 },
         { type: CreatureType.Skeleton, count: saveData.aliveSkeletons || 0 },
