@@ -301,7 +301,13 @@
 
     {
         "name": "key-pickup",
-        "path": "./assets/sounds/effects/key-pickup.wav",
+        "path": "./assets/sounds/effects/key-collected-game-success-alert-2039.wav",
+        "size": 1,
+        "volume": 0.2
+    },
+    {
+        "name": "on-escape-successful",
+        "path": "./assets/sounds/effects/on-escape-success-riser-helicopter.wav",
         "size": 1,
         "volume": 0.2
     },

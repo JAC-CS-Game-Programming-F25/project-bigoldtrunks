@@ -26,6 +26,8 @@ const SoundName = {
   Hurt: "hurt",
   Landed: "landed",
   Scream: "scream",
+  KeyPickup: "key-pickup",
+  OnEscapeSuccessful: "on-escape-successful",
 };
 
 export default SoundName;
