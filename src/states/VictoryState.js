@@ -13,6 +13,7 @@ import FontName from "../enums/FontName.js";
 import ImageName from "../enums/ImageName.js";
 import GameStateName from "../enums/GameStateName.js";
 import SoundName from "../enums/SoundName.js";
+import SaveManager from "../services/SaveManager.js";
 /**
  * VictoryState - Displayed when the player wins the game.
  *
@@ -26,6 +27,7 @@ export default class VictoryState extends State {
     super();
   }
   enter() {
+    SaveManager.deleteSave();
     sounds.play(SoundName.Victory);
   }
   exit() {
