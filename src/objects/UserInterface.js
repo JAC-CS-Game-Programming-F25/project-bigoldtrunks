@@ -25,12 +25,18 @@ export default class UserInterface {
     context.textAlign = "left";
 
     // use heart to represent health
-    context.fillStyle = "#FF0000";
-    context.fillText(`❤️ ${this.player.health}`, 10, 18);
+    let hearts = "";
+    for (let i = 0; i < this.player.health; i++) {
+      hearts += "❤️";
+    }
+    context.fillText(hearts, 10, 18);
 
     // Lives
-    context.fillStyle = "#FFD700";
-    context.fillText(`🧍 x ${this.player.lives}`, 10, 32);
+    let lives = "";
+    for (let i = 0; i < this.player.lives; i++) {
+      lives += "🧍";
+    }
+    context.fillText(lives, 10, 32);
   }
   /**
    * Renders unlocked abilities and collected items in top-right corner.
