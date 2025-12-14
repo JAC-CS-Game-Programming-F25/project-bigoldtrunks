@@ -175,12 +175,6 @@ Short SFX used for actions, combat, items, and feedback:
 - **boss-dead.wav** — Boss defeat impact  
   https://opengameart.org/content/male-dead-voice
 
-- **door-enter.wav** — Entering a portal/door  
-  (from Pokémon assignment)
-
-- **door-exit.wav** — Exiting a portal/door  
-  (from Pokémon assignment)
-
 - **enemy-dead.wav** — Enemy defeated sound  
   https://opengameart.org/content/male-dead-voice
 
