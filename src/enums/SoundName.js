@@ -24,6 +24,7 @@ const SoundName = {
   PlayerPerformFireFlame: "player-fire-flame",
   PlayerPerformFrozenFlame: "frozen",
   Hurt: "hurt",
+  Landed: "landed",
 };
 
 export default SoundName;

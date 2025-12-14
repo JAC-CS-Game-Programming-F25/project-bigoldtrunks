@@ -286,6 +286,12 @@
         "volume": 0.3
     },
     {
+        "name": "landed",
+        "path": "./assets/sounds/effects/landed-on-earth-stomp.wav",
+        "size": 1,
+        "volume": 0.5
+    },
+    {
         "name": "key-pickup",
         "path": "./assets/sounds/effects/key-pickup.wav",
         "size": 1,

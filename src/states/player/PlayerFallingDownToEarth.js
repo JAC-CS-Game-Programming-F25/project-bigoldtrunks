@@ -2,8 +2,9 @@ import State from "../../../lib/State.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
 import Animation from "../../../lib/Animation.js";
 import Direction from "../../enums/Direction.js";
-import { CANVAS_HEIGHT } from "../../globals.js";
+import { CANVAS_HEIGHT, sounds, timer } from "../../globals.js";
 import Player from "../../entities/Player.js";
+import SoundName from "../../enums/SoundName.js";
 
 /**
  * This state is used when player dead and still have lives remaining, this state will handle the tween from the top of the screen to the ground
@@ -35,6 +36,8 @@ export default class PlayerFallingDownToEarth extends State {
         this.player.currentAnimation = this.animation[this.player.direction];
         
         console.log("Player falling from sky...");
+
+
     }
 
     update(dt) {
