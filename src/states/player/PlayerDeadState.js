@@ -45,7 +45,7 @@ export default class PlayerDeadState extends State {
     async startWaitTimer() {
         console.log(`Death animation complete, waiting ${PlayerDeadState.WAIT_DURATION} seconds...`);
         await timer.wait(PlayerDeadState.WAIT_DURATION);
-        
+        this.waitTimerStarted = false;
         // Decrease a life after death animation
         this.player.lives -= 1;
         if(this.player.lives < 0) {
