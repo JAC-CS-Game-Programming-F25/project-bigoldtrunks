@@ -14,6 +14,7 @@ import FireTorch from "./FireTorch.js";
 import CreatureType from "../enums/CreatureType.js";
 import Key from "./Key.js";
 import BigBoss from "../entities/Creature/BigBoss.js";
+import PlayerStateName from "../enums/PlayerStateName.js";
 export default class Region {
   constructor(mapDefinition, creatureConfig = [], isWinter = false) {
     this.isWinter = isWinter;
@@ -186,17 +187,17 @@ export default class Region {
 
   updateEntities(dt) {
     this.entities.forEach((entity) => {
-      if (entity.health <= 0) {
-        entity.isDead = true;
-      }
-      // Specific logic for Creature entities
-      if (entity instanceof Creature) {
+    if (entity.health <= 0) {
+    entity.isDead = true;
+    }
+    // Specific logic for Creature entities
+    if (entity instanceof Creature) {
         const oldX = entity.position.x;
         const oldY = entity.position.y;
 
         this.checkCreatureCollisions(entity, oldX, oldY);
 
-        // check collision with all objects (ability's hitbox specifically) in the region (FireFlame, FrozenFlame, etc.)
+        //Creatures deal with player's ability objects in the region (FireFlame, FrozenFlame's hitbox , etc.)
         this.checkCollisionWithObjects(entity);
 
         // Creature deal with player's sword hit or ability hit
@@ -204,7 +205,6 @@ export default class Region {
           !entity.isHurt &&
           entity.didCollideWithEntity(this.player.swordHitbox)
         ) {
-          // Creature deal with player's sword hit or ability hit
           entity.onTakingHit(this.player.damage);
         }
 
@@ -213,24 +213,24 @@ export default class Region {
           this.player.onTakingDamage(entity.damage);
         }
 
-        // Specific logic for Player entity
-      } else if (entity instanceof Player) {
-        // Player specific update logic can go here
-        this.checkCollisionWithItem(entity);
-      }
-      entity.update(dt);
+            // Specific logic for Player entity
+        } else if (entity instanceof Player) {
+            // Player specific update logic can go here
+            this.checkCollisionWithItem(entity);
+        }
+        entity.update(dt);
     });
     // Check game over
     if (
-      (this.player.isDead || this.player.health <= 0) &&
-      !this.player.lives < 0
+        (this.player.isDead || this.player.health <= 0) &&
+        !this.player.lives < 0
     ) {
-      this.isGameOver = true;
-      stateMachine.change(GameStateName.Transition, {
-        fromState: stateMachine.currentState,
-        toState: stateMachine.states[GameStateName.GameOver],
-        toStateEnterParameters: { score: this.score },
-      });
+        this.isGameOver = true;
+        stateMachine.change(GameStateName.Transition, {
+            fromState: stateMachine.currentState,
+            toState: stateMachine.states[GameStateName.GameOver],
+            toStateEnterParameters: { score: this.score },
+        });
     }
     // Check all creatures isDead
     this.checkRegionTransition();
@@ -246,8 +246,8 @@ export default class Region {
       this.creatures.length > 0 && this.creatures.every((c) => c.isDead);
 
     if (allEnemiesDead) {
-      this.isGameOver = true;
-      stateMachine.change(GameStateName.Transition, {
+        this.isGameOver = true;
+        stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
         toStateEnterParameters: { isWinter: true },
@@ -260,46 +260,54 @@ export default class Region {
    * - Player is not invulnerable
    * - Entity has contact damage
    * - Player's hitbox collides with entity's hitbox
+   * - Player is not in FallingDownToEarth state
    * @param {*} entity
    * @returns {boolean} true if entity can take damage
    */
   isEntityReadyToTakeDamage(entity) {
     return (
-      !entity.isDead &&
-      !this.player.isInVulnerable &&
-      entity.isContactDamage &&
-      this.player.hitbox &&
-      entity.hitbox.didCollide(this.player.hitbox)
+        !entity.isDead &&
+        !this.player.isInVulnerable &&
+        entity.isContactDamage &&
+        this.player.hitbox &&
+        entity.hitbox.didCollide(this.player.hitbox) &&
+        this.player.stateMachine.currentState.name != PlayerStateName.FallingDownToEarth
     );
   }
-  /**
-   * Check if the game is over.
-   * @returns {boolean} true if game over conditions met
-   */
-  isGameOver() {
-    return this.player.isDead && this.player.lives < 0;
-  }
-  /**
-   * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key)
-   * Performs onConsume on the item, and onCollectItem on the player
-   * @param {Player} player
-   */
-  checkCollisionWithItem(player) {
-    this.items.forEach((item, index) => {
-      if (player.didCollideWithEntity(item.hitbox)) {
-        if (item instanceof Crystal || item instanceof FireTorch) {
-          item.onConsume();
-          player.onCollectItem(item);
-          // Remove item from region after consumption
-          this.items.splice(index, 1);
-        } else if (item instanceof Key) {
-          item.onConsume();
-          player.onCollectItem(item);
-          this.items.splice(index, 1);
+    /**
+     * Check if the game is over.
+     * @returns {boolean} true if game over conditions met
+     */
+    isGameOver() {
+            return this.player.isDead && this.player.lives < 0;
+    }
+    /**
+     * Check if player collides with any item in the region (e.g., Crystal, FireTorch, Key), but not during FallingDownToEarth state
+     * Performs onConsume on the item, and onCollectItem on the player
+     * @param {Player} player
+     */
+    checkCollisionWithItem(player) {
+        if(this.player.stateMachine.currentState.name != PlayerStateName.FallingDownToEarth) {
+            // Player is not falling, check for item collection
+            this.items.forEach((item, index) => {
+                
+                // Player is not falling, check for item collection
+                
+                if (player.didCollideWithEntity(item.hitbox)) {
+                    if (item instanceof Crystal || item instanceof FireTorch) {
+                        item.onConsume();
+                        player.onCollectItem(item);
+                        // Remove item from region after consumption
+                        this.items.splice(index, 1);
+                    } else if (item instanceof Key) {
+                        item.onConsume();
+                        player.onCollectItem(item);
+                        this.items.splice(index, 1);
+                    }
+                }
+            });
         }
-      }
-    });
-  }
+    }
   /**
    * Checks if the player can move to a given position without colliding with collision tiles
    * @param {number} x - Pixel X position
@@ -316,54 +324,54 @@ export default class Region {
     // Check the tile coordinates for all corners of the player's hitbox
     const topLeftTile = this.map.collisionLayer.getTile(tileX, tileY);
     const topRightTile = this.map.collisionLayer.getTile(
-      Math.floor((x + width) / Tile.SIZE),
-      tileY
+        Math.floor((x + width) / Tile.SIZE),
+        tileY
     );
     const bottomLeftTile = this.map.collisionLayer.getTile(
-      tileX,
-      Math.floor((y + height) / Tile.SIZE)
+        tileX,
+        Math.floor((y + height) / Tile.SIZE)
     );
     const bottomRightTile = this.map.collisionLayer.getTile(
-      Math.floor((x + width) / Tile.SIZE),
-      Math.floor((y + height) / Tile.SIZE)
+        Math.floor((x + width) / Tile.SIZE),
+        Math.floor((y + height) / Tile.SIZE)
     );
 
     // If any of the corners are on a collision tile, the move is invalid
     return (
-      topLeftTile === null &&
-      topRightTile === null &&
-      bottomLeftTile === null &&
-      bottomRightTile === null
+        topLeftTile === null &&
+        topRightTile === null &&
+        bottomLeftTile === null &&
+        bottomRightTile === null
     );
-  }
-  /**
-   * Check for collisions between an Creature and all objects in the region such as FireFlame, etc.
-   * Call Creature's onTakingHit method to process if collision detected
-   * @param {Creature} entity
-   */
-  checkCollisionWithObjects(entity) {
-    this.objects.forEach((object) => {
-      if (entity.didCollideWithEntity(object.hitbox)) {
-        entity.onTakingHit(object.damage);
-      }
-    });
-  }
+    }
+    /**
+     * Check for collisions between an Creature and all objects in the region such as FireFlame, etc.
+     * Call Creature's onTakingHit method to process if collision detected
+     * @param {Creature} entity
+     */
+    checkCollisionWithObjects(entity) {
+        this.objects.forEach((object) => {
+            if (entity.didCollideWithEntity(object.hitbox)) {
+                entity.onTakingHit(object.damage);
+            }
+        });
+    }
 
-  /**
-   * Spawns creatures based on the provided configuration.
-   * Each creature type can have different spawn position ranges.
-   * Uses collision checking to avoid overlapping creatures.
-   *
-   * @param {Array} config - Array of creature definitions with type and count
-   * @returns {Array} Array of spawned creature instances
-   */
-  spawnCreatures(config) {
-    // array to hold all spawned creatures
-    const creatures = new Array();
+    /**
+     * Spawns creatures based on the provided configuration.
+     * Each creature type can have different spawn position ranges.
+     * Uses collision checking to avoid overlapping creatures.
+     *
+     * @param {Array} config - Array of creature definitions with type and count
+     * @returns {Array} Array of spawned creature instances
+     */
+    spawnCreatures(config) {
+        // array to hold all spawned creatures
+        const creatures = new Array();
 
-    // spawn creatures based on the config
-    config.forEach((def) => {
-      for (let i = 0; i < def.count; i++) {
+        // spawn creatures based on the config
+        config.forEach((def) => {
+        for (let i = 0; i < def.count; i++) {
         let position;
         let attempts = 0;
         const maxAttempts = 50;
