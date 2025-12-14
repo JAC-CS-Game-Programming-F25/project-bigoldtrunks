@@ -21,37 +21,64 @@ export default class PlayState extends State {
 
     this.currentSeason = isWinter ? "winter" : "summer";
 
+    if (loadSave) {
+      this.loadSaveGame(isWinter);
+    } else {
+      this.StartNewGame(isWinter);
+    }
+  }
+
+  /**
+   * Starts a new game with fresh creatures.
+   */
+  StartNewGame() {
+    let creatures;
+
     if (isWinter) {
       sounds.play(SoundName.Winter);
-      const winterCreatures = [{ type: CreatureType.BigBoss, count: 1 }];
-      this.region = new Region(
-        this.winterMapDefinition,
-        winterCreatures,
-        isWinter
-      );
+      creatures = [{ type: CreatureType.BigBoss, count: 1 }];
+      this.region = new Region(this.winterMapDefinition, creatures, isWinter);
     } else {
       sounds.play(SoundName.Summer);
-      const summerCreatures = [
+      creatures = [
         { type: CreatureType.Spider, count: getRandomPositiveInteger(3, 5) },
         { type: CreatureType.Skeleton, count: getRandomPositiveInteger(2, 3) },
       ];
-      this.region = new Region(
-        this.summerMapDefinition,
-        summerCreatures,
-        isWinter
-      );
+      this.region = new Region(this.summerMapDefinition, creatures, isWinter);
     }
-    // restore the player's status from save data if loadSave is true
-    if (loadSave) {
-      const saveData = SaveManager.load();
-      if (saveData) {
-        this.region.player.health = saveData.health;
-        this.region.player.lives = saveData.lives;
-        this.region.player.position.x = saveData.playerX;
-        this.region.player.position.x = saveData.playery;
-      }
-    }
+    SaveManager.save(this.region.player, this.region);
   }
+
+  /**
+   * Loads saved game and restores player/creature state.
+   */
+  loadSavedGame(isWinter) {
+    const saveData = SaveManager.load();
+    let creatures;
+
+    if (isWinter) {
+      sounds.play(SoundName.Winter);
+      creatures = [
+        { type: CreatureType.BigBoss, count: saveData.aliveBigBoss || 1 },
+      ];
+      this.region = new Region(this.winterMapDefinition, creatures, isWinter);
+    } else {
+      sounds.play(SoundName.Summer);
+      creatures = [
+        { type: CreatureType.Spider, count: saveData.aliveSpiders || 0 },
+        { type: CreatureType.Skeleton, count: saveData.aliveSkeletons || 0 },
+      ];
+      this.region = new Region(this.summerMapDefinition, creatures, isWinter);
+    }
+
+    // restore player status
+    this.region.player.health = saveData.health;
+    this.region.player.lives = saveData.lives;
+    this.region.player.position.x = saveData.playerX;
+    this.region.player.position.y = saveData.playerY;
+    this.region.player.abilityUnlocked = saveData.abilityUnlocked;
+  }
+
   update(dt) {
     this.region.update(dt);
 
