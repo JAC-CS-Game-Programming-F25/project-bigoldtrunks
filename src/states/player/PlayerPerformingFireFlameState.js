@@ -3,9 +3,10 @@ import State from "../../../lib/State.js";
 import Player from "../../entities/Player.js";
 import Direction from "../../enums/Direction.js";
 import PlayerStateName from "../../enums/PlayerStateName.js";
-import { timer } from "../../globals.js";
+import { sounds, timer } from "../../globals.js";
 import FireFlame from "../../objects/FireFlame.js";
 import AbilityType from "../../enums/AbilityType.js";
+import SoundName from "../../enums/SoundName.js";
 
 
 export default class PlayerPerformingFireFlameState extends State {
@@ -14,10 +15,10 @@ export default class PlayerPerformingFireFlameState extends State {
         this.player = player;
         this.region = region;
         this.animation = {
-            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.2 , 1),
-            [Direction.Left]: new Animation([4, 5, 6, 7], 0.2, 1),
-            [Direction.Down]: new Animation([8, 9, 10, 11], 0.2, 1),
-            [Direction.Up]: new Animation([12, 13, 14, 15], 0.2, 1),
+            [Direction.Right]: new Animation([0, 1, 2, 3 ], 0.3 , 1),
+            [Direction.Left]: new Animation([4, 5, 6, 7], 0.3, 1),
+            [Direction.Down]: new Animation([8, 9, 10, 11], 0.3, 1),
+            [Direction.Up]: new Animation([12, 13, 14, 15], 0.3, 1),
         };
         
         
@@ -67,6 +68,9 @@ export default class PlayerPerformingFireFlameState extends State {
         
         // add flame object to the region
         this.addFireFlameToRegionAndPlayer();
+
+        // Play fire flame sound once when entering the state
+        sounds[SoundName.PlayerPerformFireFlame].play();
 
         // Start cooldown on the player (not the ability object)
         this.player.abilityCooldowns[AbilityType.FireFlame] = true;
