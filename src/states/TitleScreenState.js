@@ -110,7 +110,6 @@ export default class TitleScreenState extends State {
       }
 
       if (this.selectedIndex === 0) {
-        // stateMachine.change(GameStateName.Play);
         stateMachine.change(GameStateName.Transition, {
           fromState: this,
           toState: stateMachine.states[GameStateName.Play],

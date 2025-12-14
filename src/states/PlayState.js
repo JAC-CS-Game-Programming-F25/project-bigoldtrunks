@@ -5,6 +5,7 @@ import { sounds, stateMachine } from "../globals.js";
 import SoundName from "../enums/SoundName.js";
 import GameStateName from "../enums/GameStateName.js";
 import CreatureType from "../enums/CreatureType.js";
+import SaveManager from "../services/SaveManager.js";
 
 export default class PlayState extends State {
   constructor(summerMapDefinition, winterMapDefinition) {
@@ -16,6 +17,8 @@ export default class PlayState extends State {
   }
   enter(params = {}) {
     const isWinter = params.isWinter || false;
+    const loadSave = params.loadSave || false;
+
     this.currentSeason = isWinter ? "winter" : "summer";
 
     if (isWinter) {
@@ -37,6 +40,16 @@ export default class PlayState extends State {
         summerCreatures,
         isWinter
       );
+    }
+    // restore the player's status from save data if loadSave is true
+    if (loadSave) {
+      const saveData = SaveManager.load();
+      if (saveData) {
+        this.region.player.health = saveData.health;
+        this.region.player.lives = saveData.lives;
+        this.region.player.position.x = saveData.playerX;
+        this.region.player.position.x = saveData.playery;
+      }
     }
   }
   update(dt) {
