@@ -1,4 +1,5 @@
 import CreatureType from "../enums/CreatureType.js";
+import ItemType from "../enums/ItemType.js";
 export default class SaveManager {
   // localStorage key
   static SAVE_KEY = "mystiaJungle_save";
@@ -24,6 +25,10 @@ export default class SaveManager {
       (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
     );
 
+    const droppedKey = region.items.find(
+      (item) => item.itemType === ItemType.Key
+    );
+
     const saveData = {
       // player status
       health: player.health,
@@ -42,6 +47,10 @@ export default class SaveManager {
       aliveBigBoss,
       bigBossHealth: bigBoss?.health ?? 0,
 
+      // key status
+      keySpawned: droppedKey !== undefined,
+      keyX: droppedKey?.position.x ?? 0,
+      keyY: droppedKey?.position.y ?? 0,
     };
 
     localStorage.setItem(this.SAVE_KEY, JSON.stringify(saveData));

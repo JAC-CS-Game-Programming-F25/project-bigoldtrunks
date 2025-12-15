@@ -11,6 +11,8 @@ import SoundName from "../enums/SoundName.js";
 import GameStateName from "../enums/GameStateName.js";
 import CreatureType from "../enums/CreatureType.js";
 import SaveManager from "../services/SaveManager.js";
+import Key from "../objects/Key.js";
+import Vector from "../../lib/Vector.js";
 
 export default class PlayState extends State {
   constructor(summerMapDefinition, winterMapDefinition) {
@@ -125,6 +127,11 @@ export default class PlayState extends State {
       if (bigBoss) {
         bigBoss.health = saveData.bigBossHealth;
       }
+    }
+    // restore Key if it was spawned
+    if (isWinter && saveData.keySpawned) {
+      const key = new Key(new Vector(saveData.keyX, saveData.keyY));
+      this.region.items.push(key);
     }
   }
 
