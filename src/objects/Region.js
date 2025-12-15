@@ -4,7 +4,12 @@ import Vector from "../../lib/Vector.js";
 import { getRandomPositiveInteger } from "../../lib/Random.js";
 import CreatureFactory from "../services/CreatureFactory.js";
 import Creature from "../entities/Creature/Creature.js";
-import { stateMachine, CANVAS_WIDTH, CANVAS_HEIGHT, sounds } from "../globals.js";
+import {
+  stateMachine,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  sounds,
+} from "../globals.js";
 import GameStateName from "../enums/GameStateName.js";
 import UserInterface from "./UserInterface.js";
 import Tile from "./Tile.js";
@@ -139,7 +144,7 @@ export default class Region {
               fromState: playState,
               toState: stateMachine.states[GameStateName.Victory],
             });
-          }, 5000); // delay before transitioning to Victory Screen to play the sound effect 
+          }, 5000); // delay before transitioning to Victory Screen to play the sound effect
         }
       }, 50);
     }, 200);
@@ -266,9 +271,9 @@ export default class Region {
       stateMachine.change(GameStateName.Transition, {
         fromState: stateMachine.states[GameStateName.Play],
         toState: stateMachine.states[GameStateName.Play],
-        toStateEnterParameters: { 
+        toStateEnterParameters: {
           isWinter: true,
-          previousPlayerData: previousPlayerData
+          previousPlayerData: previousPlayerData,
         },
       });
     }
@@ -323,11 +328,15 @@ export default class Region {
             player.onCollectItem(item);
             // Remove item from region after consumption
             this.items.splice(index, 1);
+            // save game when spwan key Crystal or FireTorch
+            SaveManager.save(player, this);
           } else if (item instanceof Key) {
             // Victory condition will be checked in checkVictory() method
             item.onConsume();
             player.onCollectItem(item);
             this.items.splice(index, 1);
+            // save game when spawn key
+            SaveManager.save(player, this);
           }
         }
       });
@@ -440,18 +449,17 @@ export default class Region {
       if (creature instanceof BigBoss) {
         creature.keepItem(ItemType.Key);
         console.log(`BigBoss will keep item of type Key ${ItemType.Key}`);
-
-      } 
-    }); 
+      }
+    });
     // Randomly select a creature to keep the item
-        const randomIndex =
-        specificCreatureIndex !== null
+    const randomIndex =
+      specificCreatureIndex !== null
         ? specificCreatureIndex
         : getRandomPositiveInteger(0, creatures.length - 1);
 
     creatures[randomIndex].keepItem(itemType);
     console.log(
-        `Creature at index ${randomIndex} will keep item of type ${itemType}`
+      `Creature at index ${randomIndex} will keep item of type ${itemType}`
     );
   }
 

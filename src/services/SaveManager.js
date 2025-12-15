@@ -1,4 +1,5 @@
 import CreatureType from "../enums/CreatureType.js";
+import ItemType from "../enums/ItemType.js";
 export default class SaveManager {
   // localStorage key
   static SAVE_KEY = "mystiaJungle_save";
@@ -8,9 +9,31 @@ export default class SaveManager {
      * Saves current game state to localStorage.
      */
 
-    // Bigboss health
+    const aliveSpiders = region.creatures.filter(
+      (c) => c.creatureType === CreatureType.Spider && !c.isDead
+    ).length;
+
+    const aliveSkeletons = region.creatures.filter(
+      (c) => c.creatureType === CreatureType.Skeleton && !c.isDead
+    ).length;
+
+    const aliveBigBoss = region.creatures.filter(
+      (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
+    ).length;
+
     const bigBoss = region.creatures.find(
       (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
+    );
+
+    const droppedKey = region.items.find(
+      (item) => item.itemType === ItemType.Key
+    );
+    const droppedCrystal = region.items.find(
+      (item) => item.itemType === ItemType.Crystal
+    );
+
+    const droppedFireTorch = region.items.find(
+      (item) => item.itemType === ItemType.FireTorch
     );
     const saveData = {
       // player status
@@ -25,20 +48,27 @@ export default class SaveManager {
       isWinter: region.isWinter,
 
       // enemy status
-      aliveSpiders: region.creatures.filter(
-        (c) => c.creatureType === CreatureType.Spider && !c.isDead
-      ).length,
-      aliveSkeletons: region.creatures.filter(
-        (c) => c.creatureType === CreatureType.Skeleton && !c.isDead
-      ).length,
-      aliveBigBoss: region.creatures.filter(
-        (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
-      ).length,
-      bigBossHealth:
-        region.creatures.find(
-          (c) => c.creatureType === CreatureType.BigBoss && !c.isDead
-        )?.health ?? 0,
+      aliveSpiders,
+      aliveSkeletons,
+      aliveBigBoss,
+      bigBossHealth: bigBoss?.health ?? 0,
+
+      // key status
+      keySpawned: droppedKey !== undefined,
+      keyX: droppedKey?.position.x ?? 0,
+      keyY: droppedKey?.position.y ?? 0,
+
+      // crystal status
+      crystalSpawned: droppedCrystal !== undefined,
+      crystalX: droppedCrystal?.position.x ?? 0,
+      crystalY: droppedCrystal?.position.y ?? 0,
+
+      // fireTorch status
+      torchSpawned: droppedFireTorch !== undefined,
+      torchX: droppedFireTorch?.position.x ?? 0,
+      torchY: droppedFireTorch?.position.y ?? 0,
     };
+
     localStorage.setItem(this.SAVE_KEY, JSON.stringify(saveData));
     console.log("Game saved:", saveData);
   }
