@@ -44,19 +44,30 @@ export default class TransitionState extends State {
    * fade in the next state.
    */
   async fadeOut() {
-    await timer.tweenAsync(this.transitionParameters, { alpha: 1 }, 1.5);
+    // Check if this is a season transition (summer to winter)
+    const isSeasonTransition = this.toStateEnterParameters?.isWinter === true;
+    const fadeOutDuration = isSeasonTransition ? 2.5 : 1.5;
+    
+    await timer.tweenAsync(this.transitionParameters, { alpha: 1 }, fadeOutDuration);
+
+    // Add a pause at full darkness for season transitions
+    if (isSeasonTransition) {
+      await timer.wait(0.5);
+    }
 
     this.currentState = this.toState;
     this.currentState.enter(this.toStateEnterParameters);
-    this.fadeIn();
+    this.fadeIn(isSeasonTransition);
   }
 
   /**
    * Tween the transition rectangle's alpha to 0, then set the
    * current state to the new state in the state machine.
    */
-  async fadeIn() {
-    await timer.tweenAsync(this.transitionParameters, { alpha: 0 }, 1.5);
+  async fadeIn(isSeasonTransition = false) {
+    const fadeInDuration = isSeasonTransition ? 2.5 : 1.5;
+    
+    await timer.tweenAsync(this.transitionParameters, { alpha: 0 }, fadeInDuration);
 
     stateMachine.currentState = this.currentState;
   }
