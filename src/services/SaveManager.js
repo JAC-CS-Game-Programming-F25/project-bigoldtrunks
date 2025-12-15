@@ -28,7 +28,13 @@ export default class SaveManager {
     const droppedKey = region.items.find(
       (item) => item.itemType === ItemType.Key
     );
+    const droppedCrystal = region.items.find(
+      (item) => item.itemType === ItemType.Crystal
+    );
 
+    const droppedFireTorch = region.items.find(
+      (item) => item.itemType === ItemType.FireTorch
+    );
     const saveData = {
       // player status
       health: player.health,
@@ -51,6 +57,16 @@ export default class SaveManager {
       keySpawned: droppedKey !== undefined,
       keyX: droppedKey?.position.x ?? 0,
       keyY: droppedKey?.position.y ?? 0,
+
+      // crystal status
+      crystalSpawned: droppedCrystal !== undefined,
+      crystalX: droppedCrystal?.position.x ?? 0,
+      crystalY: droppedCrystal?.position.y ?? 0,
+
+      // fireTorch status
+      torchSpawned: droppedFireTorch !== undefined,
+      torchX: droppedFireTorch?.position.x ?? 0,
+      torchY: droppedFireTorch?.position.y ?? 0,
     };
 
     localStorage.setItem(this.SAVE_KEY, JSON.stringify(saveData));

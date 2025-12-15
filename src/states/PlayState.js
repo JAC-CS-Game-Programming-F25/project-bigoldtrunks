@@ -13,6 +13,8 @@ import CreatureType from "../enums/CreatureType.js";
 import SaveManager from "../services/SaveManager.js";
 import Key from "../objects/Key.js";
 import Vector from "../../lib/Vector.js";
+import Crystal from "../objects/Crystal.js";
+import FireTorch from "../objects/FireTorch.js";
 
 export default class PlayState extends State {
   constructor(summerMapDefinition, winterMapDefinition) {
@@ -132,6 +134,19 @@ export default class PlayState extends State {
     if (isWinter && saveData.keySpawned) {
       const key = new Key(new Vector(saveData.keyX, saveData.keyY));
       this.region.items.push(key);
+    }
+
+    // restore dropped items
+    if (saveData.crystalSpawned) {
+      const crystal = new Crystal(
+        new Vector(saveData.crystalX, saveData.crystalY)
+      );
+      this.region.items.push(crystal);
+    }
+
+    if (saveData.torchSpawned) {
+      const torch = new FireTorch(new Vector(saveData.torchX, saveData.torchY));
+      this.region.items.push(torch);
     }
   }
 
