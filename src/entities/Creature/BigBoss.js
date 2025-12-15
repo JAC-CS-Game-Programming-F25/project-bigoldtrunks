@@ -195,9 +195,9 @@ export default class BigBoss extends Creature {
     }
 
     if (this.health <= 0) {
+      this.isDead = true;
       sounds[SoundName.BigBossDead].play();
       this.spawnItemIfKeep();
-      // this.playDeathEffect();
       return;
     }
 
