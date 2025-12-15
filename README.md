@@ -31,7 +31,7 @@ Futher development:
 ![See full diagram](https://app.diagrams.net/#G1sjSH3Uyv7jwJ8xMc6ca89T6FTznb_LNN#%7B%22pageId%22%3A%22M2zET9DWoPOz6EyovvN7%22%7D)
 ![Flowchart](assets/diagrams/class-diagram-1.png)
 ![Flowchart](assets/diagrams/class-diagram-2.png)
-![Flowchart](assets/diagrams/environment-diagram.png.png)
+![Flowchart](assets/diagrams/environment-diagram.png)
 ![Flowchart](assets/diagrams/creature-diagram.png)
 ![Flowchart](assets/diagrams/player-state-diagram.png)
 
@@ -46,6 +46,7 @@ Managed with state machine system:
 - `PerformFireFlameState`
 - `PerformFrozenBlastState`
 - `FallingDownToEartthState`
+- `DeadState`
 
 ### 👾 Creatures AI Design
 - Patrol logic: creatures movement with a certain patern like left, right, up, down.
@@ -129,6 +130,11 @@ Most of sprites included Purchase and Free Version are used from these link list
 
 All wireframe images are stored in the `readme_images/` folder and are used for UI layout planning.
 Additional in-game backgrounds and sprites will be stored under `assets/images/` during production.
+### Actual Implementation
+
+![TitleScreen](assets/actual-game-screenshot/title-screen.png)
+![Summer Region](assets/actual-game-screenshot/summer-region.png)
+![Winter Region](assets/actual-game-screenshot/winter-region.png)
 
 ### ✏️ Fonts
 
