@@ -333,6 +333,7 @@ export default class Region {
           } else if (item instanceof Key) {
             // Victory condition will be checked in checkVictory() method
             item.onConsume();
+            sounds[SoundName.KeyPickup].play();
             player.onCollectItem(item);
             this.items.splice(index, 1);
             // save game when spawn key
@@ -451,16 +452,22 @@ export default class Region {
         console.log(`BigBoss will keep item of type Key ${ItemType.Key}`);
       }
     });
-    // Randomly select a creature to keep the item
-    const randomIndex =
-      specificCreatureIndex !== null
+    
+    // Filter out BigBoss creatures to avoid assigning them other items
+    const nonBossCreatures = creatures.filter(creature => !(creature instanceof BigBoss));
+    
+    // If no non-BigBoss creatures exist, don't assign the item
+    if (nonBossCreatures.length === 0) {
+      return;
+    }
+    
+    // Randomly select a non-BigBoss creature to keep the item
+    const randomIndex = specificCreatureIndex !== null && specificCreatureIndex < nonBossCreatures.length
         ? specificCreatureIndex
-        : getRandomPositiveInteger(0, creatures.length - 1);
+        : getRandomPositiveInteger(0, nonBossCreatures.length - 1);
 
-    creatures[randomIndex].keepItem(itemType);
-    console.log(
-      `Creature at index ${randomIndex} will keep item of type ${itemType}`
-    );
+    nonBossCreatures[randomIndex].keepItem(itemType);
+    
   }
 
   isPositionOccupied(position, existingCreatures) {

@@ -18,6 +18,7 @@ const ImageName = {
   BigBoss_Left: "big-boss-left",
   BigBoss_Right: "big-boss-right",
   Key: "key-item",
+  KeyPickup: "key-pickup",
 };
 
 export default ImageName;
