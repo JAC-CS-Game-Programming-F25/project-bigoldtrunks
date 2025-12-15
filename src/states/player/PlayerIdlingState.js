@@ -81,7 +81,7 @@ export default class PlayerIdlingState extends State {
     isCouldPerformFireFlame() {
         return this.player.abilityUnlocked[AbilityType.FireFlame] && 
         (this.player.direction === Direction.Left || this.player.direction === Direction.Right) &&
-        !this.player.abilityCooldowns[AbilityType.FireFlame];
+        this.player.abilityCooldowns[AbilityType.FireFlame] === null;
     }
     
     handlePerformingFrozenBlast() {
@@ -105,7 +105,7 @@ export default class PlayerIdlingState extends State {
     isCouldPerformFrozenBlast() {
         return this.player.abilityUnlocked[AbilityType.FrozenFlame] && 
         (this.player.direction === Direction.Left || this.player.direction === Direction.Right) &&
-        !this.player.abilityCooldowns[AbilityType.FrozenFlame];
+        this.player.abilityCooldowns[AbilityType.FrozenFlame] === null;
     }
     /**
      * Handles transition to Dead state if the player is dead

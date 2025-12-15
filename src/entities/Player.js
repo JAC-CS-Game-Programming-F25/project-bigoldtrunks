@@ -104,11 +104,12 @@ export default class Player extends GameEntity {
         }
         
         /**
-         * Tracks cooldown status for each ability
+         * Tracks cooldown status for each ability.
+         * Stores timestamp when cooldown started, or null if ready.
          */
         this.abilityCooldowns = {
-            [AbilityType.FireFlame]: false,
-            [AbilityType.FrozenFlame]: false
+            [AbilityType.FireFlame]: null,
+            [AbilityType.FrozenFlame]: null
         }
 
         this.itemCollected = []

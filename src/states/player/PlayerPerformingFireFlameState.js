@@ -72,10 +72,10 @@ export default class PlayerPerformingFireFlameState extends State {
         // Play fire flame sound once when entering the state
         sounds[SoundName.PlayerPerformFireFlame].play();
 
-        // Start cooldown on the player (not the ability object)
-        this.player.abilityCooldowns[AbilityType.FireFlame] = true;
+        // Start cooldown on the player - store the start timestamp
+        this.player.abilityCooldowns[AbilityType.FireFlame] = Date.now();
         timer.wait(2).then(() => {
-            this.player.abilityCooldowns[AbilityType.FireFlame] = false;
+            this.player.abilityCooldowns[AbilityType.FireFlame] = null;
             console.log("FireFlame cooldown finished");
         });
 

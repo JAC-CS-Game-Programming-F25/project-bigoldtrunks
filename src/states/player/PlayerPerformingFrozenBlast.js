@@ -74,10 +74,10 @@ export default class PlayerPerformingFrozenBlastState extends State {
         // Play frozen blast sound
         sounds[SoundName.PlayerPerformFrozenFlame].play();
         
-        // Start cooldown on the player (not thxe ability object)
-        this.player.abilityCooldowns[AbilityType.FrozenFlame] = true;
+        // Start cooldown on the player - store the start timestamp
+        this.player.abilityCooldowns[AbilityType.FrozenFlame] = Date.now();
         timer.wait(2).then(() => {
-            this.player.abilityCooldowns[AbilityType.FrozenFlame] = false;
+            this.player.abilityCooldowns[AbilityType.FrozenFlame] = null;
             console.log("FrozenBlast cooldown finished");
         });
         

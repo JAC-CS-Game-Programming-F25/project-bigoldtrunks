@@ -44,15 +44,25 @@ export default class UserInterface {
   renderAbilities() {
     // Render Frozen Blast icon if ability is unlocked
     if (this.player.abilityUnlocked[AbilityType.FrozenFlame]) {
+      const iconX = CANVAS_WIDTH - 20;
+      const iconY = 10;
+      
+      // Draw cooldown indicator circle
+      this.renderAbilityCooldown(iconX, iconY, AbilityType.FrozenFlame);
+      
       context.textAlign = "right";
       context.font = `15px ${FontName.MedievalSharp}`;
-
       context.fillText("❄️", CANVAS_WIDTH - 10, 17);
     }
     if (this.player.abilityUnlocked[AbilityType.FireFlame]) {
+      const iconX = CANVAS_WIDTH - 20;
+      const iconY = 33;
+      
+      // Draw cooldown indicator circle
+      this.renderAbilityCooldown(iconX, iconY, AbilityType.FireFlame);
+      
       context.textAlign = "right";
       context.font = `15px ${FontName.MedievalSharp}`;
-
       context.fillText("🔥", CANVAS_WIDTH - 10, 40);
     }
 
@@ -79,6 +89,68 @@ export default class UserInterface {
     context.textAlign = "center";
     context.fillText(`Enemies: ${aliveCount}`, CANVAS_WIDTH / 2, 15);
   }
+  /**
+   * Renders a circular cooldown indicator around an ability icon.
+   * @param {number} x - Center X position of the circle
+   * @param {number} y - Center Y position of the circle
+   * @param {string} abilityType - The ability type to check cooldown for
+   */
+  renderAbilityCooldown(x, y, abilityType) {
+    const radius = 12;
+    const lineWidth = 2;
+    
+    // If ability is on cooldown, draw the progress arc
+    if (this.player.abilityCooldowns[abilityType]) {
+      const cooldownStartTime = this.player.abilityCooldowns[abilityType];
+      const elapsed = Date.now() - cooldownStartTime;
+      const cooldownDuration = 2000; // 2 seconds in milliseconds
+      const progress = Math.min(elapsed / cooldownDuration, 1);
+      
+      // Draw background circle (darker)
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.strokeStyle = "rgba(0, 0, 0, 0.3)";
+      context.lineWidth = lineWidth;
+      context.stroke();
+      
+      // Draw progress arc (starts from top, goes clockwise)
+      if (progress < 1) {
+        context.beginPath();
+        context.arc(
+          x, 
+          y, 
+          radius, 
+          -Math.PI / 2, // Start at top
+          -Math.PI / 2 + (Math.PI * 2 * progress), // Progress clockwise
+          false
+        );
+        context.strokeStyle = abilityType === AbilityType.FrozenFlame 
+          ? "rgba(100, 200, 255, 0.8)"  // Ice blue for frozen
+          : "rgba(255, 100, 50, 0.8)";   // Fire orange for fire
+        context.lineWidth = lineWidth;
+        context.stroke();
+      } else {
+        // Cooldown complete - draw full bright circle
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.strokeStyle = abilityType === AbilityType.FrozenFlame 
+          ? "rgba(100, 200, 255, 1)"  // Ice blue
+          : "rgba(255, 150, 50, 1)";   // Fire orange
+        context.lineWidth = lineWidth;
+        context.stroke();
+      }
+    } else {
+      // No cooldown - draw ready indicator (full bright circle)
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.strokeStyle = abilityType === AbilityType.FrozenFlame 
+        ? "rgba(100, 200, 255, 1)"  // Ice blue
+        : "rgba(255, 150, 50, 1)";   // Fire orange
+      context.lineWidth = lineWidth;
+      context.stroke();
+    }
+  }
+
   /**
    * Renders enemy count (summer) or boss health bar (winter).
    */
