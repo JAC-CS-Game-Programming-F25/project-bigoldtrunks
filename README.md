@@ -29,11 +29,14 @@ Futher development:
 
 ## Class Diagram
 ![See full diagram](https://app.diagrams.net/#G1sjSH3Uyv7jwJ8xMc6ca89T6FTznb_LNN#%7B%22pageId%22%3A%22M2zET9DWoPOz6EyovvN7%22%7D)
+
 ![Flowchart](assets/diagrams/class-diagram-1.png)
 ![Flowchart](assets/diagrams/class-diagram-2.png)
 ![Flowchart](assets/diagrams/environment-diagram.png)
 ![Flowchart](assets/diagrams/creature-diagram.png)
 ![Flowchart](assets/diagrams/player-state-diagram.png)
+![Flowchart](assets/diagrams/game-engine-diagram.png)
+
 
 
 
